@@ -18,150 +18,150 @@ function getColumn(grid, column) {
 }
 
 //Test case Ud tables
-// function SelectCellDropdownGrid(column, dropValue, ultraGrid){
-//   var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
-//     Log["Message"]('columns' + allColumns)
+function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
+  var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
+    Log["Message"]('columns' + allColumns)
 
-//     if (allColumns["Count"] == null || allColumns["Count"] == 0) {
-//       Log["Message"]("Grid has no columns")
-//     }
+    if (allColumns["Count"] == null || allColumns["Count"] == 0) {
+      Log["Message"]("Grid has no columns")
+    }
 
-//     var colCurrent, columnIndex
-//     //var column = "ColumnName"
+    var colCurrent, columnIndex
+    //var column = "ColumnName"
 
-//     for (var i = 0; i <= allColumns["Count"] -1 ; i++) {
-//       colCurrent = allColumns["Item"](i)["ColumnChooserCaptionResolved"]["OleValue"]
-//       if ( allColumns["Item"](i)["IsVisibleInLayout"] && colCurrent == column ) {
-//         columnIndex = allColumns["Item"](i)["Index"]
-//         break
-//       }
-//     }
+    for (var i = 0; i <= allColumns["Count"] -1 ; i++) {
+      colCurrent = allColumns["Item"](i)["ColumnChooserCaptionResolved"]["OleValue"]
+      if ( allColumns["Item"](i)["IsVisibleInLayout"] && colCurrent == column ) {
+        columnIndex = allColumns["Item"](i)["Index"]
+        break
+      }
+    }
 
-//     Log["Message"]('columns index ' + columnIndex)
-//     Log["Message"]('columns colCurrent ' + colCurrent)
+    Log["Message"]('columns index ' + columnIndex)
+    Log["Message"]('columns colCurrent ' + colCurrent)
 
-//     var rows = ultraGrid["DisplayLayout"]["Rows"]
-//     Log["Message"]('columns rows ' + rows)
+    var rows = ultraGrid["DisplayLayout"]["Rows"]
+    Log["Message"]('columns rows ' + rows)
 
-//     var rowIndex = ultraGrid["Rows"]["Count"] -1 
+    var rowIndex = ultraGrid["Rows"]["Count"] -1 
 
-//     Log["Message"]('columns rowIndex ' + rowIndex)
+    Log["Message"]('columns rowIndex ' + rowIndex)
 
-//     //var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
-//     var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
+    //var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
+    var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
 
-//     Log["Message"]('columns rowIndex ' + rowIndex)
+    Log["Message"]('columns rowIndex ' + rowIndex)
 
-//     // Activate cell
-//     ultraGrid["Rows"]["Item"](cell["Row"]["Index"])["Activate"]()
+    // Activate cell
+    ultraGrid["Rows"]["Item"](cell["Row"]["Index"])["Activate"]()
 
-//     var rect = cell["GetUIElement"]()["Rect"]
+    var rect = cell["GetUIElement"]()["Rect"]
 
-//     ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+    ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
 
-//     cell["ShowDropDown"]()
+    cell["ShowDropDown"]()
 
-//     while(!cell["DroppedDown"]){
-//     Delay(5000)
-//     if (!cell["DroppedDown"]){
-//       Log["Message"]("DROPDOWN CONTROL NOT SHOWN, SECOND ATTEMPT")      
-//       ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
-//       cell["ShowDropDown"]()             
+    while(!cell["DroppedDown"]){
+    Delay(5000)
+    if (!cell["DroppedDown"]){
+      Log["Message"]("DROPDOWN CONTROL NOT SHOWN, SECOND ATTEMPT")      
+      ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+      cell["ShowDropDown"]()             
       
-//       while (!cell["DroppedDown"]){
-//         Delay(500)
-//         if(!cell["DroppedDown"])
-//           Log['Error']("Dropdown list not found")
-//       }
-//     }
-//   }
+      while (!cell["DroppedDown"]){
+        Delay(500)
+        if(!cell["DroppedDown"])
+          Log['Error']("Dropdown list not found")
+      }
+    }
+  }
 
-//     //Gather the items in the dropdown into an array
-//     var ddValueList = cell['EditorResolved']['ValueList']  
-//     var aRes = []
+    //Gather the items in the dropdown into an array
+    var ddValueList = cell['EditorResolved']['ValueList']  
+    var aRes = []
 
-//   if( ddValueList["ClrClassName"] == "UltraCombo" ){
-//       var listItemsCount = ddValueList["Rows"]["Count"]
-//       var aRes = [listItemsCount]
-//       for (var i = 0; i <= aRes.length - 1; i++) {
-//         aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](0)["Text"]["OleValue"]
-//       }
-//   }
-//   if( ddValueList["ClrClassName"] == "ValueList" ){
-//       var listItemsCount = ddValueList["ValueListItems"]["Count"]
-//       // var aRes = [listItemsCount]
-//       for (var i = 0; i <= listItemsCount - 1; i++) {
-//         aRes[i] = ddValueList["ValueListItems"]["Item"](i)["DisplayText"]["OleValue"]
-//       }
-//   }
-//   if( ddValueList["ClrClassName"] == "EpiCombo" ) {
-//       var listItemsCount = ddValueList["Rows"]["Count"]
-//       var aRes = [listItemsCount]
-//       for (var i = 0; i <= aRes.length - 1; i++) {
-//         aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"]
-//       }
-//   }
-//   else{ 
-//     Log["Message"]("Unable to get items from value list. Method for this class is not implemented")
-//   }
+  if( ddValueList["ClrClassName"] == "UltraCombo" ){
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](0)["Text"]["OleValue"]
+      }
+  }
+  if( ddValueList["ClrClassName"] == "ValueList" ){
+      var listItemsCount = ddValueList["ValueListItems"]["Count"]
+      // var aRes = [listItemsCount]
+      for (var i = 0; i <= listItemsCount - 1; i++) {
+        aRes[i] = ddValueList["ValueListItems"]["Item"](i)["DisplayText"]["OleValue"]
+      }
+  }
+  if( ddValueList["ClrClassName"] == "EpiCombo" ) {
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"]
+      }
+  }
+  else{ 
+    Log["Message"]("Unable to get items from value list. Method for this class is not implemented")
+  }
 
-//   var comboValue, indexValue
+  var comboValue, indexValue
 
-//   // var dropValue = "UD100A_Company"
+  // var dropValue = "UD100A_Company"
 
-//   //find value index in dropdown list 
-//   for (var i = 0; i <= aRes.length -1; i++ ){
-//     comboValue = aqString.Trim(aRes[i])
-//     ultraGrid["Keys"]("[Down]")
-//     if ( comboValue == aqString.Trim(dropValue) ){
-//       //Select the value from the combo
-//       indexValue = i
-//       ultraGrid["Keys"]("[PageUp]")
-//       break
-//     }
-//   }              
+  //find value index in dropdown list 
+  for (var i = 0; i <= aRes.length -1; i++ ){
+    comboValue = aqString.Trim(aRes[i])
+    ultraGrid["Keys"]("[Down]")
+    if ( comboValue == aqString.Trim(dropValue) ){
+      //Select the value from the combo
+      indexValue = i
+      ultraGrid["Keys"]("[PageUp]")
+      break
+    }
+  }              
 
-//   for (var i = 0; i <= indexValue - 1; i++) {
-//     ultraGrid["Keys"]("[Down]")
-//   }
+  for (var i = 0; i <= indexValue - 1; i++) {
+    ultraGrid["Keys"]("[Down]")
+  }
 
-//   //close dropdown list
-//   ultraGrid["Click"](rect["X"] + 1, rect["Y"] + rect["Height"]/2)
+  //close dropdown list
+  ultraGrid["Click"](rect["X"] + 1, rect["Y"] + rect["Height"]/2)
 
-//   if ( comboValue != aqString.Trim(dropValue) ){     
-//     Log["Error"]("Cell_DropDownSelect failed ")
-//   }
+  if ( comboValue != aqString.Trim(dropValue) ){     
+    Log["Error"]("Cell_DropDownSelect failed ")
+  }
 
-//   Log["Message"]("Value '" + dropValue + "' selected from dropdown list")
+  Log["Message"]("Value '" + dropValue + "' selected from dropdown list")
 
-//   // Validation  of Grid in Business Activity Query 
-//   if( column == "Filter Value" ){  
-//     cell["Activate"]()
-//     cell["Column"]["PerformAutoResize"]()
+  // Validation  of Grid in Business Activity Query 
+  if( column == "Filter Value" ){  
+    cell["Activate"]()
+    cell["Column"]["PerformAutoResize"]()
     
-//     var aLinks = ultraGrid["GetLinks"](cell)
+    var aLinks = ultraGrid["GetLinks"](cell)
     
-//     if( aLinks["Count"] == 0 )
-//       Log["Message"]("Cell has no links")
-//     else
-//       Log["Message"]("Cell has links")
+    if( aLinks["Count"] == 0 )
+      Log["Message"]("Cell has no links")
+    else
+      Log["Message"]("Cell has links")
      
-//     var link = aLinks["Item"](0)
-//     var linkText = "specified"
+    var link = aLinks["Item"](0)
+    var linkText = "specified"
 
-//     for (var i = 0; i < aLinks["Count"]; i++) {
-//       link = aLinks["Item"](i) //get current link
-//       if( link["Text"] == linkText )
-//         break
-//     }
+    for (var i = 0; i < aLinks["Count"]; i++) {
+      link = aLinks["Item"](i) //get current link
+      if( link["Text"] == linkText )
+        break
+    }
    
-//     //all links in the cell checked. No link with <linkText> found
-//     if (link.Text != linkText ) 
-//       Log["Error"]( "Unable to find link '" + linkText + "'")
+    //all links in the cell checked. No link with <linkText> found
+    if (link.Text != linkText ) 
+      Log["Error"]( "Unable to find link '" + linkText + "'")
               
-//     ultraGrid["Click"](link["Bounds"]["Left"] + link["Bounds"]["Width"]/2, link["Bounds"]["Top"] + link["Bounds"]["Height"]/2)
-//   }
-// }
+    ultraGrid["Click"](link["Bounds"]["Left"] + link["Bounds"]["Width"]/2, link["Bounds"]["Top"] + link["Bounds"]["Height"]/2)
+  }
+}
 
 
 //IMPORTANT TO CHECK FUNTIONALITY WITH GRIDS

@@ -17,7 +17,7 @@ function Dashboard_with_UD_tables(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
     
     //Creates Menu
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "MenuA", "MenuA", "Menu Item", "Ice.UI.UD100Entry.dll")
+    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "MenuA", "MenuA", 0, "Menu Item", "Ice.UI.UD100Entry.dll")
     Log["Checkpoint"]("MenuA created")
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
@@ -148,7 +148,7 @@ function Dashboard_with_UD_tables(){
       Log["Message"]("General data for data filled")
       Log["Message"]("Dashboard created")
 
-      SaveDashboard("Dashb", "Dashb")
+      SaveDashboard()
       Log["Message"]("Dashboard saved - no queries added")
 
       /***** QUERY 1 *****/
@@ -244,7 +244,7 @@ function Dashboard_with_UD_tables(){
       /******* end creation for Dashboard to retrieve BAQs created **********/
 
       //Save dashboard
-      SaveDashboard("Dashb","Dashb")
+      SaveDashboard()
       Log["Message"]("Dashboard was saved")
 
       //Deploy dashboard 

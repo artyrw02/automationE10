@@ -4,15 +4,15 @@
 //USEUNIT Grid_Functions
 var continueTest = true
 
-function TC_Dashboard_Tracer_Views_2(){
+function TC_Dashboard_Tracker_Views_2(){
   
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
-    // StartSmartClient()
+    StartSmartClient()
 
-    // Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123", "Classic") 
 
-    // ActivateFullTree()
+    ActivateFullTree()
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'

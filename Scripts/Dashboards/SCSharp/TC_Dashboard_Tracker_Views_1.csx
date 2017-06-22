@@ -4,7 +4,7 @@
 //USEUNIT Grid_Functions
 var continueTest = true
 
-function TC_Dashboard_Tracer_Views_1(){
+function TC_Dashboard_Tracker_Views_1(){
   
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    

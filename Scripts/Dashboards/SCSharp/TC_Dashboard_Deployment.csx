@@ -68,4 +68,15 @@ function Dashboard_Deployment()
 
   //Manage dashboard
   DashboardMaintenance("DashB", "Modify Dashboard")
+
+  //--- Close Smart Client --------------------------------------------------------------------------------------------------------------------'
+  
+  Delay(1000)
+  
+  DeactivateFullTree()
+  Log["Checkpoint"]("FullTree Deactivate")
+
+  CloseSmartClient()
+  Log["Checkpoint"]("SmartClient Closed")
+//-------------------------------------------------------------------------------------------------------------------------------------------'
 }

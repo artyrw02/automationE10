@@ -47,7 +47,7 @@ function Dashboard_Publishing(){
     NewDashboard("DashB", "Dashb", "Dashb")
     Log["Message"]("General data for data filled")
 
-    SaveDashboard("Dashb", "Dashb")
+    SaveDashboard()
     Log["Message"]("Dashboard saved - no queries added")
 
     /***** QUERIES *****/
@@ -74,7 +74,7 @@ function Dashboard_Publishing(){
         Aliases["Epicor"]["PublishViewPropsDialog"]["btnOk"]["Click"]()
 
         //Save dashboard
-        SaveDashboard("Dashb","Dashb")
+        SaveDashboard()
         Log["Message"]("Dashboard was saved")
 
         // Clear/Close the dashboard 
@@ -336,7 +336,7 @@ function Dashboard_Publishing(){
       AddQueriesDashboard("baq1")
       Log["Message"]("BAQ1 added")
       
-      SaveDashboard("Dashb2", "Dashb2")
+      SaveDashboard()
       Log["Message"]("Dashboard saved")
 
       if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["Exists"]){
@@ -350,7 +350,7 @@ function Dashboard_Publishing(){
       /*MODIFY TO ADAPT DRAG FUNCTION*/
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Drag"](77, 30, 11, -127);
 
-      SaveDashboard("Dashb2", "Dashb2")
+      SaveDashboard()
       Log["Message"]("Dashboard saved")
 
       DeployDashboard("DashB2","Dashb", "Deploy Smart Client,Add Favorite Item,Generate Web Form")
