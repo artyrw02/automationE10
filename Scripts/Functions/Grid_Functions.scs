@@ -306,3 +306,10 @@ function SelectCellDropdownGrid(column, dropValue, ultraGrid){
     ultraGrid["Click"](link["Bounds"]["Left"] + link["Bounds"]["Width"]/2, link["Bounds"]["Top"] + link["Bounds"]["Height"]/2)
   }
 }
+
+function RetrieveGridsMainPanel(){
+  var dashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+    
+  var gridDashboardPanelChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 7)["toArray"]();
+  return gridDashboardPanelChildren
+}
