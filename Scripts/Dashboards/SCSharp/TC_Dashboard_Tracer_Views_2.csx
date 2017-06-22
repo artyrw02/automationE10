@@ -843,6 +843,16 @@ function TC_Dashboard_Tracer_Views_2(){
         //Click Ok to close Properties
         Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()    
 
+        //used to recreate object on testcomplete
+        var gridDashboard = dashboardPanel["FindAllChildren"]("FullName", "*grid*", 7)["toArray"]();
+        
+        for (var i = 0; i < gridDashboard["length"]; i++) {
+          if (gridDashboard[i]["WndCaption"] == 'zAPInvDtl: Summary') {
+            gridInvDtlPanel = gridDashboard[i]
+            break
+          }
+        }
+
     /*
       Step No: 47
       Step: Right click on the tracker view from zAPInvDtl query and click on Customize tracker view        
@@ -857,11 +867,12 @@ function TC_Dashboard_Tracer_Views_2(){
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Customize Tracker View");
       Log["Message"]("BAQ1 Summary - Customize Tracker View was selected from Menu")
 
-  /*
+    /*
       Step No: 48
       Step: Click Tools>Toolbox and select an EpiCombo and drop it in the tracker below the other fields
       Result: An EpiTextBox appears now, below the other fields    
     */ 
+      var trackerPanelsDashboard = dashboardPanel["FindAllChildren"]("FullName", "*TrackerPanel", 20)["toArray"]();  
 
       Aliases["Epicor"]["CustomToolsDialog"]["UltraMainMenu"]["Click"]("Tools|ToolBox");
       Aliases["Epicor"]["ToolboxForm"]["toolbox"]["ToolboxTab"]["tableLayoutPanel1"]["lvwItems"]["ClickItemXY"]("EpiCombo", -1, 63, 8);
@@ -898,7 +909,8 @@ function TC_Dashboard_Tracer_Views_2(){
           }
         }
       }
-      
+      var epiPropertyGrid = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgProperties"]["pnlControlProperties"]["pnlProperties"]["pgdProperties"]
+
       delay(1000)
       epiPropertyGrid["wItems"]("Misc")["ClickLabel"]("IsTrackerQueryControl");
       epiPropertyGrid["Keys"]("^a[Del]" + "True" + "[Enter]");
@@ -990,6 +1002,8 @@ function TC_Dashboard_Tracer_Views_2(){
      testQuery1()
      testQuery2()
      testQuery3()
+
+     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
