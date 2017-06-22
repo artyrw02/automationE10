@@ -188,6 +188,13 @@ function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll
     Delay(1000)
     //Save Menu Item
     Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|&Save")
+
+    if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){
+      if(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"] == "Duplicate Order Sequence for this parent menu ID."){
+        MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](orderSequence+1)
+      }
+    }
+  
     Delay(1000)
     Aliases["Epicor"]["MenuMForm"]["Close"]()
     Log["Checkpoint"]("Menu created correctly")
