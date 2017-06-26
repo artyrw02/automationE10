@@ -1,10 +1,10 @@
 //USEUNIT Grid_Functions
 
 // Create a simple BAQ with one table 
-function CreateSimpleBAQ(baqID, baqDescription, table, columns){
+function CreateSimpleBAQ(baqID, baqDescription, table, columns, generalConfig){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
-  CreateBAQ(baqID, baqDescription)
+  CreateBAQ(baqID, baqDescription, generalConfig)
   
   AddTableBAQ(BAQFormDefinition, table)
 
@@ -30,7 +30,7 @@ function OpenBAQ(baqID){
   BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"]("[Tab]")
 }
 
-function CreateBAQ(baqID, baqDescription){
+function CreateBAQ(baqID, baqDescription, generalConfig){
   Delay(1500)
   
   //click New BAQ
@@ -41,6 +41,16 @@ function CreateBAQ(baqID, baqDescription){
   //Set ID and description
   BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
   BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"](baqDescription)
+  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"]("[Tab]")
+
+  if(generalConfig != undefined){
+    generalConfig = generalConfig.split(",")
+
+    for(var i = 0; i < generalConfig["length"]; i++){
+      var checkbox = BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["FindAllChildren"]("FullName", "*chk"+"*"+generalConfig[i]+"*", 30)["toArray"]();
+      checkbox[0]["Checked"] = true
+    }
+  }
 }
 
 function AddTableBAQ(BAQFormDefinition, table){
