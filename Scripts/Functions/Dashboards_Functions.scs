@@ -34,6 +34,25 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
   //Type Definition, Caption and Description
   var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
   dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
+  dashboardPanel["txtDefinitonID"]["Keys"]("[Tab]")
+  
+  Delay(1500)
+   if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){    
+    var aString = Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"]
+    var aSubString = "TestDashBD set for All Companies already exists"
+    var Res, flag = true;
+
+    Res = aqString["Find"](aString, aSubString)
+    if (Res != -1) {
+         Log["Message"]("There are occurrences of '" + aSubString + "' in '" + aString + "'.");
+         Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["btnOk"]["Click"]()
+    }
+    else{
+        Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+        
+    }
+  }
+
   dashboardPanel["txtCaption"]["Keys"](dashboardCaption)
   dashboardPanel["txtDescription"]["Keys"](dashDescription)
 
@@ -140,7 +159,7 @@ function ExitDashboard(){
 }
 
 //Create menu from menu maintenance for dashboards
-function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll){  
+function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations){  
   Delay(1000)
   var MenuMFormTree = Aliases["Epicor"]["MenuMForm"]["windowDockingArea2"]["dockableWindow2"]["jobTreeViewPanel"]["methodTree"]  
   var CountElem = MenuMFormTree["SelectedNodes"]["Item"](0)["Nodes"]["Count"]  
@@ -182,26 +201,48 @@ function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll
     MenuFormObject["grpProgramMain"]["txtProgram"]["Keys"]("[Tab]")
   }
   var enabledChk = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["chkEnable"]["Checked"]
-  var webAccess = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpProgramMain"]["eshWebAccess"]["EnabledCaption"]
-  
-  if(enabledChk == true && webAccess == "Available"){
-    Delay(1000)
-    //Save Menu Item
-    Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|&Save")
+   
+  var flag = true
 
-    if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){
-      if(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"] == "Duplicate Order Sequence for this parent menu ID."){
-        MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](orderSequence+1)
+  if(validations != undefined){
+    validations = validations.split(",")
+
+    for(var i = 0; i < validations["length"]; i++){
+      if(validations[i] != "Web Access"){
+        var checkbox = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["FindAllChildren"]("FullName", "*chk"+"*"+validations[i]+"*", 30)["toArray"]()
+        checkbox[0]["Checked"] = true
+        // if(checkbox[0]["Checked"] == true  ){
+        //   Log["Checkpoint"]("Checkbox " + validations[i] + " is Checked.")
+        //   flag = true
+        // }else{
+        //   Log["Error"]("Checkbox " + validations[i] + " is not Checked.")
+        //   flag =  false
+        //   break
+        // }
+      }else{
+        var webAccess = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpProgramMain"]["eshWebAccess"]["EnabledCaption"]
+        if(webAccess == "Available"){
+          Log["Checkpoint"]("Web Access  " + validations[i] + " is Available.")
+          flag = true
+        }else{
+          Log["Error"]("Web Access  " + validations[i] + " is not Available.")
+          flag =  false
+          break
+        }
       }
     }
-  
-    Delay(1000)
-    Aliases["Epicor"]["MenuMForm"]["Close"]()
-    Log["Checkpoint"]("Menu created correctly")
-  }else{
-    Log["Error"]("There was a problem while creating the menu")
+
+    if(flag){
+      Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|&Save")
+      Delay(1000)
+      Aliases["Epicor"]["MenuMForm"]["Close"]()
+      Log["Checkpoint"]("Menu created correctly")
+    }else{
+      Log["Error"]("There was a problem while creating the menu")
+    }
   }
   
+
   
 }
 
@@ -340,3 +381,5 @@ function DeleteDashboard(dashboardIDs) {
     }
   }
 }
+
+
