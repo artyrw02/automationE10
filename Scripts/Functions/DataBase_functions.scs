@@ -1,0 +1,58 @@
+function QueryDatabaseDashboards(DashBDID)
+{
+  var aCon, aCmd, aRecSet, RunTaskSeq, p, ConnectInfo, i;
+ 
+  ConnectInfo = "Provider=SQLOLEDB.1;User ID=sa; Password=Epicor123;Initial Catalog=erp10Staging;Persist Security Info=False;Data Source=" + Sys["HostName"];
+ 
+  // Creates ADO connection
+  aCon = ADO["CreateConnection"]();
+  
+  // Sets up the connection parameters
+  aCon["ConnectionString"] = ConnectInfo;
+  
+  // Opens the connection
+  aCon["Open"]();
+  
+  // Creates a command and specifies its parameters
+  aCmd = ADO["CreateCommand"]();
+  aCmd["ActiveConnection"] = aCon; // Connection
+  aCmd["CommandType"] = adCmdText; // Command type
+  // aCmd["CommandText"] = "select Company, DefinitionID, SysRowID from Ice.DashBdDef where DefinitionID='TestDashBD'"; // Query record on  Active status 
+  aCmd["CommandText"] = "select Company, DefinitionID, SysRowID from Ice.DashBdDef where DefinitionID='" + DashBDID + "'"; // Query record on  Active status 
+   
+  aRecSet = aCmd["Execute"]();
+  
+  var  s = "";
+
+  for (i = 0; i < aRecSet["Fields"]["Count"]; i++)
+    s = s + aRecSet["Fields"]["Item"](i)["Name"] + "\t";
+
+    s = s + "\r\n";
+    
+    // Scans recordset
+    while (! aRecSet["EOF"])
+    {
+      for (i = 0; i < aRecSet["Fields"]["Count"]; i++){
+        s = s + aRecSet["Fields"]["Item"](i)["Value"] + "\t";
+      }
+      s = s + "\r\n";
+      aRecSet["MoveNext"]();
+    }
+
+   /* // Outputs results
+    Log["Message"](aRecSet["RecordCount"])
+    Log["Message"]("Results from Ice.DashBdDef", s);
+
+    if(aRecSet["RecordCount"] == 0){
+      Log["Message"]("Query with Dashboard ID " + DashBDID + " retrieved " + aRecSet["RecordCount"] + " records.")
+      return aRecSet["RecordCount"]
+    }else{
+      Log["Message"]("Query with Dashboard ID " + DashBDID + " retrieved " + aRecSet["RecordCount"] + " records.")
+      return aRecSet["RecordCount"]
+    }
+*/
+    return aRecSet;
+    // Closes the recordset and connection
+    aRecSet["Close"]();
+    aCon["Close"]();
+}
