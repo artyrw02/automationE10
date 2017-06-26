@@ -75,12 +75,7 @@ function Login(username,password, shellMenu){
     }  
   }
 
-  if(menuSCType["Exists"]){
-    //Select Company
-    ExpandComp("Epicor Education")
-    //Select Plant
-    ChangePlant("Main Plant") 
-  }
+  ExpandComp("Epicor Education")
 }
 
 function CloseSmartClient(){
@@ -111,16 +106,19 @@ function RestartSmartClient(shellMenuType) {
 function ExpandComp(Company){
   var ElemCountI
   
-  //Expand Company
-  ElemCountI = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Count"]-1
+   //Expand Company
+    ElemCountI = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Count"]-1
+
     for (var i = 0; i < ElemCountI; i++) {
-    if( Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)["Text"] == Company ){
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)["Selected"]= true
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)["expanded"]= true      
+    var rect = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)
+    if( rect["Text"] == Company ){
+      rect["Selected"]= true
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["ActiveNode"] = rect
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Click"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)   
+      
       break
     }
-  }
- }
+  }  
 
 
 function ChangePlant(Plant){
