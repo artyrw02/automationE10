@@ -2,7 +2,7 @@
 //USEUNIT Dashboards_Functions
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
-var continueTest = true
+//USEUNIT DataBase_Functions
 
 function TC_Dashboard_Tracker_Views_2(){
   
@@ -13,6 +13,10 @@ function TC_Dashboard_Tracker_Views_2(){
     Login("epicor","Epicor123", "Classic") 
 
     ActivateFullTree()
+
+    ExpandComp("Epicor Education")
+
+    ChangePlant("Main Plant")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
@@ -184,6 +188,8 @@ function TC_Dashboard_Tracker_Views_2(){
         Log["Error"]("Menu is not available for this company")
       }
 
+      Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+    
     /*
       Step No: 19
       Step: Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
@@ -244,51 +250,42 @@ function TC_Dashboard_Tracker_Views_2(){
               Also verify that after getting this message the All companies check box appears disabled"       
     */
 
-
       NewDashboard("TestDashBD", "TestDashBD", "TestDashBD")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"] = true
-
-      //Finds the windows dialog and button object
-      var windowsExceptionDialog = Aliases["Epicor"]["FindAllChildren"]("FullName", "*TestDashBD*", 15)["toArray"]();
-      var windowsExceptionDialogBtn = Aliases["Epicor"]["FindAllChildren"]("FullName", "*Button*", 2)["toArray"]();
-
-      //Validates if the checkbox is disabled
-      if(windowsExceptionDialog[0]["Exists"]){
+      if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["ReadOnly"]){
         Log["Message"]("Checkbox 'All Companies' is disabled")
-        windowsExceptionDialogBtn[0]["Click"]()
       }else{
         Log["Error"]("Checkbox 'All Companies' is not disabled")
       }
 
-    /*
-      Step No: 23 & 24
-      Step: Save your dashboard       
-      Result: Verify the dashboard is saved       
-    */    
-      AddQueriesDashboard("baqTest")
-      
-      SaveDashboard()
+      /*
+        Step No: 23 & 24
+        Step: Save your dashboard       
+        Result: Verify the dashboard is saved       
+      */    
+        AddQueriesDashboard("baqTest")
+        
+        SaveDashboard()
 
-    /*
-      Step No: 26 & 27
-      Step: On Dashboard designer click on Tools> Deploy Dashboard   
-            Check Deploy Smart Client Application and Generate Web Form. Click Deploy       
-      Result: Verify the Dashboard Deploy dialog opens        
-              Verify the dashboard is deployed without problems       
-    */  
-      DeployDashboard("TestDashBD", "TestDashBD", "Deploy Smart Client,Generate Web Form")
+      /*
+        Step No: 26 & 27
+        Step: On Dashboard designer click on Tools> Deploy Dashboard   
+              Check Deploy Smart Client Application and Generate Web Form. Click Deploy       
+        Result: Verify the Dashboard Deploy dialog opens        
+                Verify the dashboard is deployed without problems       
+      */  
+        DeployDashboard("TestDashBD", "TestDashBD", "Deploy Smart Client,Generate Web Form")
 
-    /*
-      Step No: 28
-      Step: Go to System Setup>Security Maintenance> Menu Maintenance.
-            In Menu Maintenance tree select Main Menu>Sales Management>Customer Relationship Management > Setup, then Select File> New>  New Menu
-            Write a Menu ID, select module UD, write a Name for the menu, write an Order Sequence (the position where you will find the menu), 
-            in Program Type select Dashboard-Assembly and in Dashboard select the previously created one. Be sure the Enabled check box is selected. Click Save."        
-                   
-      Result: Verify the menu is created with the given parameters        
-    */ 
-    
+      /*
+        Step No: 28
+        Step: Go to System Setup>Security Maintenance> Menu Maintenance.
+              In Menu Maintenance tree select Main Menu>Sales Management>Customer Relationship Management > Setup, then Select File> New>  New Menu
+              Write a Menu ID, select module UD, write a Name for the menu, write an Order Sequence (the position where you will find the menu), 
+              in Program Type select Dashboard-Assembly and in Dashboard select the previously created one. Be sure the Enabled check box is selected. Click Save."        
+                     
+        Result: Verify the menu is created with the given parameters        
+      */ 
+ 
       //Open Menu maintenance   
       MainMenuTreeViewSelect("Epicor Mexico;System Setup;Security Maintenance;Menu Maintenance")
 
@@ -315,7 +312,7 @@ function TC_Dashboard_Tracker_Views_2(){
 
       MainMenuTreeViewSelect("Epicor Mexico;Sales Management;Customer Relationship Management;Setup;Dash Menu2")
 
- /*
+   /*
       Step No: 31
       Step: Click Refresh       
       Result: Verify the dashboard is populated with customers data       
@@ -349,6 +346,8 @@ function TC_Dashboard_Tracker_Views_2(){
 
     */    
 
+      ExpandComp("Epicor Education")
+      ChangePlant("Main Plant")
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;Dash Menu")
 
     /*
@@ -383,7 +382,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Go to Main Menu> System Management> Upgrade/Mass Regeneration       
       Result: Verify the form loads       
     */
-
+      ExpandComp("Epicor Education")
+      ChangePlant("Main Plant")
       MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
     /*
@@ -508,7 +508,7 @@ function TC_Dashboard_Tracker_Views_2(){
       SaveDashboard()
       ExitDashboard()
 
-      var test2 = QueryDatabaseDashboards("TestDashBD-3")
+      // var test2 = QueryDatabaseDashboards("TestDashBD-2")
     /*
       Step No: 47
       Step: On Dashboard Maintenance search for system dashboard JobStatusPlus and retrieve it        
@@ -526,7 +526,28 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: Verify the info from the dashboard is displayed       
     */
       Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Modify Dashboard")
+        
+      var count = 0
+      while(true){
+        var windowsExceptionDialogBtn = Aliases["Epicor"]["FindAllChildren"]("FullName", "*Button*", 2)["toArray"]();
 
+        if (windowsExceptionDialogBtn[0] != null && windowsExceptionDialogBtn[0] != null || windowsExceptionDialogBtn[0] != undefined && windowsExceptionDialogBtn[0] != undefined) {
+          if(windowsExceptionDialogBtn[0]["Exists"]){
+            Log["Message"]("Validating Warning - System Dashboards may not be modified. - Clicked OK on message ")
+            windowsExceptionDialogBtn[0]["Click"]()
+            break
+          }
+        }
+        count++
+
+        if(count == 5){
+          break
+          Runner["Stop"]()
+          Log["Error"]("Check")
+        }
+      }
+      
+        
     /*
       Step No: 49
       Step: Click File> Copy Dashboard        
@@ -542,34 +563,9 @@ function TC_Dashboard_Tracker_Views_2(){
     */  
       Aliases["Epicor"]["CopyDashboardForm"]["txtDefinitionId"]["Keys"]("TestDashBD-3")
       Aliases["Epicor"]["CopyDashboardForm"]["btnOkay"]["Click"]()      
-
-      SaveDashboard()
-      ExitDashboard()
-
-      //Finds the windows dialog and button object
-      // var windowsExceptionDialog = Aliases["Epicor"]["FindAllChildren"]("FullName", "*System Dashboard Warning*", 15)["toArray"]();
-      var windowsExceptionDialogBtn = Aliases["Epicor"]["FindAllChildren"]("FullName", "*Button*", 2)["toArray"]();
-
-      windowsExceptionDialogBtn[0]["Click"]()
-
+        
     /*
       Step No: 51
-      Step: Click File> Copy Dashboard        
-      Result: Verify the Copy Dashboard dialog opens        
-    */  
-
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Copy Dashboard")
-
-    /*
-      Step No: 52
-      Step: Enter Definition ID: TestDashBD-3. Click Ok
-      Result: Verify the dashboard is copied
-    */  
-      Aliases["Epicor"]["CopyDashboardForm"]["txtDefinitionId"]["Keys"]("TestDashBD-3")
-      Aliases["Epicor"]["CopyDashboardForm"]["btnOkay"]["Click"]()
-
-    /*
-      Step No: 53
       Step: Save your dashboard       
       Result: Verify the dashboard is saved
     */      
@@ -580,7 +576,10 @@ function TC_Dashboard_Tracker_Views_2(){
     //Query on SQL the dashboards
 
       var test1 = QueryDatabaseDashboards("TestDashBD")
+      Log["Message"]("Query with Dashboard ID TestDashBD retrieved " + test1["RecordCount"] + " records.")
+
       var test2 = QueryDatabaseDashboards("TestDashBD-3")
+      Log["Message"]("Query with Dashboard ID TestDashBD-3 retrieved " + test2["RecordCount"] + " records.")
 
     /*
       Step No: 53
@@ -590,14 +589,13 @@ function TC_Dashboard_Tracker_Views_2(){
 
       DeleteDashboard("TestDashBD-3")
       
-      var test2 = QueryDatabaseDashboards("TestDashBD-3")
-  
-      if(test2["RecordCount"] == 0){
-        Log["Message"]("Query with Dashboard ID TestDashBD-3 retrieved " + test2["RecordCount"] + " records.")
-        return test2["RecordCount"]
-      }else{
-        Log["Message"]("Query with Dashboard ID TestDashBD-3 retrieved " + test2["RecordCount"] + " records.")
-        return test2["RecordCount"]
-      }
-  
-  
+      var test3 = QueryDatabaseDashboards("TestDashBD-3")
+      Log["Message"]("Query with Dashboard ID TestDashBD-3 retrieved " + test3["RecordCount"] + " records.")
+
+  //-------------------------------------------------------------------------------------------------------------------------------------------' 
+
+   DeactivateFullTree()
+
+   CloseSmartClient()
+
+}

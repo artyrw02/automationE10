@@ -109,7 +109,7 @@ function ExpandComp(Company){
    //Expand Company
     ElemCountI = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Count"]-1
 
-    for (var i = 0; i < ElemCountI; i++) {
+  for (var i = 0; i < ElemCountI; i++) {
     var rect = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)
     if( rect["Text"] == Company ){
       rect["Selected"]= true
@@ -119,43 +119,46 @@ function ExpandComp(Company){
       break
     }
   }  
-
+}
 
 function ChangePlant(Plant){
   var CountPlant, ActPlant
   
   CountPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Count"] -1
-  
+
   for (var i = 0; i < CountPlant; i++) {    
-    ActPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Item"](i)["Text"]
-    if( ActPlant == Plant ){
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Item"](i)["Selected"] = true
+    ActPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Item"](i)
+    if( ActPlant["Text"]["OleValue"] == Plant ){
+      ActPlant["Selected"] = true
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["ActiveNode"] = ActPlant
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Click"]((ActPlant["Bounds"]["Left"]+ ActPlant["Bounds"]["Right"])/2, (ActPlant["Bounds"]["Top"]+ ActPlant["Bounds"]["Bottom"])/2)   
+      
       break
     }
   }
   
-  if (Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Text"] == Plant && Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["HasNodes"] == false ){
-    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Click"]("Options|Change Site...")
-    CountPlant = Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Count"] - 1
+  // if (Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Text"] == Plant && Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["HasNodes"] == false ){
+  //   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Click"]("Options|Change Site...")
+  //   CountPlant = Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Count"] - 1
     
-    for (var i = 0; i < CountPlant; i++) {
-      if( Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Item"](i)["Cells"]["Item"](2)["Text"] != Plant ){
-        Aliases["Epicor"]["PlantLku"]["grid"]["ClickCell"](i,"Name")
-        Aliases["Epicor"]["PlantLku"]["btnOK"]["Click"]
-        break
-      }
-    }
+  //   for (var i = 0; i < CountPlant; i++) {
+  //     if( Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Item"](i)["Cells"]["Item"](2)["Text"] != Plant ){
+  //       Aliases["Epicor"]["PlantLku"]["grid"]["ClickCell"](i,"Name")
+  //       Aliases["Epicor"]["PlantLku"]["btnOK"]["Click"]()
+  //       break
+  //     }
+  //   }
     
-    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Click"]("Options|Change Site...")
-    CountPlant = Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Count"] - 1
+  //   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Click"]("Options|Change Site...")
+  //   CountPlant = Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Count"] - 1
 
-    for (var i = 0; i < CountPlant; i++) {
-      if (Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["IteWm"](i)["Cells"]["Item"](2)["Text"] == Plant) {
-        Aliases["Epicor"]["PlantLku"]["grid"]["ClickCell"](i,"Name")
-        Aliases["Epicor"]["PlantLku"]["btnOK"]["Click"]
-        break
-      }
-    }
+  //   for (var i = 0; i < CountPlant; i++) {
+  //     if (Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["IteWm"](i)["Cells"]["Item"](2)["Text"] == Plant) {
+  //       Aliases["Epicor"]["PlantLku"]["grid"]["ClickCell"](i,"Name")
+  //       Aliases["Epicor"]["PlantLku"]["btnOK"]["Click"]()
+  //       break
+  //     }
+  //   }
   }
 }
 

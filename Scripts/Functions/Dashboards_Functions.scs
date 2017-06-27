@@ -53,6 +53,16 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
     }
   }
 
+  var windowsExceptionDialog = Aliases["Epicor"]["FindAllChildren"]("FullName", "*TestDashBD*", 15)["toArray"]();
+  var windowsExceptionDialogBtn = Aliases["Epicor"]["FindAllChildren"]("FullName", "*Button*", 2)["toArray"]();
+
+  if (windowsExceptionDialog[0] != null && windowsExceptionDialogBtn[0] != null || windowsExceptionDialog[0] != undefined && windowsExceptionDialogBtn[0] != undefined) {
+    if(windowsExceptionDialog[0]["Exists"]){
+      Log["Message"]("Warning - Dashboard: TestA set for All Companies already exists. - Clicked OK on message ")
+      windowsExceptionDialogBtn[0]["Click"]()
+    }
+  }
+
   dashboardPanel["txtCaption"]["Keys"](dashboardCaption)
   dashboardPanel["txtDescription"]["Keys"](dashDescription)
 
