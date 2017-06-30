@@ -168,6 +168,11 @@ function ExitDashboard(){
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 }
 
+function CloseDashboard(){
+  Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Close All")
+  Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()
+}
+
 //Create menu from menu maintenance for dashboards
 function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations){  
   Delay(1000)

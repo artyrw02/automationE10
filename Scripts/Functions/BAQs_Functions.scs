@@ -241,15 +241,25 @@ function CopyBAQ(baqID, newID){
   }
 }
 
-
-function UpdateTabBAQ(field, fieldAction){
+//Grid 'Updatable Columns' only
+function UpdateTabBAQ(field, fieldAction, querySettings){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
-  //Change to "Query Builder" tab
+  //Change to "Update" tab
   BAQFormDefinition["dockableWindow3"]["Activate"]()
 
   //Activate 'General Properties'
   BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+
+  if (querySettings != undefined) {
+    //querySettings = "AllowNew,Multiple Row"
+    querySettings = querySettings.split(",")
+
+    for (var i = 0; i < querySettings.length; i++) {      
+      var checkbox = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["upMainPanel1"]["grpProps"]["FindAllChildren"](["Text", "Style"], ["*"+querySettings[i]+"*","*Check*"], 30)["toArray"]()
+      checkbox[0]["Checked"] = true
+    }
+  }
 
   var grid = BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["upMainPanel1"]["updSelectFields1"]["grdUpdatable"]
   var columnAlias = getColumn(grid, "Alias") 
