@@ -14,6 +14,7 @@ function TC_Dashboard_Solution_Workbench_1(){
 
     ActivateFullTree()
 
+    Delay(1500)
     ExpandComp("Epicor Europe")
 
     // ChangePlant("Main Plant")
@@ -685,7 +686,6 @@ function TC_Dashboard_Solution_Workbench_1(){
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
-
   
   //--- Delete the dashboards and BAQs you've created on EPIC06 (TestDashBD2 and TestBAQ2, TestDashBD3) ---------------------------------------'
    //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
@@ -878,23 +878,23 @@ function TC_Dashboard_Solution_Workbench_1(){
 
     MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-      Log["Checkpoint"]("Dashboard opened")
-      
-      //Enable Dashboard Developer Mode  
-      DevMode()
-      Log["Checkpoint"]("DevMode activated")
+    var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+    Log["Checkpoint"]("Dashboard opened")
+    
+    //Enable Dashboard Developer Mode  
+    DevMode()
+    Log["Checkpoint"]("DevMode activated")
 
-      DeleteDashboard("TestDashBD3,TestDashBD4")
-      ExitDashboard()
+    DeleteDashboard("TestDashBD3,TestDashBD4")
+    ExitDashboard()
 
-      //Delete BAQ
+    //Delete BAQ
 
-      //Go to System Management> External Business Activity Query> External Datasource Type
-      MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+    //Go to System Management> External Business Activity Query> External Datasource Type
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
         
-       DeleteBAQ("TestBAQ3")
-       ExitBAQ()
+     DeleteBAQ("TestBAQ3")
+     ExitBAQ()
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
@@ -905,85 +905,381 @@ function TC_Dashboard_Solution_Workbench_1(){
     */
 
     //Go to System Management> Solution Management> Solution Type(Solution Workbench) Maintenance
-    MainMenuTreeViewSelect("Epicor Europe;System Management;Solution Management;Solution Type Maintenance")
+    MainMenuTreeViewSelect("Epicor Europe;System Management;Solution Management;Solution Workbench")
 
     // Click on Actions> Install Solution
-    Aliases["Epicor"]["SolutionTypeForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
+    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
+ 
     // Click on Solution File and search for the exported file
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
+
+    var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
+    var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
+
+
+    openSolutionWindow["Keys"]("Stest_Customer Solution_3.2.100.0")
+    
+    openSolutionWindowBtn["Click"]()
+
     // Leave defaults and click Install
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnInstall"]["Click"]()
+    
+    if (Aliases["Epicor"]["ExtDsSelectionForm"]["pnlButtons"]["Exists"]) {
+      Aliases["Epicor"]["ExtDsSelectionForm"]["pnlButtons"]["btnOK"]["Click"]()
+    }
+ 
     // Click Close
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["WinFormsObject"]("btnAbort")["Click"]()
+    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+  
+  //-------------------------------------------------------------------------------------------------------------------------------------------' 
+
+  //--- EPIC05 Retrieve TestDashBD1, TestBAQ1 and TestDashBD3  --------------------------------------------------\-----------------------------'
+    
+    /*
+      Step: 24 - 25
+      Note: Retrieve Dashboard
+    */
+    MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
-      
-      //Enable Dashboard Developer Mode  
-      DevMode()
-      Log["Checkpoint"]("DevMode activated")
 
-      DeleteDashboard("TestDashBD3,TestDashBD4")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD1")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
+
+      if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
+        Log["Checkpoint"]("Dashboard TestDashBD1 retrieved")
+      }else{
+        Log["Error"]("Dashboard TestDashBD1 wasn't retrieved")
+      }
+      
+      ExitDashboard()
+    
+    /*
+      Step: 26 - 27
+      Note: Retrieve BAQ
+    */
+
+   //Go to System Management> Business Activity Management;Setup;Business Activity Query
+    MainMenuTreeViewSelect("Epicor Europe;System Management;External Business Activity Query;External Business Activity Query")
+
+      Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"]("TestBAQ1")
+      Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"]("[Tab]")
+
+      if(Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"]){
+         Log["Checkpoint"]("BAQ TestBAQ1 retrieved and 'Shared' checkbox is checked")
+      }else{
+        Log["Error"]("BAQ TestBAQ1 wasn't retrieved or 'Shared' checkbox is not checked")
+      }
+
+
+      if(Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow1"]["optionsPanel1"]["gbID"]["cmbExtDs"]["Text"] != ""){
+         Log["Checkpoint"]("BAQ TestBAQ1 retrieved and 'External Datasource' is not empty")
+      }else{
+        Log["Error"]("BAQ TestBAQ1 wasn't retrieved or 'External Datasource' is empty")
+      }
+
+      ExitBAQ()
+
+    /*
+      Step: 28 - 29
+      Note: Retrieve Dashboard
+    */
+    MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+      Log["Checkpoint"]("Dashboard opened")
+
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD3")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
+
+      if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
+        Log["Checkpoint"]("Dashboard TestDashBD3 retrieved")
+      }else{
+        Log["Error"]("Dashboard TestDashBD3 wasn't retrieved")
+      }
+      
+     if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
+        Log["Checkpoint"]("Dashboard TestDashBD3 'All Companies' checkbox is checked")
+      }else{
+        Log["Error"]("Dashboard TestDashBD3'All Companies' checkbox is not checked")
+      }
+
+      ExitDashboard()
+  
+  //-------------------------------------------------------------------------------------------------------------------------------------------'
+
+  //--- EPIC05 Delete TestDashBD1, TestBAQ1 and TestDashBD3  ----------------------------------------------------------------------------------'
+    
+    MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      DeleteDashboard("TestDashBD1")
+      ExitDashboard()
+    
+   //Go to System Management> Business Activity Management;Setup;Business Activity Query
+    MainMenuTreeViewSelect("Epicor Europe;System Management;External Business Activity Query;External Business Activity Query")
+
+      DeleteBAQ("TestBAQ1")
+      ExitBAQ()
+
+    MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      DeleteDashboard("TestDashBD3")
       ExitDashboard()
 
-      //Delete BAQ
-
-      //Go to System Management> External Business Activity Query> External Datasource Type
-      MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
         
-       DeleteBAQ("TestBAQ3")
-       ExitBAQ()
-
-
+     DeleteBAQ("TestBAQ3")
+     ExitBAQ()
   
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
+  //-------------------------------------------------------------------------------------------------------------------------------------------'  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
+  //--- On EPIC06 Install the exported solution: ----------------------------------------------------------------------------------------------'
     /*
-      Step No: 11
-      Step: Restart Smart Client        
-      Result: E10 is restarted        
-    */    
+      Step: 30
+      Note: Install the exported solution
+    */
 
-    Delay(1000)
-    RestartSmartClient("Classic")
-    Log["Checkpoint"]("SmartClient Restarted")
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
+    //Go to System Management> Solution Management> Solution Type(Solution Workbench) Maintenance
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Solution Management;Solution Workbench")
 
-  //--- Test Menu -----------------------------------------------------------------------------------------------------------------------------'
-   /*
-      Step No: 12
-      Step:  Click refresh        
-      Result: Verify the data is retrieved on the grid, respecting the given rules       
-    */ 
+    // Click on Actions> Install Solution
+    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
+ 
+    // Click on Solution File and search for the exported file
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
 
-    //Open Menu created   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;DashbExport")
+    var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
+    var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
 
-    Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
+    openSolutionWindow["Keys"]("Stest2_Customer Solution_3.2.100.0")
+    
+    openSolutionWindowBtn["Click"]()
 
+    // Leave defaults and click Install
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnInstall"]["Click"]()
+    
+    if (Aliases["Epicor"]["ExtDsSelectionForm"]["pnlButtons"]["Exists"]) {
+      Aliases["Epicor"]["ExtDsSelectionForm"]["pnlButtons"]["btnOK"]["Click"]()
+    }
+ 
+    // Click Close
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["WinFormsObject"]("btnAbort")["Click"]()
+    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+  
+  //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-    var gridsMainPanel = RetrieveGridsMainPanel()
+  //--- EPIC06 Retrieve TestDashBD2, TestDashBD3  ---------------------------------------------------------------------------------------------'
+    
+    /*
+      Step: 31 - 32
+      Note: Retrieve Dashboard
+    */
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-     if (gridsMainPanel[0]["Rows"]["Count"] > 0) {
-      Log["Message"]("Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
-     }else{
-      Log["Error"]("There was a problem. Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
-     }
+      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+      Log["Checkpoint"]("Dashboard opened")
+
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
+
+      if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
+        Log["Checkpoint"]("Dashboard TestDashBD2 retrieved")
+      }else{
+        Log["Error"]("Dashboard TestDashBD2 wasn't retrieved")
+      }
+      
+      if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
+        Log["Checkpoint"]("Dashboard TestDashBD2 'All Companies' checkbox is not checked")
+      }else{
+        Log["Error"]("Dashboard TestDashBD2'All Companies' checkbox is checked")
+      }
+
+      ExitDashboard()
+    
+    /*
+      Step: 33
+      Note: Retrieve Dashboard
+    */
+    MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+      Log["Checkpoint"]("Dashboard opened")
+
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD3")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
+
+      if (Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["Exists"]) {
+        Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["btnOK"]["click"]()
+      }
+
+      if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
+        Log["Checkpoint"]("Dashboard TestDashBD3 retrieved")
+      }else{
+        Log["Error"]("Dashboard TestDashBD3 wasn't retrieved")
+      }
+      
+     if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
+        Log["Checkpoint"]("Dashboard TestDashBD3 'All Companies' checkbox is checked")
+      }else{
+        Log["Error"]("Dashboard TestDashBD3'All Companies' checkbox is not checked")
+      }
+
+      ExitDashboard()
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
+  //--- EPIC06 Delete TestDashBD2, TestDashBD3  -----------------------------------------------------------------------------------------------'
+    
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      DeleteDashboard("TestDashBD2")
+      ExitDashboard()
+    
+   //Go to System Management> Business Activity Management;Setup;Business Activity Query
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+
+      DeleteBAQ("TestBAQ2")
+      ExitBAQ()
+
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      DeleteDashboard("TestDashBD3")
+      ExitDashboard()
+
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+        
+     DeleteBAQ("TestBAQ3")
+     ExitBAQ()
+  
+  //-------------------------------------------------------------------------------------------------------------------------------------------'  
+
+  //--- On EPIC07 Install the exported solution: ----------------------------------------------------------------------------------------------'
+    /*
+      Step: 34
+      Note: Install the exported solution
+    */
+
+    //Go to System Management> Solution Management> Solution Type(Solution Workbench) Maintenance
+    MainMenuTreeViewSelect("Epicor Mexico;System Management;Solution Management;Solution Workbench")
+
+    // Click on Actions> Install Solution
+    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
+ 
+    // Click on Solution File and search for the exported file
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
+
+    var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
+    var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
+
+    openSolutionWindow["Keys"]("Stest3_Customer Solution_3.2.100.0")
+    
+    openSolutionWindowBtn["Click"]()
+
+    // Leave defaults and click Install
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnInstall"]["Click"]()
+    
+    if (Aliases["Epicor"]["ExtDsSelectionForm"]["pnlButtons"]["Exists"]) {
+      Aliases["Epicor"]["ExtDsSelectionForm"]["pnlButtons"]["btnOK"]["Click"]()
+    }
+    
+    if (Aliases["Epicor"]["dlgWarning"]["Exists"]) {
+      Aliases["Epicor"]["dlgWarning"]["btnYes"]["Click"]()
+    }
+
+    // Click Close
+    Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["WinFormsObject"]("btnAbort")["Click"]()
+    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+  
+  //-------------------------------------------------------------------------------------------------------------------------------------------' 
+
+  //--- EPIC07 Retrieve TestDashBD3, TestDashBD4  ---------------------------------------------------------------------------------------------'
+    
+    /*
+      Step: 35 - 36
+      Note: Retrieve Dashboard
+    */
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+      Log["Checkpoint"]("Dashboard opened")
+
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD3")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
+
+      if (Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["Exists"]) {
+        Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["btnOK"]["click"]()
+      }
+
+      if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
+        Log["Checkpoint"]("Dashboard TestDashBD3 retrieved")
+      }else{
+        Log["Error"]("Dashboard TestDashBD3 wasn't retrieved")
+      }
+      
+     if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
+        Log["Checkpoint"]("Dashboard TestDashBD3 'All Companies' checkbox is checked")
+      }else{
+        Log["Error"]("Dashboard TestDashBD3'All Companies' checkbox is not checked")
+      }
+
+      ExitDashboard()
+
+    /*
+      Step: 37
+      Note: Retrieve Dashboard
+    */
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+      Log["Checkpoint"]("Dashboard opened")
+
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD4")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
+
+      if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
+        Log["Checkpoint"]("Dashboard TestDashBD4 retrieved")
+      }else{
+        Log["Error"]("Dashboard TestDashBD4 wasn't retrieved")
+      }
+      
+      if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
+        Log["Checkpoint"]("Dashboard TestDashBD4 'All Companies' checkbox is checked")
+      }else{
+        Log["Error"]("Dashboard TestDashBD4'All Companies' checkbox is not checked")
+      }
+
+      var grid = Aliases["Epicor"]["Dashboard"]["dbPanel"]["FindChild"]("WndCaption", "*zCustomer01*", 30)
+      if(grid["Exists"]){
+        Log["Checkpoint"]("TestDashBD4 is retrieved and it includes the zCustomer01 query")
+      }else{
+        Log["error"]("TestDashBD4 is retrieved and it doesn't include the zCustomer01 query")
+      }
+
+      ExitDashboard()      
+  
+  //-------------------------------------------------------------------------------------------------------------------------------------------'
+
+  //--- EPIC06 Delete TestDashBD2, TestDashBD3  -----------------------------------------------------------------------------------------------'
+    
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      DeleteDashboard("TestDashBD3")
+      ExitDashboard()
+    
+   //Go to System Management> Business Activity Management;Setup;Business Activity Query
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+
+      DeleteBAQ("TestBAQ3")
+      ExitBAQ()
+
+    MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+      DeleteDashboard("TestDashBD4")
+      ExitDashboard()
+
+  //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
    DeactivateFullTree()
 
