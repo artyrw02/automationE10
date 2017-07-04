@@ -455,6 +455,9 @@ function TC_Dashboard_Updatable_Customized_Form(){
 
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
+  // deactivate dev mode
+   Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")
+   
    DeactivateFullTree()
 
    CloseSmartClient()
