@@ -246,17 +246,16 @@ function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll
         }
       }
     }
-
-    if(flag){
-      Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|&Save")
-      Delay(1000)
-      Aliases["Epicor"]["MenuMForm"]["Close"]()
-      Log["Checkpoint"]("Menu created correctly")
-    }else{
-      Log["Error"]("There was a problem while creating the menu")
-    }
   }
   
+  if(flag){
+    Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|&Save")
+    Delay(1000)
+    Aliases["Epicor"]["MenuMForm"]["Close"]()
+    Log["Checkpoint"]("Menu created correctly")
+  }else{
+    Log["Error"]("There was a problem while creating the menu")
+  }
 
   
 }
