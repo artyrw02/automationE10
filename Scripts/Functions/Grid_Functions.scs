@@ -313,3 +313,26 @@ function RetrieveGridsMainPanel(){
   var gridDashboardPanelChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 7)["toArray"]();
   return gridDashboardPanelChildren
 }
+
+//Cells
+function findValueInStringGrids(grid, column, valueToFind){
+  for (var i = 0; i < grid["Rows"]["Count"]; i++) {
+    var aString = grid["Rows"]["Item"](i)["Cells"]["Item"](column)["Text"]["OleValue"]
+    var aSubString = valueToFind
+    var Res, flag = true;
+
+    Res = aqString["Find"](aString, aSubString)
+    if (Res != -1) {
+      flag = true
+    }
+    else{
+      Log["Error"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+      flag = false
+      break
+    }
+  }
+
+  if (flag) {
+    Log["Checkpoint"]("Grid retrieved just records with " + aSubString)
+  } 
+}
