@@ -17,7 +17,7 @@ function getColumn(grid, column) {
     return columnIndex
 }
 
-//Test case Ud tables
+//Test case BAQ parameters 
 function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
   var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
     Log["Message"]('columns' + allColumns)
@@ -164,7 +164,7 @@ function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
 }
 
 
-//IMPORTANT TO CHECK FUNTIONALITY WITH GRIDS
+//IMPORTANT TO CHECK FUNTIONALITY WITH GRIDS - Ud tables
 function SelectCellDropdownGrid(column, dropValue, ultraGrid){
   var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
     Log["Message"]('columns' + allColumns)

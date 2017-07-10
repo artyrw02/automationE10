@@ -7,27 +7,29 @@ function DevMode(){
 }
 
 //Basic deployment for dashboards
-function CreateSimpleDashboards(dashboardID, dashboardCaption, dashDescription, generalOptions, baqQuery, deploymentOptions){
+// function CreateSimpleDashboards(dashboardID, dashboardCaption, dashDescription, generalOptions, baqQuery, deploymentOptions){
+function CreateSimpleDashboards(DashbData){
 
-  NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions)
+  NewDashboard(DashbData["dashboardID"],DashbData["dashboardCaption"],DashbData["dashDescription"], DashbData["generalOptions"])
   
-  AddQueriesDashboard(baqQuery)
+  AddQueriesDashboard(DashbData["baqQuery"])
   
-  SaveDashboard(dashboardCaption,dashDescription)
+  SaveDashboard()
   
   Delay(1000)
   
-  DeployDashboard(dashboardCaption,dashDescription, deploymentOptions)
+  DeployDashboard(DashbData["deploymentOptions"])
   
   ExitDashboard()
 }
+
 function OpenDashboard(dashboardID) {
   var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
   dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
   dashboardPanel["txtDefinitonID"]["Keys"]("[Tab]")
 }
-function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions){
 
+function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions){
   //Click New Dashboard
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&New...|New Dashboard")
 
@@ -114,10 +116,13 @@ function SaveDashboard(){
   }
 }
 // Modify
-function DeployDashboard(dashboardCaption,dashDescription, deploymentOptions){
+function DeployDashboard(deploymentOptions){
   //Deploy Dashboard
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
-  
+ 
+  var dashboardCaption =  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]["Text"]
+  var dashDescription = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDescription"]["Text"]
+
   if (dashboardCaption == "" || dashDescription == "") { 
     if (Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Exists"]){
       Log['Message']("Validated correctly: Cancelling AppBuilder operation: Dashboard Description and caption is required.")
@@ -174,12 +179,13 @@ function CloseDashboard(){
 }
 
 //Create menu from menu maintenance for dashboards
-function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations){  
+// function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations)
+function CreateMenu(MenuData){  
   Delay(1000)
   var MenuMFormTree = Aliases["Epicor"]["MenuMForm"]["windowDockingArea2"]["dockableWindow2"]["jobTreeViewPanel"]["methodTree"]  
   var CountElem = MenuMFormTree["SelectedNodes"]["Item"](0)["Nodes"]["Count"]  
  
-  var arrMenuLocation = menuLocation.split(">")
+  var arrMenuLocation = MenuData["menuLocation"].split(">")
   
     for (var i = 1; i <= arrMenuLocation.length; i++) {
       for (var j = 0; j <= CountElem; j++) {
@@ -198,34 +204,35 @@ function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll
   //Fill the information
   var MenuFormObject = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]
 
-  MenuFormObject["dbxDetail"]["txtMenuID"]["Keys"](menuID)
-  MenuFormObject["dbxDetail"]["txtName"]["Keys"](menuName)
-  MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](orderSequence)
+  MenuFormObject["dbxDetail"]["txtMenuID"]["Keys"](MenuData["menuID"])
+  MenuFormObject["dbxDetail"]["txtName"]["Keys"](MenuData["menuName"])
+  MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](MenuData["orderSequence"])
   if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){
     if(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"] == "Duplicate Order Sequence for this parent menu ID."){
-      MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](orderSequence+1)
+      MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](MenuData["orderSequence"]+1)
     }
   }
   MenuFormObject["grpProgramMain"]["cboType"]["Keys"]("[BS][BS][BS][BS][BS][BS][BS][BS][BS]")
-  MenuFormObject["grpProgramMain"]["cboType"]["Keys"](menuType)
-  if (menuType == "Dashboard-Assembly") {
-    MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"](dll)
+  MenuFormObject["grpProgramMain"]["cboType"]["Keys"](MenuData["menuType"])
+  if (MenuData["menuType"] == "Dashboard-Assembly") {
+    MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"](MenuData["dll"])
     MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"]("[Tab]")
-  }else if (menuType == "Menu Item") {
-    MenuFormObject["grpProgramMain"]["txtProgram"]["Keys"](dll)
+  }else if (MenuData["menuType"] == "Menu Item") {
+    MenuFormObject["grpProgramMain"]["txtProgram"]["Keys"](MenuData["dll"])
     MenuFormObject["grpProgramMain"]["txtProgram"]["Keys"]("[Tab]")
   }
   var enabledChk = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["chkEnable"]["Checked"]
    
   var flag = true
 
-  if(validations != undefined){
-    validations = validations.split(",")
+  if(MenuData["validations"] != undefined && MenuData["validations"] != "" && MenuData["validations"] != null){
+    var validations = MenuData["validations"].split(",")
 
     for(var i = 0; i < validations["length"]; i++){
       if(validations[i] != "Web Access"){
         var checkbox = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["FindAllChildren"]("FullName", "*chk"+"*"+validations[i]+"*", 30)["toArray"]()
         checkbox[0]["Checked"] = true
+        Log["Checkpoint"]("Checkbox from menu was selected - " + validations[i])
         // if(checkbox[0]["Checked"] == true  ){
         //   Log["Checkpoint"]("Checkbox " + validations[i] + " is Checked.")
         //   flag = true
@@ -256,8 +263,6 @@ function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll
   }else{
     Log["Error"]("There was a problem while creating the menu")
   }
-
-  
 }
 
 //deploy from Dashboard maintenance
@@ -272,11 +277,13 @@ function DashboardMaintenance(dashboardID, actions){
   for (var i = 0; i <= arrActions.length - 1; i++) {
     
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|" + arrActions[i])
+    Log["Message"]("Action " + arrActions[i] + " was selected.")
 
     if (arrActions[i] == "Modify Dashboard") {
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Copy Dashboard") 
       Aliases["Epicor"]["CopyDashboardForm"]["txtDefinitionId"]["Keys"](dashboardID + "Copy")
       Aliases["Epicor"]["CopyDashboardForm"]["btnOkay"]["Click"]()
+      Log["Checkpoint"]("Dashboard was copied correctly.")
 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
 
@@ -288,6 +295,7 @@ function DashboardMaintenance(dashboardID, actions){
       Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["grpMobile"]["chkGenMobile"]["Checked"] = true
       Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["grpMobile"]["chkMobileMenuAvail"]["Checked"] = true
       Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["btnOk"]["Click"]()
+      Log["Checkpoint"]("Copied Dashboard was deployed correctly.")
 
       Delay(5000)
       Aliases["Epicor"]["AppBuilderDeployDialog"]["Close"]()
@@ -308,7 +316,7 @@ function OpenDashboardFavMenu(DashboardID) {
 
 }
 
-//MODIFY
+//MODIFY-remove
 function DashboardQueryProperties(tab){
     var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
 
@@ -323,7 +331,6 @@ function DashboardQueryProperties(tab){
 
 function DashboardPropertiesTabs(dashboardPropsPanel, tab){
     // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-
     for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
       if (dashboardPropsPanel["Tabs"]["Item_2"](i)["Text"] == tab) {
           dashboardPropsPanel["ActiveTab"] = dashboardPropsPanel["Tabs"]["Item_2"](i)

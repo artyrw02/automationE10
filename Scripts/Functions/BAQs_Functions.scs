@@ -1,14 +1,15 @@
 //USEUNIT Grid_Functions
 
 // Create a simple BAQ with one table 
-function CreateSimpleBAQ(baqID, baqDescription, table, columns, generalConfig){
+// function CreateSimpleBAQ(baqID, baqDescription, table, columns, generalConfig){
+function CreateSimpleBAQ(baqData){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
-  CreateBAQ(baqID, baqDescription, generalConfig)
+  CreateBAQ(baqData["Id"], baqData["Description"], baqData["GeneralConfig"])
   
-  AddTableBAQ(BAQFormDefinition, table)
+  AddTableBAQ(BAQFormDefinition, baqData["Table"])
 
-  AddColumnsBAQ(BAQFormDefinition, table, columns)
+  AddColumnsBAQ(BAQFormDefinition, baqData["Table"], baqData["Columns"])
 
   AnalyzeSyntaxisBAQ(BAQFormDefinition)
 
@@ -140,8 +141,17 @@ function TestResultsBAQ(BAQFormDefinition, parameterValue){
     var fieldParameter = pnlParametersBAQField["FindAllChildren"]("FullName", "*edt*", 5)["toArray"]();
     var btnParameter = pnlParametersBAQBtn["FindAllChildren"]("FullName", "*btn*", 5)["toArray"]();
 
-    fieldParameter[0]["Keys"](parameterValue)
+    fieldParameter[0]["setFocus"]()
+    fieldParameter[0]["Click"]()
 
+    while(true){
+      fieldParameter[0]["Keys"]("[Down]")
+      if (fieldParameter[0]["Value"] == parameterValue) {
+        fieldParameter[0]["Keys"]("[Tab]")
+        break
+      }
+    }
+    
     for (var i = 0; i <= btnParameter.length -1; i++) {
       if(btnParameter[i]["Text"] == "OK"){
         btnParameter[i]["Click"]()

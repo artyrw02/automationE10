@@ -37,34 +37,23 @@ function StartSmartClient(){
 }
 
 //Function to login
-function Login(username,password, shellMenu){
+function Login(username,password){
 
   var epicor = Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["WPFObject"]("AvalonAdapter", "", 1)["WPFObject"]("Shell", "", 1)["WPFObject"]("Grid", "", 1)["WPFObject"]("ShellGrid")["WPFObject"]("ContentPanel")["WPFObject"]("userControl")["WPFObject"]("MainGrid")["WPFObject"]("logon")["WPFObject"]("LogonPopup")["WPFObject"]("Grid", "", 1)
 
   //Activates Shell menu
-  if (shellMenu == "Classic" ){
-      if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == false ){
-        epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
-      }
-  }else{
-      if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == true ){
-        epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
-      }
+  if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == false ){
+    epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
   }
  
   //Enters the text 'epicor' in the 'txtUserID' text editor.
   Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtUserID"]["Keys"](username)
-  //Aliases.Epicor.ShellMenuForm.shellControlHost.HwndSource_AdornerDecorator.AdornerDecorator.AvalonAdapter.Shell.Grid.ShellGrid.ContentPanel.userControl.MainGrid.logon.LogonPopup.Grid.LoginGrid.txtUserID.Keys(username)
 
   //Enters 'Epicor123[Enter]' in the 'txtPassword' object.
   Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtPassword"]["Keys"](password+"[Enter]")
-  //Aliases.Epicor.ShellMenuForm.shellControlHost.HwndSource_AdornerDecorator.AdornerDecorator.AvalonAdapter.Shell.Grid.ShellGrid.ContentPanel.userControl.MainGrid.logon.LogonPopup.Grid.LoginGrid.txtPassword.Keys(password+"[Enter]")
 
   //Activates Shell menu'
-  if (shellMenu == "Classic")
-      var menuSCType = Aliases["Epicor"]["MenuForm"]
-  else
-      var menuSCType = Aliases["Epicor"]["ShellMenuForm"]   
+  var menuSCType = Aliases["Epicor"]["MenuForm"]
 
   while(!menuSCType["Exists"]){
     Delay(5000)
@@ -74,8 +63,6 @@ function Login(username,password, shellMenu){
       Runner["Stop"](false)
     }  
   }
-
-  ExpandComp("Epicor Education")
 }
 
 function CloseSmartClient(){
@@ -91,7 +78,7 @@ function CloseSmartClient(){
 
 
 //Restart smart client
-function RestartSmartClient(shellMenuType) {
+function RestartSmartClient() {
   //Close Epicor
   CloseSmartClient()
 
@@ -99,7 +86,7 @@ function RestartSmartClient(shellMenuType) {
   TestedApps["Epicor"]["Run"]()
 
   //log in
-  Login("epicor", "Epicor123", shellMenuType)
+  Login("epicor", "Epicor123")
 }
 
 
@@ -159,7 +146,6 @@ function ChangePlant(Plant){
   //       break
   //     }
   //   }
-  }
 }
 
 function ActivateFavoritesMenuTab() {
