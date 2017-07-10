@@ -5,9 +5,32 @@
 
 function Dashboard_with_UD_tables(){
   
+  var MenuDataEntry = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "MenuA",
+    "menuName" : "MenuA",
+    "orderSequence" : 0,
+    "menuType" : "Menu Item",
+    "dll" : "Ice.UI.UD100Entry.dll"
+  }
+
+  var baqData1 = {
+    "Id" : "baqUD1",
+    "Description" : "baqUD1",
+    "Table" : "UD100",
+    "Columns" : "Company,Key1,Key2,Key3,Key4,Key5,Character01"
+  }
+
+  var baqData2 = {
+    "Id" : "baqUD2",
+    "Description" : "baqUD2",
+    "Table" : "UD100A",
+    "Columns" : "Company,Key1,Key2,Key3,Key4,Key5,ChildKey1,ChildKey2,ChildKey3,ChildKey4,ChildKey5,Character01"
+  }
+
   StartSmartClient()
 
-  Login("epicor","Epicor123", "Classic") 
+  Login("epicor","Epicor123") 
 
   ActivateFullTree()
 
@@ -17,14 +40,14 @@ function Dashboard_with_UD_tables(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
     
     //Creates Menu
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "MenuA", "MenuA", 0, "Menu Item", "Ice.UI.UD100Entry.dll")
+    CreateMenu(MenuDataEntry)
     Log["Checkpoint"]("MenuA created")
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Restart SmartClient -------------------------------------------------------------------------------------------------------------------'
     
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("Epicor10 restarted")
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
@@ -32,7 +55,7 @@ function Dashboard_with_UD_tables(){
   //--- Create UD registers -------------------------------------------------------------------------------------------------------------------'
     
     //Open Menu created
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;MenuA")
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuDataEntry["menuName"])
     Log["Checkpoint"]("MenuA opened")
 
     //******* Create register UD100 Maintenance ***********
@@ -119,7 +142,7 @@ function Dashboard_with_UD_tables(){
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
       Log["Checkpoint"]("Business Activity Query opened")
 
-      CreateSimpleBAQ("baq1", "baqDescription", "UD100", "Company,Key1,Key2,Key3,Key4,Key5,Character01")
+      CreateSimpleBAQ(baqData1)
       Log["Message"]("BAQ1 created for UD100")
     //******* End creation register UD100 Maintenance *****
       
@@ -128,7 +151,7 @@ function Dashboard_with_UD_tables(){
     //******* Create BAQ against UD100A ********************
      //Open Business Activity Query to create BAQ   
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
-      CreateSimpleBAQ("baq2", "baqDescription", "UD100A", "Company,Key1,Key2,Key3,Key4,Key5,ChildKey1,ChildKey2,ChildKey3,ChildKey4,ChildKey5,Character01")
+      CreateSimpleBAQ(baqData2)
       Log["Message"]("BAQ2 created for UD100A")
     //******* End creation register UD100 Maintenance *****
 
@@ -144,7 +167,7 @@ function Dashboard_with_UD_tables(){
       Log["Message"]("Devmode activated on Dashboard")
 
       //Call function to create and deploy a dashboard
-      NewDashboard("DashB", "Dashb", "Dashb", "Refresh All")
+      NewDashboard("DashbUD", "DashbUD", "DashbUD", "Refresh All")
       Log["Message"]("General data for data filled")
       Log["Message"]("Dashboard created")
 
@@ -152,12 +175,14 @@ function Dashboard_with_UD_tables(){
       Log["Message"]("Dashboard saved - no queries added")
 
       /***** QUERY 1 *****/
-        AddQueriesDashboard("baq1")
+        AddQueriesDashboard(baqData1["Id"])
         Log["Message"]("BAQ1 added")
 
+        var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+
         //Right click on the query and click on Properties        
-        var rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](0)["UIElement"]["Rect"]
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
+        var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
+        dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
         Log["Message"]("BAQ1 - right click")
 
         // click 'Properties' option
@@ -182,12 +207,12 @@ function Dashboard_with_UD_tables(){
         Log["Message"]("BAQ1 - properties 'ok' button was clicked")
 
       /***** QUERY 2 *****/
-        AddQueriesDashboard("baq2")
+        AddQueriesDashboard(baqData2["Id"])
         Log["Message"]("BAQ2 added")
 
         //Right click on the query and click on Properties        
-        var rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](1)["UIElement"]["Rect"]
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
+        rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
+        dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
         Log["Message"]("BAQ2 - right click")
 
         // click 'Properties' option
@@ -212,31 +237,31 @@ function Dashboard_with_UD_tables(){
 
         SelectCellDropdownGrid("ColumnName", "UD100A_Company", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Company", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Company", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
         SelectCellDropdownGrid("ColumnName", "UD100A_Key1", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Key1", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Key1", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
         SelectCellDropdownGrid("ColumnName", "UD100A_Key2", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Key2", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Key2", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
         SelectCellDropdownGrid("ColumnName", "UD100A_Key3", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Key3", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Key3", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
         SelectCellDropdownGrid("ColumnName", "UD100A_Key4", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Key4", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Key4", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
         SelectCellDropdownGrid("ColumnName", "UD100A_Key5", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Key5", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Key5", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
         SelectCellDropdownGrid("ColumnName", "UD100A_Character01", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baqDescription: UD100_Character01", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"] +"- " + baqData1["Description"] + ": UD100_Character01", ultraGrid)
         
         Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
         Log["Message"]("Cells were filled and 'ok' button was clicked")
@@ -248,7 +273,7 @@ function Dashboard_with_UD_tables(){
       Log["Message"]("Dashboard was saved")
 
       //Deploy dashboard 
-      DeployDashboard("Dashb","Dashb", "Deploy Smart Client,Add Menu tab,Add Favorite Item")
+      DeployDashboard("Deploy Smart Client,Add Menu tab,Add Favorite Item")
       Log["Message"]("Dashboard was deployed")
 
       ExitDashboard()
@@ -258,7 +283,7 @@ function Dashboard_with_UD_tables(){
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //------- Restart Epicor10 ------------------------------------------------------------------------------------------------------------------' 
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("Smart Client was restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'     
         
@@ -308,7 +333,7 @@ function Dashboard_with_UD_tables(){
   //-------------------------------------------------------------------------------------------------------------------------------------------'     
   
   //------- Main Menu -------------------------------------------------------------------------------------------------------------------------'             
-    // On Main Menu select Tracing Options
+    // On Smart Client Main Menu select Tracing Options
     Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Tracing Options...") 
     Log["Message"]("Tracing Options menu option selected")
 
@@ -325,7 +350,7 @@ function Dashboard_with_UD_tables(){
     //** Testing from Favorites **
       ActivateFavoritesMenuTab()
 
-      OpenDashboardFavMenu("DashB")
+      OpenDashboardFavMenu("DashbUD")
 
       DashboardPanelTest()
 
