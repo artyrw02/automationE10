@@ -7,9 +7,44 @@ function Dashboard_Publishing(){
   
   StartSmartClient()
 
-  Login("epicor","Epicor123", "Classic") 
+  Login("epicor","Epicor123") 
 
   ActivateFullTree()
+
+  ExpandComp("Epicor Education")
+
+  ChangePlant("Main Plant")
+
+  var baqData1 = {
+    "Id" : "baqPublishing",
+    "Description" : "baqPublishing",
+    "Table" : "Customer",
+    "Columns" : "CustID,CustNum,Name,State,Country"
+  }
+
+  var baqData2 = {
+    "Id" : "baqPublishing2",
+    "Description" : "baqPublishing2",
+    "Table" : "OrderHed",
+    "Columns" : "OrderNum,CustNum,PONum"
+  }
+  var DashbData = {
+    "dashboardID" : "DashBPublishing",
+    "dashboardCaption" : "Publishing",
+    "dashDescription" : "Publishing",
+    "generalOptions" : "",
+    "baqQuery" : "",
+    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item"
+  }
+
+  var DashbData2 = {
+    "dashboardID" : "DashBPublishing2",
+    "dashboardCaption" : "Publishing2",
+    "dashDescription" : "Publishing2",
+    "generalOptions" : "",
+    "baqQuery" : "baq1",
+    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
+  }
 
   //--- Creates BAQs ---------------------------------------------------------------------------------------------------------------------------'
     
@@ -17,8 +52,9 @@ function Dashboard_Publishing(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
     //****** Creating BAQ1 ***************'
-    //Call function to create a simple BAQ
-    CreateSimpleBAQ("baq1", "baq", "Customer", "CustID,CustNum,Name,State,Country")
+    //1- Call function to create a simple BAQ
+    CreateSimpleBAQ(baqData1)
+    Log["Checkpoint"]("BAQ " + baqData1["Id"] + " created correctly.")
 
     //****** End of BAQ1 creation ********'
 
@@ -26,9 +62,9 @@ function Dashboard_Publishing(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
     //****** Creating BAQ2 ***************'
-    //Call function to create a simple BAQ
-    CreateSimpleBAQ("baq2", "baq", "OrderHed", "OrderNum,CustNum,PONum")
-
+    //2- Call function to create a simple BAQ
+    CreateSimpleBAQ(baqData2)
+    Log["Checkpoint"]("BAQ " + baqData2["Id"] + " created correctly.")
     //****** End of BAQ2 creation ******
 
   //--------------------------------------------------------------------------------------------------------------------------------------------'
@@ -43,8 +79,8 @@ function Dashboard_Publishing(){
 
     Log["Message"]("Devmode activated on Dashboard")
 
-    //Call function to create and deploy a dashboard
-    NewDashboard("DashB", "Dashb", "Dashb")
+    //3- Call function to create and deploy a dashboard
+    NewDashboard(DashbData["dashboardID"],DashbData["dashboardCaption"],DashbData["dashDescription"])
     Log["Message"]("General data for data filled")
 
     SaveDashboard()
@@ -52,17 +88,18 @@ function Dashboard_Publishing(){
 
     /***** QUERIES *****/
       /*** ADDING BAQ1 ******/
-        AddQueriesDashboard("baq1")
-        Log["Message"]("BAQ1 added to the dashboard")
+        AddQueriesDashboard(baqData1["Id"])
+        Log["Message"](baqData1["Id"] + " added to the dashboard")
 
-        //Right click on the query summary and click on Publish View        
-        var rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)["UIElement"]["Rect"]
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-        Log["Message"]("BAQ1 - right click")
+        var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+        //4- Right click on the query summary and click on Publish View        
+        var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
+        dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
+        Log["Message"]("Right click on " + baqData1["Id"])
 
         // click 'Publish View' option from menu
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Publish View");
-        Log["Message"]("BAQ1 Summary - Publish View was selected from Menu")
+        Log["Message"]("Publish View was selected from Menu")
 
         Delay(1000)
 
@@ -72,21 +109,21 @@ function Dashboard_Publishing(){
 
         //Click Ok
         Aliases["Epicor"]["PublishViewPropsDialog"]["btnOk"]["Click"]()
+        Log["Checkpoint"]("Published view added.")
 
         //Save dashboard
         SaveDashboard()
         Log["Message"]("Dashboard was saved")
 
-        // Clear/Close the dashboard 
+        //5- Clear/Close the dashboard 
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
         //Open Dashboard   
         MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
         //retrieve the dashboard created
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("Dashb")
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
-        Log["Message"]("Dashboard 'DashB' loaded")
+        OpenDashboard(DashbData["dashboardID"])
+        Log["Message"]("Dashboard " + DashbData["dashboardID"] + " loaded")
 
         //checks if the 'Available Views' panel is available
         if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["Exists"]){
@@ -99,25 +136,30 @@ function Dashboard_Publishing(){
         }
 
         /*MODIFY TO ADAPT DRAG FUNCTION*/
-        //Drags the published view created
+        //6- Drags the published view created
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Drag"](77, 30, 11, -127);
         Log["Message"]("BAQ from published views was dragged to the queries area")
 
-        //Right click on the query summary and click on Properties        
-        rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](1)["UIElement"]["Rect"]
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-        Log["Message"]("Right click on BAQ1 dragged from published views")
+        //7- Right click on the query summary and click on Properties        
+        // rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](1)["UIElement"]["Rect"]
+        // Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
+        // Log["Message"]("Right click on BAQ1 dragged from published views")
+
+        var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+        var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
+        dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
+        Log["Message"]("Right click on " + baqData1["Id"] + "dragged from published views")
 
         // click 'Properties' option
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-        Log["Message"]("Properties was selected from BAQ1 dragged - published views")
+        Log["Message"]("Properties was selected from " + baqData1["Id"] + " dragged - published views")
 
         Delay(1000)
 
         // Active Publish tab and select all columns to be published
         DashboardQueryProperties("Publish")
 
-        Log["Message"]("Publish tab was selected from BAQ1 dragged - published views")
+        Log["Message"]("Publish tab was selected from "+ baqData1["Id"] + " dragged - published views")
         var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
 
         var publishColumns = queryProperties["tabPublish"]["eclpPublishedColumns"]["myCLB"]
@@ -134,30 +176,37 @@ function Dashboard_Publishing(){
         Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
         Log["Message"]("BAQ1 - properties 'ok' button was clicked")
 
+        SaveDashboard()
+
       /**********************/
 
       /*** ADDING BAQ2 ******/
-        AddQueriesDashboard("baq2")
-        Log["Message"]("BAQ2 added")
+      //8- Add second BAQ created 
+        AddQueriesDashboard(baqData2["Id"])
+        Log["Message"](baqData2["Id"] + " added")
 
         //Right click on the query and click on Properties        
-        var rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](2)["UIElement"]["Rect"]
-        Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-        Log["Message"]("Right click on BAQ2")
+        // var rect = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["Nodes"]["Item"](0)["Nodes"]["Item"](2)["UIElement"]["Rect"]
+        // Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
+
+        var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+        var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](2)
+        dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
+        Log["Message"]("Right click on " + baqData2["Id"])
 
         // click 'Properties' option
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-        Log["Message"]("BAQ2 - Properties was selected")
+        Log["Message"](baqData2["Id"] + " - Properties was selected")
 
         //active to 'Filter' tab
         DashboardQueryProperties("Filter")
-        Log["Message"]("BAQ1 - filter tab was selected")
+        Log["Message"](baqData2["Id"] + " - filter tab was selected")
 
         var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
 
         SelectCellDropdownGrid("ColumnName", "OrderHed_CustNum", ultraGrid)
         SelectCellDropdownGrid("Condition", "=", ultraGrid)
-        SelectCellDropdownGrid("Value", "baq1- baq: Customer_CustNum", ultraGrid)
+        SelectCellDropdownGrid("Value", baqData1["Id"]+"- "+ baqData1["Description"] + ": Customer_CustNum", ultraGrid)
         ultraGrid["Keys"]("[Enter]")
 
         //click 'OK' button
@@ -170,12 +219,12 @@ function Dashboard_Publishing(){
         //Enable 'refresh all' checkbox
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkInhibitRefreshAll"]["Checked"] = true
 
-        SaveDashboard("Dashb", "Dashb")
+        SaveDashboard()
         
         //Operan 'Deploy dashboard' from menu
         Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
         
-        //Click 'Test Application'
+        //9- Click 'Test Application'
         Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["grpWinAssembly"]["btnTestLaunch"]["Click"]()
         Delay(1500)
         Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["btnCancel"]["Click"]()
@@ -184,8 +233,7 @@ function Dashboard_Publishing(){
     
     /*******************/
 
-
-    /*Test data before deployment */
+    /*9- Test data before deployment */
 
       Log["Message"]("Ready to test data")
       Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh All")
@@ -214,7 +262,7 @@ function Dashboard_Publishing(){
       var baqCellValueKey2 = baq2Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Value"]
       
       if( baqCellValueKey1["OleValue"] == baqCellValueKey2["OleValue"]){
-        Log["Message"]("Data from BAQ1 row 0 matches the result on baq2")
+        Log["Message"]("Data from "+ baqData1["Id"] +" row 0 matches the result on baq2")
       }
 
       //Select second record on BAQ1 results to notice change of data on BAQ2
@@ -230,13 +278,13 @@ function Dashboard_Publishing(){
       baqCellValueKey2 = baq2Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Value"]
       
       if( baqCellValueKey1["OleValue"] == baqCellValueKey2["OleValue"]){
-        Log["Message"]("Data from BAQ1 row 1 matches the result on baq2")
+        Log["Message"]("Data from "+ baqData1["Id"] + " row 1 matches the result on baq2"+ baqData2["Id"] )
       }
 
       Delay(1500)
     /******************************/
 
-    /* In the second grid from the dashboard right click on any Order from "Order" column
+    /* 10- In the second grid from the dashboard right click on any Order from "Order" column
      select open with > Sales Order Entry  (Or do the same with any CustID from the first grid and open it with Customer Maintenance) */
       
       //Retrieve cell      
@@ -244,16 +292,21 @@ function Dashboard_Publishing(){
       rect = cell["GetUIElement"]()["Rect"]
 
       baq2Grid["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-      Log["Message"]("Cell from grid 2 (baq 2) was selected")
+      Log["Message"]("Cell from grid 2 "+ baqData2["Id"] +" was selected")
 
       // click 'Properties' option
       baq2Grid["UltraPopupMenu"]["Click"]("Open With...|Sales Order Entry");
-      Log["Message"]("|Sales Order Entry opened")
 
+      Delay(2500)
+      if(Aliases["Epicor"]["SalesOrderForm"]["Exists"]){
+        Log["Message"]("|Sales Order Entry opened")
+      }else{
+        Log["Error"]("There was a problem opening Sales Order Entry")
+      }
       Delay(2500)
     /* end Open Sales order */
 
-    /* change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
+    /* 11- change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
 
       //Activate Dash window
       Aliases["Epicor"]["MainController"]["Activate"]()
@@ -305,12 +358,13 @@ function Dashboard_Publishing(){
 
       //Close Dashboard Panel
       Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+      Log["Checkpoint"]("Data was validated, no errors found")
 
-      DeployDashboard("Dashb","Dashb", "Deploy Smart Client,Add Favorite Item")
+      DeployDashboard(DashbData["deploymentOptions"])
       Log["Message"]("Dashboard was deployed")
     /* end */
 
-    /* 
+    /* 12- 
        > Close the dashboard from dashboard designer form (Use ""Close All"" button)
        > Click on New button to create a new dashboard
        > Enter Dashboard ID , Caption and Description
@@ -322,6 +376,7 @@ function Dashboard_Publishing(){
 
       //Exit dashboard
       ExitDashboard()
+      Log["Checkpoint"]("Dashboard was created correctly.")
         
       //Open Dashboard   
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
@@ -330,11 +385,11 @@ function Dashboard_Publishing(){
       DevMode()
     
       //Call function to create and deploy a dashboard
-      NewDashboard("DashB2", "Dashb2", "Dashb2")
+      NewDashboard(DashbData2["dashboardID"],DashbData2["dashboardCaption"],DashbData2["dashDescription"])
       Log["Message"]("General data for data filled")
 
-      AddQueriesDashboard("baq1")
-      Log["Message"]("BAQ1 added")
+      AddQueriesDashboard(baqData1["Id"])
+      Log["Message"](baqData1["Id"] + " added")
       
       SaveDashboard()
       Log["Message"]("Dashboard saved")
@@ -348,13 +403,18 @@ function Dashboard_Publishing(){
       }
 
       /*MODIFY TO ADAPT DRAG FUNCTION*/
+      // 13- drag that element with the name of your description from published view in step 4, to the Dashboard Area       
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Drag"](77, 30, 11, -127);
 
+      //14- Save Dashboard and deploy 
       SaveDashboard()
       Log["Message"]("Dashboard saved")
 
-      DeployDashboard("DashB2","Dashb", "Deploy Smart Client,Add Favorite Item,Generate Web Form")
-      Log["Message"]("Dashboard was deployed")
+      //Deactivate Published Views
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&View|Published Views")
+
+      DeployDashboard(DashbData2["deploymentOptions"])
+      Log["Checkpoint"]("Dashboard was deployed")
 
       //Exit dashboard
       ExitDashboard()
@@ -363,9 +423,11 @@ function Dashboard_Publishing(){
     Delay(1000)
   //--------------------------------------------------------------------------------------------------------------------------------------------'
 
-  DeactivateFullTree()
+    DeactivateFullTree()
+    Log["Checkpoint"]("FullTree Deactivated")
 
-  CloseSmartClient()
+    CloseSmartClient()
+    Log["Checkpoint"]("SmartClient Closed")
 }
 
 
