@@ -6,11 +6,21 @@
 
 function TC_Importing_exporting_Dashboards_E10(){
   
+  var MenuData = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashbE10",
+    "menuName" : "DashbE10",
+    "orderSequence" : 1,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : "DashBDExport",
+    "validations" : "Enable"
+  }
+
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
     StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
     ActivateFullTree()
 
@@ -306,6 +316,7 @@ function TC_Importing_exporting_Dashboards_E10(){
         Log["Error"]("BAQ Import dialog is not displayed")
       }
 
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
       if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Text"]["OleValue"] == "DashBDExport2"){
         Log["Message"]("Dashboard Imported")
       }else{
@@ -319,14 +330,13 @@ function TC_Importing_exporting_Dashboards_E10(){
     */ 
       SaveDashboard()
 
-
     /*
       Step No: 9
       Step:  Click on Tools>Deploy Dashboard. Select Deploy Smart Client Application checkbox       
       Result: Verify the dashboard is deployed without errors       
     */ 
 
-      DeployDashboard("dashboardCaption","dashDescription", "Deploy Smart Client")
+      DeployDashboard("Deploy Smart Client")
 
       ExitDashboard()
 
@@ -346,7 +356,7 @@ function TC_Importing_exporting_Dashboards_E10(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
     //Creates Menu
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "DashbExport", "DashbExport", 1, "Dashboard-Assembly", "DashBDExport", "Enable")
+    CreateMenu(MenuData)
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
@@ -358,7 +368,7 @@ function TC_Importing_exporting_Dashboards_E10(){
     */    
 
     Delay(1000)
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
@@ -370,7 +380,7 @@ function TC_Importing_exporting_Dashboards_E10(){
     */ 
 
     //Open Menu created   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;DashbExport")
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
 
@@ -384,7 +394,6 @@ function TC_Importing_exporting_Dashboards_E10(){
      }
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
-
 
    DeactivateFullTree()
 
