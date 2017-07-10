@@ -6,13 +6,27 @@ var continueTest = true
 
 function TC_Dashboard_Tracker_Views_2(){
   
+  var MenuData = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashT2",
+    "menuName" : "DashTrack2",
+    "orderSequence" : 100,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : "DashTracker2"
+  }
+
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
-   
-    StartSmartClient()
+    
+    // Step1- Log in  
+      StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+      Login("epicor","Epicor123") 
 
-    ActivateFullTree()
+      ActivateFullTree()
+
+      ExpandComp("Epicor Education")
+
+      ChangePlant("Main Plant")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
@@ -63,7 +77,6 @@ function TC_Dashboard_Tracker_Views_2(){
         
         //Go to Query Builder Tab and on Display Fields tab add GroupCode to Display Column(s)
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
-
         
         BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
         BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
@@ -106,9 +119,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: Verify the Dashboard is created       
     */
 
-      NewDashboard("DashTracker2", "DashTracer2", "DashTracer description", "Refresh All")
+      NewDashboard("DashTracker2", "DashTracker2", "DashTracker2", "Refresh All")
       
-
     /*
       Step No: 6
       Step: Add a New Query and select the QueryId "zCustomer01Copy"        
@@ -189,47 +201,46 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Check Prompt for CustID and enter condition: StartsWith and check prompt for Phone, EMailAddress and GroupCode. Click Ok        
       Result: Verify the tracker view is added        
     */  
-          var tracerViewsGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
+          var TrackerViewsGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
           
-          var column = getColumn(tracerViewsGrid, "Column")
-          var columnPrompt = getColumn(tracerViewsGrid, "Prompt")
-          var columnCondition = getColumn(tracerViewsGrid, "Condition")
+          var column = getColumn(TrackerViewsGrid, "Column")
+          var columnPrompt = getColumn(TrackerViewsGrid, "Prompt")
+          var columnCondition = getColumn(TrackerViewsGrid, "Condition")
 
           /*Check Prompt for CustID and enter condition: StartsWith and check prompt for Phone, EMailAddress and GroupCode. Click Ok        */
-          for (var i = 0; i <= tracerViewsGrid["wRowCount"] - 1; i++) {
+          for (var i = 0; i <= TrackerViewsGrid["wRowCount"] - 1; i++) {
             //Select row and check Prompt checkbox
-            var cell = tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
+            var cell = TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
 
             if (cell["Text"] == "Customer_CustID") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
 
               //Activates 'Condition' column
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Click"]()
 
               while(true){
-                tracerViewsGrid["Keys"]("[Down]")
-                if (tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["EditorResolved"]["SelectedText"] == "StartsWith") {
+                TrackerViewsGrid["Keys"]("[Down]")
+                if (TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["EditorResolved"]["SelectedText"] == "StartsWith") {
                   break
-                
                 }
               }
             }
             if (cell["Text"] == "Customer_PhoneNum") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
             }
             if (cell["Text"] == "Customer_EMailAddress") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
             }
             if (cell["Text"] == "Customer_GroupCode") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
             }            
           }
 
@@ -255,40 +266,38 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Check Prompt for CustID and enter condition: StartsWith and check prompt for Phone, EMailAddress and GroupCode. Click Ok        
       Result: Verify the tracker view is added        
     */
-          for (var i = 0; i <= tracerViewsGrid["wRowCount"] - 1; i++) {
+          for (var i = 0; i <= TrackerViewsGrid["wRowCount"] - 1; i++) {
             //Select row and check Prompt checkbox
-            var cell = tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
+            var cell = TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
 
             if (cell["Text"] == "Customer_CustID") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
-
-                          //Activates 'Condition' column
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              //Activates 'Condition' column
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Click"]()
 
               while(true){
-                tracerViewsGrid["Keys"]("[Down]")
-                if (tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["EditorResolved"]["SelectedText"] == "StartsWith") {
+                TrackerViewsGrid["Keys"]("[Down]")
+                if (TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["EditorResolved"]["SelectedText"] == "StartsWith") {
                   break
-                
                 }
               }
             }
             if (cell["Text"] == "Customer_PhoneNum") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
             }
             if (cell["Text"] == "Customer_EMailAddress") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
             }
             if (cell["Text"] == "Customer_GroupCode") {
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
               // Check Prompt check box on field
-              tracerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+              TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
             }            
           }
 
@@ -960,7 +969,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */    
 
     SaveDashboard()
-    DeployDashboard("DashTracer", "DashTracer description", "Deploy Smart Client,Generate Web Form")
+    DeployDashboard("Deploy Smart Client,Generate Web Form")
     ExitDashboard()
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
@@ -976,7 +985,7 @@ function TC_Dashboard_Tracker_Views_2(){
 
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "TackerVMenu", "TackerVMenu", 100, "Dashboard-Assembly", "DashTracer description")
+    CreateMenu(MenuData)
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
@@ -987,7 +996,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */    
 
     Delay(1000)
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
@@ -997,7 +1006,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Open the menu with the dashboard            
       Result: The dashboard opens without errors        
     */   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;TackerVMenu")
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
      testQuery1()
      testQuery2()
@@ -1463,10 +1472,12 @@ function testQuery3(){
 
     var partComboTracker = trackerMainPanel[3]["FindChild"]("FullName", "*epiCombo1", 1);
     partComboTracker["setFocus"]()
+    partComboTracker["Click"]()
 
     while(true){
       partComboTracker["Keys"]("[Down]")
       if (partComboTracker["Value"] == "0LP3A") {
+        partComboTracker["Keys"]("[Tab]")
         break
       }
     }
