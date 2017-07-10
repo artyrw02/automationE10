@@ -5,42 +5,73 @@
 
 function Dashboard_Deployment()
 {
+  var baqData = {
+    "Id" : "baqDeployment",
+    "Description" : "baq",
+    "Table" : "Part",
+    "Columns" : "Company,PartNum,PartDescription,TypeCode,UnitPrice"
+  }
+
+  var DashbData = {
+    "dashboardID" : "DashBDeployment",
+    "dashboardCaption" : "dashboardCaption",
+    "dashDescription" : "dashDescription",
+    "generalOptions" : "",
+    "baqQuery" : "baqDeployment",
+    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
+  }
+
+  var MenuData = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashDepl",
+    "menuName" : "Dash Menu",
+    "orderSequence" : 0,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : "dashDescription"
+  }
 
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
-    // StartSmartClient()
+    StartSmartClient()
 
-    // Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
-    // ActivateFullTree()
+    ActivateFullTree()
+
+    ExpandComp("Epicor Education")
+
+    ChangePlant("Main Plant")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //Open Business Activity Query to create BAQ   
+  //2- Open Business Activity Query to create BAQ   
   MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
-  //Call function to create a simple BAQ
-  CreateSimpleBAQ("baq1", "baq", "Part", "Company,PartNum,PartDescription,TypeCode,UnitPrice")
+    //Call function to create a simple BAQ
+    CreateSimpleBAQ(baqData)
 
-  //Open Dashboard   
+    Log["Checkpoint"]("BAQ creaded correctly.")
+  //3- Open Dashboard   
   MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-  //Enable Dashboard Developer Mode  
-  DevMode()
+    //Enable Dashboard Developer Mode  
+    DevMode()
 
-  //Call function to create and deploy a dashboard
-  CreateSimpleDashboards("DashB", "dashboardCaption", "dashDescription", "", "baq1", "Deploy Smart Client,Add Menu tab,Add Favorite Item,Generate Web Form")
+  //4- Call function to create and deploy a dashboard (5,6,7,8)
+  CreateSimpleDashboards(DashbData)
+    Log["Checkpoint"]("Dashboard creaded correctly.")
 
-  //Open Menu maintenance   
+  //9- Open Menu maintenance   
   MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
-  //Creates Menu
-  CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "DashMenu", "Dash Menu", 1, "Dashboard-Assembly", "dashDescription")
+    //Creates Menu
+    CreateMenu(MenuData)
+    Log["Checkpoint"]("Menu creaded correctly.")
 
-  //Restart SmartClient
-  RestartSmartClient("Classic")
+  //10- Restart SmartClient
+  RestartSmartClient()
 
-  //Open Menu created
-  MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;Dash Menu")
+  //14- Open Menu created
+  MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
 
   Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Edit|Refresh") 
   
@@ -49,34 +80,36 @@ function Dashboard_Deployment()
   var gridDashboard = RetrieveGridsMainPanel()
   
   for (var i = 0; i < gridDashboard["length"]; i++) {
-    if (gridDashboard[i]["WndCaption"] == 'baq1: Summary') {
+    if (gridDashboard[i]["WndCaption"] == baqData["Id"] +': Summary') {
       gridBaq1Panel = gridDashboard[i]
       break
     }
   }
 
   if(gridBaq1Panel["Rows"]["Count"] > 0 ){
-    Log["Checkpoint"]("Grid retrieved records.")
+    Log["Checkpoint"]("Grid retrieved " + gridBaq1Panel["Rows"]["Count"]  + " records.")
   }else{
-    Log["Error"]("Grid didn't retrieve records.")
+    Log["Error"]("Grid didn't retrieve " + gridBaq1Panel["Rows"]["Count"]  + " records.")
   }
 
   Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
-  //Open Dashboard maintenance
+  //19- Open Dashboard maintenance
   MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
-  //Manage dashboard
-  DashboardMaintenance("DashB", "Modify Dashboard")
+  // steps: 20, 21, 22, 23, 24, 25
+  // Manage dashboard
+
+  DashboardMaintenance(DashbData["dashboardID"], "Modify Dashboard")
+  Log["Checkpoint"]("Dashboard was manipulated through Dashboard Maintenance correctly.")
 
   //--- Close Smart Client --------------------------------------------------------------------------------------------------------------------'
-  
-  Delay(1000)
-  
-  DeactivateFullTree()
-  Log["Checkpoint"]("FullTree Deactivate")
+    Delay(1000)
+    
+    DeactivateFullTree()
+    Log["Checkpoint"]("FullTree Deactivated")
 
-  CloseSmartClient()
-  Log["Checkpoint"]("SmartClient Closed")
-//-------------------------------------------------------------------------------------------------------------------------------------------'
+    CloseSmartClient()
+    Log["Checkpoint"]("SmartClient Closed")
+  //-------------------------------------------------------------------------------------------------------------------------------------------'
 }
