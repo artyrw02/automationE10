@@ -4,14 +4,29 @@
 //USEUNIT Grid_Functions
 
 function Dashboard_BAQ_Parameters(){
-  
+  var DashbData = {
+    "dashboardID" : "DashBBAQ",
+    "dashboardCaption" : "DashBBAQ",
+    "dashDescription" : "DashBBAQ",
+    "generalOptions" : "",
+    "baqQuery" : "baqParams2",
+    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
+  }
+
+  var baqData = {
+    "Id" : "baqParams1",
+    "Description" : "baqParams1",
+    "Table" : "Customer",
+    "Columns" : "CustNum"
+  }
+
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
-    // StartSmartClient()
+    StartSmartClient()
 
-    // Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
-    // ActivateFullTree()
+    ActivateFullTree()
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
@@ -22,8 +37,8 @@ function Dashboard_BAQ_Parameters(){
 
     //****** Creating BAQ1 ***************'
       //Call function to create a simple BAQ
-      CreateSimpleBAQ("baq1", "baq", "Customer", "CustNum")
-      Log["Checkpoint"]("BAQ1 created")
+      CreateSimpleBAQ(baqData)
+      Log["Checkpoint"]("baqParams1 created")
     //****** End of BAQ1 creation ********'
 
     //****** Creating BAQ2 ***************'
@@ -33,7 +48,7 @@ function Dashboard_BAQ_Parameters(){
         
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
         
-        CreateBAQ("baq2", "baqDescription")
+        CreateBAQ("baqParams2", "baqParams2")
 
         AddTableBAQ(BAQFormDefinition, "OrderDtl")
         
@@ -59,9 +74,9 @@ function Dashboard_BAQ_Parameters(){
               var tableWhereClausePanel = queryCondPanel["windowDockingArea1"]["dockableWindow3"]["tableWhereClausePanel"]
               var epiUltraGrid = tableWhereClausePanel["grdTableWhere"]
               
-              SelectCellDropdownGrid("Field", "CustNum", epiUltraGrid)
-              SelectCellDropdownGrid("Operation", "MATCHES", epiUltraGrid)
-              SelectCellDropdownGrid("Filter Value", "specified parameter", epiUltraGrid)
+              SelectCellDropdownGrid2("Field", "CustNum", epiUltraGrid)
+              SelectCellDropdownGrid2("Operation", "MATCHES", epiUltraGrid)
+              SelectCellDropdownGrid2("Filter Value", "specified parameter", epiUltraGrid)
 
               //Select Parameter
               Aliases["Epicor"]["ParameterForm"]["btnDefine"]["Click"]()
@@ -81,7 +96,7 @@ function Dashboard_BAQ_Parameters(){
               var queryParamsValueEditor = queryParametersdialog["dockableWindow2"]["ctrlCustomEditor1"]["windowDockingArea1"]["dockableWindow2"]["ctrlBAQList1"]
 
               //Query ID
-              queryParamsValueEditor["txtExportID"]["Keys"]("baq1")
+              queryParamsValueEditor["txtExportID"]["Keys"](baqData["Id"])
               //Display Column
               queryParamsValueEditor["cmbDisplay"]["Keys"]("Customer_CustNum")
               //DisplayValue
@@ -89,7 +104,7 @@ function Dashboard_BAQ_Parameters(){
 
               //Save//
               Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
-
+              Log["Checkpoint"]("Parameters where set for the filter value.")
               //Exit
               Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit")
 
@@ -111,7 +126,7 @@ function Dashboard_BAQ_Parameters(){
         ExitBAQ()
 
     //****** End of BAQ2 Creation ********'
-      Log["Checkpoint"]("BAQ2 created")
+      Log["Checkpoint"]("baqParams2 created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'  
   
   //--- Creates Dashboards --------------------------------------------------------------------------------------------------------------------'
@@ -123,13 +138,13 @@ function Dashboard_BAQ_Parameters(){
     DevMode()
     Log["Checkpoint"]("DevMode activated")
     //Creating dashboard
-    CreateSimpleDashboards("DashBBAQ", "DashBBAQ", "DashBBAQ description", "", "baq2", "Deploy Smart Client,Add Favorite Item,Generate Web Form")
+    CreateSimpleDashboards(DashbData)
     Log["Checkpoint"]("Dashboard created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
     Delay(10000)
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
@@ -139,7 +154,7 @@ function Dashboard_BAQ_Parameters(){
         ActivateFavoritesMenuTab()
         Log["Checkpoint"]("FavoritesMenuTab Activated")
 
-        OpenDashboardFavMenu("DashBBAQ")
+        OpenDashboardFavMenu(DashbData["dashDescription"])
         Log["Checkpoint"]("Dashboard opened")
 
         DashboardPanelTest()
@@ -176,14 +191,23 @@ function DashboardPanelTest(){
     var fieldParameter = pnlParametersBAQField["FindAllChildren"]("FullName", "*edt*", 5)["toArray"]();
     var btnParameter = pnlParametersBAQBtn["FindAllChildren"]("FullName", "*btn*", 5)["toArray"]();
 
-    fieldParameter[0]["Keys"](parameterValue)
+    // fieldParameter[0]["Keys"](parameterValue)
+    fieldParameter[0]["setFocus"]()
+    fieldParameter[0]["Click"]()
 
+    while(true){
+      fieldParameter[0]["Keys"]("[Down]")
+      if (fieldParameter[0]["Value"] == parameterValue) {
+        fieldParameter[0]["Keys"]("[Tab]")
+        Log["Checkpoint"]("Parameter value was selected from dropdown")
+        break
+      }
+    }
     for (var i = 0; i <= btnParameter.length -1; i++) {
       if(btnParameter[i]["Text"] == "OK"){
         btnParameter[i]["Click"]()
         break
       }
-      
     }
   }
   
@@ -196,16 +220,21 @@ function DashboardPanelTest(){
 
   var baqGrid = gridDashboardPanelChildren[0]
 
-  for (var i = 0; i <= baqGrid["Rows"]["Count"] - 1; i++) {
-    //Select first record on BAQ1 results to notice change of data on BAQ2      
+  if(baqGrid["Rows"]["Count"] > 0){
+    Log["Checkpoint"]("Grid retrieved " + baqGrid["Rows"]["Count"] + " records.")
+  }else{
+    Log["Error"]("Grid retrieved " + baqGrid["Rows"]["Count"] + " records.")
+  }
 
+  for (var i = 0; i <= baqGrid["Rows"]["Count"] - 1; i++) {
+      
     var cell1Customer = baqGrid["Rows"]["Item"](i)["Cells"]["Item"](3)
     var cell2Customer = baqGrid["Rows"]["Item"](i)["Cells"]["Item"](4)
 
-    if (cell1Customer["Text"] != parameterValue && cell1Customer["Text"] != cell2Customer["Text"] ) {
-      Log["Message"]("Data doesn't match with the parameter given ( " + parameterValue + " ) -> Order " + baqGrid["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"] + " Customer " + cell1Customer["Text"])
+    if (cell1Customer["Text"]["OleValue"] != parameterValue && cell1Customer["Text"]["OleValue"] != cell2Customer["Text"]["OleValue"] ) {
+      Log["Message"]("Data doesn't match with the parameter given ( " + parameterValue + " ) -> Order " + baqGrid["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"] + " Customer " + cell1Customer["Text"]["OleValue"])
     }else{
-      Log["Message"]("Data match with the parameter given ( " + parameterValue + " ) -> Order " + baqGrid["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"] + " Customer " + cell1Customer["Text"])
+      Log["Message"]("Data match with the parameter given ( " + parameterValue + " ) -> Order " + baqGrid["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"] + " Customer " + cell1Customer["Text"]["OleValue"])
     }
   }
 
