@@ -7,12 +7,22 @@
 function TC_Importing_exporting_Dashboards_E9E10(){
   var dashboardID = "DashCaro"
   var baqE9 = "EPIC06-testBAQCaro"
-  var menuData = "DashbE9"
+
+  var MenuData = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashbE9",
+    "menuName" : "DashbE9",
+    "orderSequence" : 2,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : dashboardID,
+    "validations" : "Enable"
+  }
+
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
     StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
     ActivateFullTree()
 
@@ -287,7 +297,7 @@ function TC_Importing_exporting_Dashboards_E9E10(){
     Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()   
 
     //13- Click on Tools>Deploy Dashboard. Select Deploy Smart Client Application checkbox        
-    DeployDashboard("dashboardCaption","dashDescription", "Deploy Smart Client")
+    DeployDashboard("Deploy Smart Client")
 
     SaveDashboard()
     ExitDashboard()
@@ -311,286 +321,25 @@ function TC_Importing_exporting_Dashboards_E9E10(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
     //Creates Menu
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", menuData, menuData, 1, "Dashboard-Assembly", dashboardID, "Enable")
+    CreateMenu(MenuData)
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
     /*
-      Step No: 11
+      Step No: 15
       Step: Restart Smart Client        
       Result: E10 is restarted        
     */    
 
     Delay(1000)
-    RestartSmartClient("Classic")
-    Log["Checkpoint"]("SmartClient Restarted")
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
-
-  //--- Test Dashboard ------------------------------------------------------------------------------------------------------------------------'
-    /*
-        Step No: 12
-        Step:  Click refresh        
-        Result: Verify the data is retrieved on the grid, respecting the given rules       
-      */ 
-
-      //Open Menu created   
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+menuData)
-
-      Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
-
-
-      // 5- Go to Updatable BAQ Maintenance (System Management> Upgrade/Mass Regeneration)        
-        MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Updatable BAQ Maintenance")
-      // 6- On Query ID retrieve the created query for your dashboard that you previously imported  
-        Aliases["Epicor"]["UBAQMaintForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["btnKeyField"]["Click"]()
-        Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["txtStartWith"]["Keys"](baqE9)
-
-        Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["WinFormsObject"]("chkShared")["CheckState"] = "Indeterminate"
-        Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["btnSearch"]["Click"]()
-        var searchGrid = Aliases["Epicor"]["BAQDesignerSearchForm"]["FindChild"](["WndCaption","ClrClassName"], ["*Search Results*", "*Grid*"],30)
-        var queryID = getColumn(searchGrid, "Query ID")
-
-        for(var i = 0; i < searchGrid["Rows"]["Count"];i++){
-          if(searchGrid["Rows"]["Item"](i)["Cells"]["Item"](queryID)["Text"]["OleValue"] == baqE9){
-            searchGrid["Rows"]["Item"](i)["Activate"]()
-            Aliases["Epicor"]["BAQDesignerSearchForm"]["ultraStatusBar2"]["btnOK"]["Click"]()
-          }
-        }
-
-      //Used to activate query
-      var treeView = Aliases["Epicor"]["UBAQMaintForm"]["FindChild"]("ClrClassName", "*TreeView", 30)
-      treeView["ClickItem"]("Updatable Queries|"+baqE9)
-
-    // 7- Select Actions>Regenerate selected  
-    Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Regenerate Selected")
-    Delay(1500)
-    Log["Checkpoint"]("BAQ regenerated")
-
-    /*
-      Step No: 8 - 9
-      Step:  Validate dashboard has all the configurations imported      
-    */
-
-    // 8- Go to Query properties on Dashboard designer        
-    Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
-    OpenDashboard(dashboardID)
-    Log["Checkpoint"]("Dashboard retrived")
-
-    var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-         
-    var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
-    dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-    Log["Message"]("BAQ - right click")
-
-    // click 'Properties' option from menu
-    Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-    Log["Message"]("EPIC06-testBAQCaro:  Summary - Properties was selected from Menu")
-
-    if (Aliases["Epicor"]["DashboardProperties"]["Exists"]) {
-      Log["Message"]("Dashboard properties dialog appears")
-    }
-
-    //Check the Updatable check box
-    if(Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["chkUpdatable"]["Checked"]){
-      Log["Checkpoint"]("Updatable checkbox is Checked")
-    }else{
-      Log["Error"]("Updatable checkbox is not checked")
-    }
-
-    var dashboardGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
-    
-    var column = getColumn(dashboardGrid, "Column")
-    var columnPrompt = getColumn(dashboardGrid, "Prompt")
-
-    // for (var i = 0; i <= dashboardGrid["wRowCount"] - 1; i++) {
-    //   var cell = dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
-
-    //   if (cell["Text"] == "Customer_Address1") {
-    //     if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-    //       Log["Checkpoint"]("Prompt checkbox on Address1 is Checked")
-    //     }else{
-    //       Log["Error"]("Prompt checkbox on Address1 is not checked")
-    //     }
-    //   }
-    //   if (cell["Text"] == "Customer_City") {
-    //     if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-    //       Log["Checkpoint"]("Prompt checkbox on City is Checked")
-    //     }else{
-    //       Log["Error"]("Prompt checkbox on City is not checked")
-    //     }
-    //   }
-    //   if (cell["Text"] == "Customer_Country") {
-    //     if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-    //       Log["Checkpoint"]("Prompt checkbox on Country is Checked")
-    //     }else{
-    //       Log["Error"]("Prompt checkbox on Country is not checked")
-    //     }
-    //   }            
-    // }
-    var fields = "Customer_Address1,Customer_City,Customer_Country"
-
-    fields = fields.split(",")
-
-    //find the row where GroupCode is located
-    for (var i = 0; i <= dashboardGrid["wRowCount"] - 1; i++) {
-      //Select row and check Prompt checkbox
-      var cell = dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
-
-      for (var j = 0; j < fields["length"]; j++) {
-        if(cell["Text"] == fields[j]) {
-          if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-            Log["Checkpoint"]("Prompt checkbox on " + fields[j] + " is Checked")
-          }else{
-            Log["Error"]("Prompt checkbox on " + fields[j] + " is not checked")
-            break
-          }
-        }
-      }
-    } 
-
-    Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
-    // //Go to View Rules tab
-    //   var gridPaneldialog = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]
-      
-    //   DashboardPropertiesTabs(gridPaneldialog, "View Rules")
-
-    //   var viewRulesPanel = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["tabViewRules"]["viewRuleWizardPanel1"]
-    Log["Checkpoint"]("Grid validated correctly.")
-
-    // 9- Go to tracker view properties on Dashboard designer        
-    var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](1)
-    dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-    Log["Message"]("BAQ - right click")
-
-    // click 'Properties' option from menu
-    Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-    Log["Message"]("Tracker View - Properties was selected from Menu")
-
-    if (Aliases["Epicor"]["DashboardProperties"]["Exists"]) {
-      Log["Message"]("Dashboard properties dialog appears")
-    }
-
-    var dashboardTrackerView = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
-        
-    var column = getColumn(dashboardTrackerView, "Column")
-    var columnPrompt = getColumn(dashboardTrackerView, "Prompt")
-    var columnCondition = getColumn(dashboardTrackerView, "Condition")
-    
-    var fields = "Customer_CustID"
-
-    fields = fields.split(",")
-
-    for (var i = 0; i <= dashboardTrackerView["wRowCount"] - 1; i++) {
-      var cell = dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](column)
-
-      for (var j = 0; j < fields["length"]; j++) {
-        if (cell["Text"] == fields[j]) {
-          if(dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked" && 
-              dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Text"]["OleValue"] == "StartsWith"){
-            Log["Checkpoint"]("Prompt checkbox on " + fields[j] + " is Checked")
-          }else{
-            Log["Error"]("Prompt checkbox on " + fields[j] + " is not checked")
-            break
-          }
-        }
-      }
-    }
-
-    //Click Ok to close Properties
-    Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()  
-
-    // 10- On Dashboard designer add the zPOLine query       
-    AddQueriesDashboard("zPOLine")
-
-    // 12- "Add a new tracker View. Select Clear All and set the following:
-
-      rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
-      dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-      Log["Message"]("BAQ - right click")
-
-      // click 'New Tracker View' option from menu
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("New Tracker View");
-      Log["Message"]("New Tracker View was selected from Menu")
-
-     // Visible & Prompt for PartNum and Description
-      var dashboardTrackerView = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
-      Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["btnClearAll"]["Click"]()
-      var column = getColumn(dashboardTrackerView, "Column")
-      var columnPrompt = getColumn(dashboardTrackerView, "Prompt")
-      var columnVisible = getColumn(dashboardTrackerView, "Visible")
-      
-      var fieldsVisible = "PODetail_PartNum,PODetail_LineDesc"
-
-      fieldsVisible = fieldsVisible.split(",")
-
-      for (var i = 0; i <= dashboardTrackerView["wRowCount"] - 1; i++) {
-        var cell = dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](column)
-
-        for (var j = 0; j < fieldsVisible["length"]; j++) {
-          if (cell["Text"]["OleValue"] == fieldsVisible[j]) {
-            dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnVisible)["Click"]()
-            dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnVisible)["EditorResolved"]["CheckState"] = "Checked" 
-
-            dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
-            dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked" 
-
-            Log["Checkpoint"]("Checkbox visible & prompt where checked for " + fieldsVisible[j])             
-          }
-        }
-      }
-    
-    // Check Input Prompts Only
-    Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["chkInputPrompts"]["Checked"] = true
-    
-    //Click Ok to close Properties
-    Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()   
-
-    //13- Click on Tools>Deploy Dashboard. Select Deploy Smart Client Application checkbox        
-    DeployDashboard("dashboardCaption","dashDescription", "Deploy Smart Client")
-
-    SaveDashboard()
-    ExitDashboard()
-
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
-  
-  //--- Creates Menu --------------------------------------------------------------------------------------------------------------------------'
-   /*
-      Step No: 14
-      Step:  "Create the menu
-              Go to System Setup>Security Maintenance> Menu Maintenance. In Menu Maintenance tree select Main Menu> Sales Management> CRM> Setup
-              Select New Menu.
-              Write a Menu ID, select module UD, write a Name for the menu, write an Order Sequence (the position where you will find the menu), 
-              in Program Type select Dashboard-Assembly and in Dashboard select the previously created one. 
-              Be sure the Enabled check box is selected. Click Save."       
-
-      Result: Verify the dashboard is saved. Verify the Caption and Description fields have the values you previously gave        
-    */ 
-
-    //Open Menu maintenance   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
-
-    //Creates Menu
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", menuData, menuData, 1, "Dashboard-Assembly", dashboardID, "Enable")
-  
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
-
-  //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
-    /*
-      Step No: 11
-      Step: Restart Smart Client        
-      Result: E10 is restarted        
-    */    
-
-    Delay(1000)
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Test Menu -----------------------------------------------------------------------------------------------------------------------------'
     // 16- On Main Menu go to Sales Management> CRM> Setup and open the previously created menu       
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+menuData)
+      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
       var gridsMainPanel = RetrieveGridsMainPanel()
       var trackerMainPanel = RetrieveTrackerMainPanel()
@@ -609,7 +358,7 @@ function TC_Importing_exporting_Dashboards_E9E10(){
     // 18- Go to the Tracker View and in Cust.ID field write E, then refresh       
       var custIDField = trackerMainPanel[0]["FindChild"](["ClrClassName", "FullName"], ["*TextBox","*CustID"], 30)
 
-      custIDField["Keys"] = "E"
+      custIDField["Keys"]("E")
 
       Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
 
@@ -721,6 +470,11 @@ function TC_Importing_exporting_Dashboards_E9E10(){
     
       findValueInStringGrids(gridsMainPanel[1], columnDescription, "CRS ROUND 1.")
 
+      Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+
+      if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+        Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["WinFormsObject"]("btnNo1")["Click"]()
+      }
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
    DeactivateFullTree()
