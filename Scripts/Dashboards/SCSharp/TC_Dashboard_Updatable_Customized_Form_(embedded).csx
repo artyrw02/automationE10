@@ -5,13 +5,20 @@
 //USEUNIT DataBase_Functions
 
 function TC_Dashboard_Updatable_Customized_Form(){
-  //Test Case -UD Dashboard
   
+  var MenuData = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashCust",
+    "menuName" : "DashCustm",
+    "orderSequence" : 5,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : "TestDashBDCustom"
+  }  
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
     StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
     ActivateFullTree()
 
@@ -83,13 +90,13 @@ function TC_Dashboard_Updatable_Customized_Form(){
       /*
         Step No: 4
         Descr: 
-          // Definition ID: TestDashBD
-          // Caption: TestDashBD
-          // Description: TestDashBD
+          // Definition ID: TestDashBDCustom
+          // Caption: TestDashBDCustom
+          // Description: TestDashBDCustom
         Result: Verify the Dashboard is created       
       */ 
 
-        NewDashboard("TestDashBD","TestDashBD","TestDashBD")
+        NewDashboard("TestDashBDCustom","TestDashBDCustom","TestDashBDCustom")
          
       /*
         Step No: 5
@@ -240,7 +247,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
         SaveDashboard()
 
         // Tools>Deploy Dashboard. Select Deploy Smart Client Application  check box. Click on Deploy button and when finished click Ok.        
-        DeployDashboard("TestDashBD", "TestDashBD", "Deploy Smart Client,Generate Web Form")
+        DeployDashboard("Deploy Smart Client,Generate Web Form")
 
         ExitDashboard()
   //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -260,7 +267,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
 
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
-    CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "DashbMenuCust", "DashbMenuCust", 100, "Dashboard-Assembly", "TestDashBD")
+    CreateMenu(MenuData)
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
@@ -271,7 +278,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
     */    
 
     Delay(1000)
-    RestartSmartClient("Classic")
+    RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
@@ -281,7 +288,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: Refresh
       Result: The dashboard opens without errors        
     */   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;DashbMenuCust")
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
 
@@ -364,7 +371,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
     
     // Choose AppBuilder Panel option and type or search and retrieve for the the Menu ID created above
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep1"]["radAppBuilderPanel"]["ultraOptionSet1"]["Click"]()
-    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep1"]["txtDashboardID"]["Keys"]("DashbMen")
+    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep1"]["txtDashboardID"]["Keys"]("DashCust")
 
     // Tick only ""display dashboard status bar"" option
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep1"]["chkDisplayStatusBar"]["Checked"] = true
