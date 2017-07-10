@@ -6,11 +6,38 @@
 
 function TC_Dashboard_Tracker_Views_2(){
   
+  var MenuData1 = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashMenu",
+    "menuName" : "DashMenu",
+    "orderSequence" : 3,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : "TestDashBD",
+    "validations" : "Companies,Enable,Web Access"
+  }    
+  var MenuData2 = {
+    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
+    "menuID" : "DashMenu2",
+    "menuName" : "DashMenu2",
+    "orderSequence" : 4,
+    "menuType" : "Dashboard-Assembly",
+    "dll" : "TestDashBD",
+    "validations" : "Enable,Web Access"
+  }
+  var baqData1 = {
+    "Id" : "baqAllcomp",
+    "Description" : "baqAllcomp",
+    "Table" : "Customer",
+    "Columns" : "Company,CustID,CustNum,Name,Address1",
+    "GeneralConfig" : "Shared,Companies"
+
+  }
+
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
     StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
     ActivateFullTree()
 
@@ -37,7 +64,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */ 
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
-      CreateSimpleBAQ("baqTest", "baqDescription", "Customer", "Company,CustID,CustNum,Name,Address1", "Shared,All Companies")
+      CreateSimpleBAQ(baqData1)
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'  
   
@@ -75,7 +102,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Click on New Query. Search for the BAQ that was previously created and click Ok. Save
       Result: Verify the created query is retrieved and the dashboard is saved        
     */    
-      AddQueriesDashboard("baqTest")
+      AddQueriesDashboard(baqData1["Id"])
+      
       
       SaveDashboard()
 
@@ -101,7 +129,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step:  On Dashboard designer click on Tools> Deploy Dashboard       
       Result: Verify the Dashboard Deploy dialog opens        
     */ 
-      DeployDashboard("TestDashBD", "TestDashBD", "Deploy Smart Client,Generate Web Form")
+      DeployDashboard("Deploy Smart Client,Generate Web Form")
 
     /*
       Step No: 12
@@ -117,7 +145,7 @@ function TC_Dashboard_Tracker_Views_2(){
       MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
       //Creates Menu
-      CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "DashMenu", "Dash Menu", 1, "Dashboard-Assembly", "TestDashBD", "All Companies,Enable,Web Access")
+      CreateMenu(MenuData1)
 
 
     /*
@@ -127,7 +155,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */
 
       //Restart SmartClient
-      RestartSmartClient("Classic")
+      RestartSmartClient()
 
     /*
       Step No: 14
@@ -135,7 +163,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: Verify the menu with the dashboard is loaded   
     */
 
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;Dash Menu")
+      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
 
     /*
       Step No: 15
@@ -150,7 +178,7 @@ function TC_Dashboard_Tracker_Views_2(){
       var gridPanel
   
       for (var i = 0; i < gridsMainPanel["length"]; i++) {
-        if (gridsMainPanel[i]["WndCaption"] == 'baqTest: Summary') {
+        if (gridsMainPanel[i]["WndCaption"] == baqData1["Id"]+': Summary') {
           gridPanel = gridsMainPanel[i]
           break
         }
@@ -178,7 +206,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */
       ExpandComp("Epicor Mexico")
 
-      MainMenuTreeViewSelect("Epicor Mexico;Sales Management;Customer Relationship Management;Setup;Dash Menu")
+      MainMenuTreeViewSelect("Epicor Mexico;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
 
       if(Aliases["Epicor"]["MainController"]["Exists"]){
         if(Aliases["Epicor"]["MainController"]["WndCaption"] == "TestDashBD"){
@@ -260,10 +288,10 @@ function TC_Dashboard_Tracker_Views_2(){
 
       /*
         Step No: 23 & 24
-        Step: Save your dashboard       
+        Step: Add the same query. Save your dashboard       
         Result: Verify the dashboard is saved       
       */    
-        AddQueriesDashboard("baqTest")
+        AddQueriesDashboard(baqData1["Id"])
         
         SaveDashboard()
 
@@ -274,7 +302,7 @@ function TC_Dashboard_Tracker_Views_2(){
         Result: Verify the Dashboard Deploy dialog opens        
                 Verify the dashboard is deployed without problems       
       */  
-        DeployDashboard("TestDashBD", "TestDashBD", "Deploy Smart Client,Generate Web Form")
+        DeployDashboard("Deploy Smart Client,Generate Web Form")
 
       /*
         Step No: 28
@@ -290,7 +318,7 @@ function TC_Dashboard_Tracker_Views_2(){
       MainMenuTreeViewSelect("Epicor Mexico;System Setup;Security Maintenance;Menu Maintenance")
 
       //Creates Menu
-      CreateMenu("Main Menu>Sales Management>Customer Relationship Management>Setup", "DashMenu2", "Dash Menu2", 2, "Dashboard-Assembly", "TestDashBD", "Enable,Web Access")
+      CreateMenu(MenuData2)
 
 
     /*
@@ -300,7 +328,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */
 
       //Restart SmartClient
-      RestartSmartClient("Classic")      
+      RestartSmartClient()      
 
     /*
       Step No: 30
@@ -310,7 +338,7 @@ function TC_Dashboard_Tracker_Views_2(){
     */    
       ExpandComp("Epicor Mexico")
 
-      MainMenuTreeViewSelect("Epicor Mexico;Sales Management;Customer Relationship Management;Setup;Dash Menu2")
+      MainMenuTreeViewSelect("Epicor Mexico;Sales Management;Customer Relationship Management;Setup;"+MenuData2["menuName"])
 
    /*
       Step No: 31
@@ -325,7 +353,7 @@ function TC_Dashboard_Tracker_Views_2(){
       var gridPanel
   
       for (var i = 0; i < gridsMainPanel["length"]; i++) {
-        if (gridsMainPanel[i]["WndCaption"] == 'baqTest: Summary') {
+        if (gridsMainPanel[i]["WndCaption"] == baqData1["Id"]+': Summary') {
           gridPanel = gridsMainPanel[i]
           break
         }
@@ -348,7 +376,7 @@ function TC_Dashboard_Tracker_Views_2(){
 
       ExpandComp("Epicor Education")
       ChangePlant("Main Plant")
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;Dash Menu")
+      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
 
     /*
       Step No: 33
@@ -363,7 +391,7 @@ function TC_Dashboard_Tracker_Views_2(){
       var gridPanel
   
       for (var i = 0; i < gridsMainPanel["length"]; i++) {
-        if (gridsMainPanel[i]["WndCaption"] == 'baqTest: Summary') {
+        if (gridsMainPanel[i]["WndCaption"] == baqData1["Id"]+': Summary') {
           gridPanel = gridsMainPanel[i]
           break
         }
@@ -592,6 +620,8 @@ function TC_Dashboard_Tracker_Views_2(){
       var test3 = QueryDatabaseDashboards("TestDashBD-3")
       Log["Message"]("Query with Dashboard ID TestDashBD-3 retrieved " + test3["RecordCount"] + " records.")
 
+      ExitDashboard()
+      Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
    DeactivateFullTree()
