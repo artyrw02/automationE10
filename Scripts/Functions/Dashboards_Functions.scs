@@ -27,6 +27,12 @@ function OpenDashboard(dashboardID) {
   var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
   dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
   dashboardPanel["txtDefinitonID"]["Keys"]("[Tab]")
+
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("Dashboard " + dashboardID + " opened.")
+  }
 }
 
 function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions){
@@ -51,7 +57,6 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
     }
     else{
         Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
-        
     }
   }
 
@@ -93,29 +98,39 @@ function AddQueriesDashboard(baqQuery, queryPropertiesTab){
     Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
   }
   
-  //remove
-  // if(queryPropertiesTab != undefined){
-  //   DashboardQueryProperties(queryPropertiesTab)
-  // }
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("Query " + baqQuery + " added.")
+  }
 }
 
 function SaveDashboard(){
   //Activate 'General' tab
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
 
- var dashboardCaption =  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]["Text"]
- var dashDescription = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDescription"]["Text"]
+  var dashboardCaption =  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]["Text"]
+  var dashDescription = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDescription"]["Text"]
+  Delay(1500)
+
   //Save the Dashboard
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
-
+  
+  Delay(1500)
   if (dashboardCaption == "" || dashDescription == "") { 
     if (Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Exists"]) {
       Log["Message"]("Validated correctly: Cancelling Save operation: Dashboard Description and Caption is required.")
       Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["btnOk"]["Click"]()
     }
   }
+
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("Dashboard saved")
+  }
 }
-// Modify
+
 function DeployDashboard(deploymentOptions){
   //Deploy Dashboard
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
@@ -123,6 +138,7 @@ function DeployDashboard(deploymentOptions){
   var dashboardCaption =  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]["Text"]
   var dashDescription = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDescription"]["Text"]
 
+  Delay(1500)
   if (dashboardCaption == "" || dashDescription == "") { 
     if (Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Exists"]){
       Log['Message']("Validated correctly: Cancelling AppBuilder operation: Dashboard Description and caption is required.")
@@ -167,10 +183,21 @@ function DeployDashboard(deploymentOptions){
   Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["btnOk"]["Click"]()
   Log["Message"]("Clicked OK button to close Deploy Dashboard window")
 
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("Dashboard deployed")
+  }
+
 }
 
 function ExitDashboard(){
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+   if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+    Log["Checkpoint"]("Exited Dashboard")
+  }
 }
 
 function CloseDashboard(){

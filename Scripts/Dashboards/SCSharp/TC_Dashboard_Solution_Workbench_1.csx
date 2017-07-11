@@ -10,7 +10,7 @@ function TC_Dashboard_Solution_Workbench_1(){
    
     StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
     ActivateFullTree()
 
@@ -73,7 +73,7 @@ function TC_Dashboard_Solution_Workbench_1(){
 
         // Data Source: MX0416-MJ014ZZ
         GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Data Source");
-        GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + "TYRELL" + "[Enter]");
+        GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + "(local)" + "[Enter]");
 
         // Initial Catalog: Demo DB
         GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Initial Catalog");
@@ -147,14 +147,17 @@ function TC_Dashboard_Solution_Workbench_1(){
         // External Datasource: testDT
         BAQDiagramForm["dockableWindow1"]["optionsPanel1"]["gbID"]["cmbExtDs"]["Keys"]("testDT")
 
-        Delay(1500)
+        Delay(2000)
 
         // Move to Query builder tab and select Erp.Part table
         AddTableBAQ(BAQDiagramForm, "Part")
 
+        Delay(2000)
         // On Displat fields select the following fields: Company, PartNum, PartDescription, TypeCode, UnitPrice
         AddColumnsBAQ(BAQDiagramForm, "Part", "Company,PartNum,PartDescription,TypeCode,UnitPrice")
         
+        Log["Checkpoint"]("External BAQ created")
+
         // Save your Query
         Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
         Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit")
@@ -191,7 +194,7 @@ function TC_Dashboard_Solution_Workbench_1(){
         AddQueriesDashboard("TestBAQ1")
         
         SaveDashboard()
-        Log["Checkpoint"]("Dashboard TestBAQ1 created")     
+        Log["Checkpoint"]("Dashboard TestDashBD1 created")     
         ExitDashboard()
 
     /*
@@ -216,12 +219,16 @@ function TC_Dashboard_Solution_Workbench_1(){
         CreateBAQ("TestBAQ2", "TestBAQ2", "Shared")
         // Country/Group Code: MX
         // Drag and drop the "Customer" table design area in "Phrase Build" tab
+        Delay(2000)
         AddTableBAQ(BAQFormDefinition, "Customer")
+        Delay(2000)
         // In the Display Fields> Column Select tab for the "Customer" table select the Company, CustID, CustNum, Name and Address1 columns and add them to "Display Columns" area
         AddColumnsBAQ(BAQFormDefinition, "Customer", "Company,CustID,CustNum,Name,Address1")
         // Save the  BAQ
         SaveBAQ()
+        Log["Checkpoint"]("BAQ TestBAQ2 created")     
         ExitBAQ()
+
     /*
       Step No: 8
       step: Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
@@ -257,7 +264,7 @@ function TC_Dashboard_Solution_Workbench_1(){
         AddQueriesDashboard("TestBAQ2")
         
         SaveDashboard()
-        Log["Checkpoint"]("Dashboard TestBAQ2 created")
+        Log["Checkpoint"]("Dashboard TestDashBD2 created")
         ExitDashboard()
 
     /*
@@ -278,12 +285,15 @@ function TC_Dashboard_Solution_Workbench_1(){
         // Description: TestBAQ3
         // Shared: Checked
         CreateBAQ("TestBAQ3", "TestBAQ3", "All Companies,Shared")
+        Delay(2000)
         // Drag and drop the "Part" table design area in "Phrase Build" tab
         AddTableBAQ(BAQFormDefinition, "Part")
+        Delay(2000)
         // In the Display Fields> Column Select tab for the "Customer" table select the Company, PartNum, PartDescription and TypeCode 
         AddColumnsBAQ(BAQFormDefinition, "Part", "Company,PartNum,PartDescription,TypeCode")
         // Save the  BAQ
         SaveBAQ()
+        Log["Checkpoint"]("BAQ TestBAQ3 created")
         ExitBAQ()
 
 
@@ -322,7 +332,7 @@ function TC_Dashboard_Solution_Workbench_1(){
             AddQueriesDashboard("TestBAQ3")
             
             SaveDashboard()
-            Log["Checkpoint"]("Dashboard TestBAQ3 created")
+            Log["Checkpoint"]("Dashboard TestDashBD3 created")
             ExitDashboard()
 
       MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
@@ -387,7 +397,6 @@ function TC_Dashboard_Solution_Workbench_1(){
 
       // Create a new Solution, enter Type and Description and Save
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
-
 
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Stest")
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtSolutionType"]["Keys"]("SType")
@@ -457,7 +466,6 @@ function TC_Dashboard_Solution_Workbench_1(){
 
       // Click Add to Solution and click Yes to the Add Dependency messages to also add the BAQs to the solution
       Aliases["Epicor"]["SolutionElementSearch"]["grpSelectedSolutionItems"]["btnAddToSolution"]["Click"]()
-
          
         while(true) {
           //find button of the "add dependency" dialog
@@ -507,7 +515,7 @@ function TC_Dashboard_Solution_Workbench_1(){
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
       // Click Close
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-
+      Log["Checkpoint"]("Solution for EPIC05 created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Delete the dashboard and BAQ you've created on EPIC05 (TestDashBD1 and TestBAQ1) ------------------------------------------------------'
@@ -532,7 +540,8 @@ function TC_Dashboard_Solution_Workbench_1(){
         
        DeleteBAQ("TestBAQ1")
        ExitBAQ()
-  
+    
+    Log["Message"]("Dashboards TestDashBD1 and baq TestBAQ1 deleted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //---  EPIC06 create the solution -----------------------------------------------------------------------------------------------------------'
@@ -684,7 +693,7 @@ function TC_Dashboard_Solution_Workbench_1(){
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
       // Click Close
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-
+      Log["Checkpoint"]("Solution for EPIC06 created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Delete the dashboards and BAQs you've created on EPIC06 (TestDashBD2 and TestBAQ2, TestDashBD3) ---------------------------------------'
@@ -865,7 +874,7 @@ function TC_Dashboard_Solution_Workbench_1(){
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
       // Click Close
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-
+      Log["Checkpoint"]("Solution for EPIC07 created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Delete the dashboards and BAQs you've created on EPIC06 (TestDashBD2 and TestBAQ2, TestDashBD3) ---------------------------------------'
@@ -885,10 +894,9 @@ function TC_Dashboard_Solution_Workbench_1(){
     DevMode()
     Log["Checkpoint"]("DevMode activated")
 
+    //Delete BAQ
     DeleteDashboard("TestDashBD3,TestDashBD4")
     ExitDashboard()
-
-    //Delete BAQ
 
     //Go to System Management> External Business Activity Query> External Datasource Type
     MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
@@ -916,7 +924,6 @@ function TC_Dashboard_Solution_Workbench_1(){
     var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
     var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
 
-
     openSolutionWindow["Keys"]("Stest_Customer Solution_3.2.100.0")
     
     openSolutionWindowBtn["Click"]()
@@ -931,6 +938,7 @@ function TC_Dashboard_Solution_Workbench_1(){
     // Click Close
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["WinFormsObject"]("btnAbort")["Click"]()
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+    Log["Checkpoint"]("Solution for EPIC05 installed")
   
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
@@ -972,7 +980,6 @@ function TC_Dashboard_Solution_Workbench_1(){
       }else{
         Log["Error"]("BAQ TestBAQ1 wasn't retrieved or 'Shared' checkbox is not checked")
       }
-
 
       if(Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow1"]["optionsPanel1"]["gbID"]["cmbExtDs"]["Text"] != ""){
          Log["Checkpoint"]("BAQ TestBAQ1 retrieved and 'External Datasource' is not empty")
@@ -1067,7 +1074,7 @@ function TC_Dashboard_Solution_Workbench_1(){
     // Click Close
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["WinFormsObject"]("btnAbort")["Click"]()
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-  
+    Log["Checkpoint"]("Solution for EPIC06 installed")
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
   //--- EPIC06 Retrieve TestDashBD2, TestDashBD3  ---------------------------------------------------------------------------------------------'
@@ -1191,7 +1198,7 @@ function TC_Dashboard_Solution_Workbench_1(){
     // Click Close
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["WinFormsObject"]("btnAbort")["Click"]()
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-  
+    Log["Checkpoint"]("Solution for EPIC07 installed")
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
   //--- EPIC07 Retrieve TestDashBD3, TestDashBD4  ---------------------------------------------------------------------------------------------'
@@ -1261,7 +1268,7 @@ function TC_Dashboard_Solution_Workbench_1(){
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //--- EPIC06 Delete TestDashBD2, TestDashBD3  -----------------------------------------------------------------------------------------------'
+  //--- EPIC06 Delete TestBAQ3, TestDashBD3,TestDashBD4 ---------------------------------------------------------------------------------------'
     
     MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 

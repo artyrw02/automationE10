@@ -29,6 +29,12 @@ function OpenBAQ(baqID){
   //Set ID and description
   BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
   BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"]("[Tab]")
+
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("BAQ " + baqID +" opened.")
+  }
 }
 
 function CreateBAQ(baqID, baqDescription, generalConfig){
@@ -66,17 +72,22 @@ function AddTableBAQ(BAQFormDefinition, table){
   //Set text on table search field
   BAQFormPanel["zEpiBasePanel_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](0)["set_Text"](table)
 
-  for (var i = 0; i <= BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Count"] - 1; i++) {
-    if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Erp." + table){
-      var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
-      BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
-      break;
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    for (var i = 0; i <= BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Count"] - 1; i++) {
+      if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Erp." + table){
+        var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
+        BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
+        break;
+      }
+      if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Ice." + table){
+        var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
+        BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
+        break;
+      }
     }
-    if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Ice." + table){
-      var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
-      BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
-      break;
-    }
+    Log["Checkpoint"]("Table Added")
   }
 }
 

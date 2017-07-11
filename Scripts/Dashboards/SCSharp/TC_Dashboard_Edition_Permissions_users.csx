@@ -3,6 +3,8 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 
+https://community.smartbear.com/t5/TestComplete-General-Discussions/Accessing-the-Visible-property-of-Menu-Subitems-of-DevX-Menu/td-p/54358
+
 function TC_Dashboard_Edition_Permissions_users(){
   
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
@@ -14,7 +16,7 @@ function TC_Dashboard_Edition_Permissions_users(){
 
       StartSmartClient()
 
-      Login("manager","Epicor123", "Classic") 
+      Login("manager","Epicor123") 
 
       ActivateFullTree()
 

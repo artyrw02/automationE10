@@ -11,7 +11,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
    
     StartSmartClient()
 
-    Login("epicor","Epicor123", "Classic") 
+    Login("epicor","Epicor123") 
 
     ActivateFullTree()
 
