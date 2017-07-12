@@ -237,8 +237,7 @@ function TC_Importing_exporting_Dashboards_E10(){
     */ 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Export Dashboard and BAQs")
 
-      //C:\ProgramData\Epicor\tyrell.playground.local-80\3.2.100.0\EPIC06\shared\Export
-
+      //stores directly on C:\ProgramData\Epicor\tyrell.playground.local-80\3.2.100.0\EPIC06\shared\Export
       
       var windowExportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Export Dashboard*","*ComboBox*"], 30)
       if (windowExportDashBD["Exists"]) {
@@ -246,6 +245,12 @@ function TC_Importing_exporting_Dashboards_E10(){
       
         windowExportDashBD["Keys"]("DashBDExport_E10")
         windowExportDashBDSaveBtn["Click"]()
+        
+        var windowExportReplaceDashBD = Aliases["Epicor"]["FindChild"](["FullName", "ClassName"],["*_already_exists*","*Element*"], 30)
+        if (windowExportReplaceDashBD["Exists"]) {
+          windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["WndCaption", "WndClass"],["*Yes*","*Button*"], 30)
+          windowExportDashBDSaveBtn["Click"]()
+        }
         Log["Message"]("Dashboard exported correctly")
       }else{
         Log["Error"]("Dashboard wasn't exported correctly, Object doesn't exists")    

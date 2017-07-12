@@ -501,15 +501,20 @@ function TC_Dashboard_Solution_Workbench_2(){
 
       // When Save CAB file dialog opens select a path to save your file
         //Stestv2_Customer Solution_3.2.100.0
-          var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
-          if (windowSaveCABFile["Exists"]) {
-            var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
-            windowSaveCABFileSaveBtn["Click"]()
-            Log["Message"]("CAB File saved correctly")
-          }else{
-            Log["Error"]("CAB File wasn't saved correctly, Object doesn't exists")    
+        var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
+        if (windowSaveCABFile["Exists"]) {
+          var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
+          windowSaveCABFileSaveBtn["Click"]()
+          var windowExportReplaceDashBD = Aliases["Epicor"]["FindChild"](["FullName", "ClassName"],["*_already_exists*","*Element*"], 30)
+          if (windowExportReplaceDashBD["Exists"]) {
+            windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["WndCaption", "WndClass"],["*Yes*","*Button*"], 30)
+            windowExportDashBDSaveBtn["Click"]()
           }
-          Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCancel")["Click"]()
+          Log["Message"]("CAB File saved correctly")
+        }else{
+          Log["Error"]("CAB File wasn't saved correctly, Object doesn't exists")    
+        }
+        Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCancel")["Click"]()
 
       // Click Save
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
@@ -678,15 +683,20 @@ function TC_Dashboard_Solution_Workbench_2(){
 
       // When Save CAB file dialog opens select a path to save your file
         //Stestv2_Customer Solution_3.2.100.0
-          var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
-          if (windowSaveCABFile["Exists"]) {
-            var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
-            windowSaveCABFileSaveBtn["Click"]()
-            Log["Message"]("CAB File saved correctly")
-          }else{
-            Log["Error"]("CAB File wasn't saved correctly, Object doesn't exists")    
+        var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
+        if (windowSaveCABFile["Exists"]) {
+          var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
+          windowSaveCABFileSaveBtn["Click"]()
+          var windowExportReplaceDashBD = Aliases["Epicor"]["FindChild"](["FullName", "ClassName"],["*_already_exists*","*Element*"], 30)
+          if (windowExportReplaceDashBD["Exists"]) {
+            windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["WndCaption", "WndClass"],["*Yes*","*Button*"], 30)
+            windowExportDashBDSaveBtn["Click"]()
           }
-          Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCancel")["Click"]()
+          Log["Message"]("CAB File saved correctly")
+        }else{
+          Log["Error"]("CAB File wasn't saved correctly, Object doesn't exists")    
+        }
+        Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCancel")["Click"]()
 
       // Click Save
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
@@ -859,15 +869,20 @@ function TC_Dashboard_Solution_Workbench_2(){
 
       // When Save CAB file dialog opens select a path to save your file
         //Stestv2_Customer Solution_3.2.100.0
-          var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
-          if (windowSaveCABFile["Exists"]) {
-            var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
-            windowSaveCABFileSaveBtn["Click"]()
-            Log["Message"]("CAB File saved correctly")
-          }else{
-            Log["Error"]("CAB File wasn't saved correctly, Object doesn't exists")    
+        var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
+        if (windowSaveCABFile["Exists"]) {
+          var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
+          windowSaveCABFileSaveBtn["Click"]()
+          var windowExportReplaceDashBD = Aliases["Epicor"]["FindChild"](["FullName", "ClassName"],["*_already_exists*","*Element*"], 30)
+          if (windowExportReplaceDashBD["Exists"]) {
+            windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["WndCaption", "WndClass"],["*Yes*","*Button*"], 30)
+            windowExportDashBDSaveBtn["Click"]()
           }
-          Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCancel")["Click"]()
+          Log["Message"]("CAB File saved correctly")
+        }else{
+          Log["Error"]("CAB File wasn't saved correctly, Object doesn't exists")    
+        }
+        Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCancel")["Click"]()
 
       // Click Save
       Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
