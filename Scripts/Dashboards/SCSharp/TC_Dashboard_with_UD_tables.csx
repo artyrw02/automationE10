@@ -34,6 +34,10 @@ function Dashboard_with_UD_tables(){
 
   ActivateFullTree()
 
+  ExpandComp("Epicor Education")
+
+  ChangePlant("Main Plant") 
+
   //--- Create Menu ---------------------------------------------------------------------------------------------------------------------------'
       
     //Open Menu maintenance   

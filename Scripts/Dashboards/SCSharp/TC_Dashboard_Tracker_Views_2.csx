@@ -10,7 +10,7 @@ function TC_Dashboard_Tracker_Views_2(){
     "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
     "menuID" : "DashT2",
     "menuName" : "DashTrack2",
-    "orderSequence" : 100,
+    "orderSequence" : 102,
     "menuType" : "Dashboard-Assembly",
     "dll" : "DashTracker2"
   }

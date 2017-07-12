@@ -49,12 +49,12 @@ function TC_Importing_exporting_Dashboards_E9E10(){
 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Import Dashboard Definition")
        
-      var windowExportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Import Dashboard*","*ComboBox*"], 30)
-      if (windowExportDashBD["Exists"]) {
-        var windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
+      var windowImportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Import Dashboard*","*ComboBox*"], 30)
+      if (windowImportDashBD["Exists"]) {
+        var windowImportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
       
-        windowExportDashBD["Keys"]("DashDef -Regression.dbd")
-        windowExportDashBDSaveBtn["Click"]()
+        windowImportDashBD["Keys"]("DashDef -Regression.dbd")
+        windowImportDashBDSaveBtn["Click"]()
         Log["Message"]("Dashboard imported correctly")
       }else{
         Log["Error"]("Dashboard wasn't imported correctly, Object doesn't exists")    

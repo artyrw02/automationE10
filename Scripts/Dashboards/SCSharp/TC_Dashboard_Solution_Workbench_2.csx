@@ -1019,7 +1019,7 @@ function TC_Dashboard_Solution_Workbench_2(){
      if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
         Log["Checkpoint"]("Dashboard TestDashBD3v2 'All Companies' checkbox is checked")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2'All Companies' checkbox is not checked")
+        Log["Error"]("Dashboard TestDashBD3v2 'All Companies' checkbox is not checked")
       }
 
       ExitDashboard()

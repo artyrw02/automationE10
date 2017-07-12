@@ -4,7 +4,7 @@
 //USEUNIT Grid_Functions
 //USEUNIT DataBase_Functions
 
-function TC_Dashboard_Tracker_Views_2(){
+function TC_Dashboard_All_companies(){
   
   var MenuData1 = {
     "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",

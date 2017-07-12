@@ -24,8 +24,8 @@ function Dashboard_Deployment()
   var MenuData = {
     "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
     "menuID" : "DashDepl",
-    "menuName" : "Dash Menu",
-    "orderSequence" : 0,
+    "menuName" : "DashDepl",
+    "orderSequence" : 6,
     "menuType" : "Dashboard-Assembly",
     "dll" : "dashDescription"
   }
