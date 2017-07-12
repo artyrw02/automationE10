@@ -277,7 +277,7 @@ function Dashboard_with_UD_tables(){
       Log["Message"]("Dashboard was saved")
 
       //Deploy dashboard 
-      DeployDashboard("Deploy Smart Client,Add Menu tab,Add Favorite Item")
+      DeployDashboard("Deploy Smart Client,Add Favorite Item")
       Log["Message"]("Dashboard was deployed")
 
       ExitDashboard()

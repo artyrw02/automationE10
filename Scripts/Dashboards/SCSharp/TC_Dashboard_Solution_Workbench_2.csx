@@ -118,7 +118,7 @@ function TC_Dashboard_Solution_Workbench_2(){
             gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](enabledCol)["EditorResolved"]["CheckState"] = "Checked"
             Log["Message"]("External source enabled")
           }else{
-            Log["Error"]("checkbox was not checked")
+            Log["Message"]("checkbox was not checked")
           }
         }
 
@@ -181,12 +181,12 @@ function TC_Dashboard_Solution_Workbench_2(){
       Step No: 5
       Descr: 
             Create a new Dashboard
-            Definition ID: TestDashBD1v2
-            Caption: TestDashBD1v2
-            Description: TestDashBD1v2  
+            Definition ID: SWTestDashBD1v2
+            Caption: SWTestDashBD1v2
+            Description: SWTestDashBD1v2  
       Result: Verify the Dashboard is created       
     */ 
-        NewDashboard("TestDashBD1v2","TestDashBD1v2","TestDashBD1v2")
+        NewDashboard("SWTestDashBD1v2","SWTestDashBD1v2","SWTestDashBD1v2")
        
     /*
       Step No: 6
@@ -195,7 +195,7 @@ function TC_Dashboard_Solution_Workbench_2(){
         AddQueriesDashboard("TestBAQ1v2")
         
         SaveDashboard()
-        Log["Checkpoint"]("Dashboard TestDashBD1v2 created")     
+        Log["Checkpoint"]("Dashboard SWTestDashBD1v2 created")     
         ExitDashboard()
 
     /*
@@ -248,14 +248,14 @@ function TC_Dashboard_Solution_Workbench_2(){
     /*
       Step No: 9
       Descr: 
-        // Definition ID: TestDashBD2v2
-        // Caption: TestDashBD2v2
-        // Description: TestDashBD2v2
+        // Definition ID: SWTestDashBD2v2
+        // Caption: SWTestDashBD2v2
+        // Description: SWTestDashBD2v2
         // Country/Group Code: MX"  
       Result: Verify the Dashboard is created       
     */ 
 
-      NewDashboard("TestDashBD2v2","TestDashBD2v2","TestDashBD2v2")
+      NewDashboard("SWTestDashBD2v2","SWTestDashBD2v2","SWTestDashBD2v2")
        
     /*
       Step No: 10
@@ -264,7 +264,7 @@ function TC_Dashboard_Solution_Workbench_2(){
         AddQueriesDashboard("TestBAQ2v2")
         
         SaveDashboard()
-        Log["Checkpoint"]("Dashboard TestDashBD2v2 created")
+        Log["Checkpoint"]("Dashboard SWTestDashBD2v2 created")
         ExitDashboard()
 
     /*
@@ -316,14 +316,14 @@ function TC_Dashboard_Solution_Workbench_2(){
         /*
           Step No: 9
           Descr: 
-            // Definition ID: TestDashBD3v2
-            // Caption: TestDashBD3v2
-            // Description: TestDashBD3v2
+            // Definition ID: SWTestDashBD3v2
+            // Caption: SWTestDashBD3v2
+            // Description: SWTestDashBD3v2
             // Country/Group Code: MX"  
           Result: Verify the Dashboard is created       
         */ 
 
-          NewDashboard("TestDashBD3v2","TestDashBD3v2","TestDashBD3v2", "All Companies")
+          NewDashboard("SWTestDashBD3v2","SWTestDashBD3v2","SWTestDashBD3v2", "All Companies")
            
         /*
           Step No: 10
@@ -332,7 +332,7 @@ function TC_Dashboard_Solution_Workbench_2(){
             AddQueriesDashboard("TestBAQ3v2")
             
             SaveDashboard()
-            Log["Checkpoint"]("Dashboard TestDashBD3v2 created")
+            Log["Checkpoint"]("Dashboard SWTestDashBD3v2 created")
             ExitDashboard()
 
       MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
@@ -347,14 +347,14 @@ function TC_Dashboard_Solution_Workbench_2(){
       /*
         Step No: 9
         Descr: 
-          // Definition ID: TestDashBD3v2
-          // Caption: TestDashBD3v2
-          // Description: TestDashBD3v2
+          // Definition ID: SWTestDashBD3v2
+          // Caption: SWTestDashBD3v2
+          // Description: SWTestDashBD3v2
           // Country/Group Code: MX"  
         Result: Verify the Dashboard is created       
       */ 
 
-        NewDashboard("TestDashBD4v2","TestDashBD4v2","TestDashBD4v2")
+        NewDashboard("SWTestDashBD4v2","SWTestDashBD4v2","SWTestDashBD4v2")
          
       /*
         Step No: 10
@@ -363,13 +363,13 @@ function TC_Dashboard_Solution_Workbench_2(){
           AddQueriesDashboard("zCustomer01")
           
           SaveDashboard()
-          Log["Checkpoint"]("Dashboard TestDashBD4v2 created")
+          Log["Checkpoint"]("Dashboard SWTestDashBD4v2 created")
           ExitDashboard()
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //---  EPIC05 create the solution -----------------------------------------------------------------------------------------------------------'
-     PENDING
+     
     /*
       Step No: 10
       Result:  Click on New Query. Search for the BAQ TestBAQ2v2 and click Ok. Save       
@@ -423,11 +423,11 @@ function TC_Dashboard_Solution_Workbench_2(){
       //Search button
       Aliases["Epicor"]["SolutionElementSearch"]["grpSearchSolutionItems"]["btnSearch"]["Click"]()
 
-      // On Advanced Element Search enter TestDashBD on Starting At and click Search
-      Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["panel1"]["oETC"]["oETP"]["pnlBasicSrch"]["groupBox1"]["txtStartWith"]["Keys"]("TestDashBD")
+      // On Advanced Element Search enter SWTestDashBD on Starting At and click Search
+      Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["panel1"]["oETC"]["oETP"]["pnlBasicSrch"]["groupBox1"]["txtStartWith"]["Keys"]("SWTestDashBD")
       Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["btnSearch"]["Click"]()
 
-      // The first results should be the TestDashBD1v2 and TestDashBD3v2
+      // The first results should be the SWTestDashBD1v2 and SWTestDashBD3v2
       // Select them using Ctrl key and click Ok
 
       var advElementsGrid = Aliases["Epicor"]["AdvancedElementSearch"]["FindChild"](["WndCaption","ClrClassName"], ["*Search*","*Grid*"], 30)
@@ -440,7 +440,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       //   var cell = advElementsGrid["Rows"]["Item"](i)["Cells"]["Item"](elemColum)
 
       //   var aString = cell["Text"]["OleValue"]
-      //   var aSubString = "TestDashBD"
+      //   var aSubString = "SWTestDashBD"
       //   var Res
 
       //   Res = aqString["Find"](aString, aSubString)
@@ -466,7 +466,6 @@ function TC_Dashboard_Solution_Workbench_2(){
 
       // Click Add to Solution and click Yes to the Add Dependency messages to also add the BAQs to the solution
       Aliases["Epicor"]["SolutionElementSearch"]["grpSelectedSolutionItems"]["btnAddToSolution"]["Click"]()
-
          
         while(true) {
           //find button of the "add dependency" dialog
@@ -519,7 +518,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //--- Delete the dashboard and BAQ you've created on EPIC05 (TestDashBD1v2 and TestBAQ1v2) ------------------------------------------------------'
+  //--- Delete the dashboard and BAQ you've created on EPIC05 (SWTestDashBD1v2 and TestBAQ1v2) ------------------------------------------------------'
    //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
     MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
@@ -530,7 +529,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       DevMode()
       Log["Checkpoint"]("DevMode activated")
 
-      DeleteDashboard("TestDashBD1v2")
+      DeleteDashboard("SWTestDashBD1v2")
       ExitDashboard()
 
       //Delete BAQ
@@ -601,11 +600,11 @@ function TC_Dashboard_Solution_Workbench_2(){
       //Search button
       Aliases["Epicor"]["SolutionElementSearch"]["grpSearchSolutionItems"]["btnSearch"]["Click"]()
 
-      // On Advanced Element Search enter TestDashBD on Starting At and click Search
-      Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["panel1"]["oETC"]["oETP"]["pnlBasicSrch"]["groupBox1"]["txtStartWith"]["Keys"]("TestDashBD")
+      // On Advanced Element Search enter SWTestDashBD on Starting At and click Search
+      Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["panel1"]["oETC"]["oETP"]["pnlBasicSrch"]["groupBox1"]["txtStartWith"]["Keys"]("SWTestDashBD")
       Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["btnSearch"]["Click"]()
 
-      // The first results should be the TestDashBD1v2 and TestDashBD3v2
+      // The first results should be the SWTestDashBD1v2 and SWTestDashBD3v2
       // Select them using Ctrl key and click Ok
 
       var advElementsGrid = Aliases["Epicor"]["AdvancedElementSearch"]["FindChild"](["WndCaption","ClrClassName"], ["*Search*","*Grid*"], 30)
@@ -618,7 +617,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       //   var cell = advElementsGrid["Rows"]["Item"](i)["Cells"]["Item"](elemColum)
 
       //   var aString = cell["Text"]["OleValue"]
-      //   var aSubString = "TestDashBD"
+      //   var aSubString = "SWTestDashBD"
       //   var Res
 
       //   Res = aqString["Find"](aString, aSubString)
@@ -696,7 +695,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
-  //--- Delete the dashboards and BAQs you've created on EPIC06 (TestDashBD2v2 and TestBAQ2v2, TestDashBD3v2) ---------------------------------------'
+  //--- Delete the dashboards and BAQs you've created on EPIC06 (SWTestDashBD2v2 and TestBAQ2v2, SWTestDashBD3v2) ---------------------------------------'
    //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
     
     /*
@@ -713,7 +712,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       DevMode()
       Log["Checkpoint"]("DevMode activated")
 
-      DeleteDashboard("TestDashBD2v2")
+      DeleteDashboard("SWTestDashBD2v2")
       ExitDashboard()
 
       //Delete BAQ
@@ -782,11 +781,11 @@ function TC_Dashboard_Solution_Workbench_2(){
       //Search button
       Aliases["Epicor"]["SolutionElementSearch"]["grpSearchSolutionItems"]["btnSearch"]["Click"]()
 
-      // On Advanced Element Search enter TestDashBD on Starting At and click Search
-      Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["panel1"]["oETC"]["oETP"]["pnlBasicSrch"]["groupBox1"]["txtStartWith"]["Keys"]("TestDashBD")
+      // On Advanced Element Search enter SWTestDashBD on Starting At and click Search
+      Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["panel1"]["oETC"]["oETP"]["pnlBasicSrch"]["groupBox1"]["txtStartWith"]["Keys"]("SWTestDashBD")
       Aliases["Epicor"]["AdvancedElementSearch"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["btnSearch"]["Click"]()
 
-      // The first results should be the TestDashBD1v2 and TestDashBD3v2
+      // The first results should be the SWTestDashBD1v2 and SWTestDashBD3v2
       // Select them using Ctrl key and click Ok
 
       var advElementsGrid = Aliases["Epicor"]["AdvancedElementSearch"]["FindChild"](["WndCaption","ClrClassName"], ["*Search*","*Grid*"], 30)
@@ -799,7 +798,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       //   var cell = advElementsGrid["Rows"]["Item"](i)["Cells"]["Item"](elemColum)
 
       //   var aString = cell["Text"]["OleValue"]
-      //   var aSubString = "TestDashBD"
+      //   var aSubString = "SWTestDashBD"
       //   var Res
 
       //   Res = aqString["Find"](aString, aSubString)
@@ -877,7 +876,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //--- Delete the dashboards and BAQs you've created on EPIC06 (TestDashBD2v2 and TestBAQ2v2, TestDashBD3v2) ---------------------------------------'
+  //--- Delete the dashboards and BAQs you've created on EPIC06 (SWTestDashBD2v2 and TestBAQ2v2, SWTestDashBD3v2) ---------------------------------------'
    //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
     
     /*
@@ -894,7 +893,7 @@ function TC_Dashboard_Solution_Workbench_2(){
     DevMode()
     Log["Checkpoint"]("DevMode activated")
 
-    DeleteDashboard("TestDashBD3v2,TestDashBD4v2")
+    DeleteDashboard("SWTestDashBD3v2,SWTestDashBD4v2")
     ExitDashboard()
 
     //Delete BAQ
@@ -950,7 +949,7 @@ function TC_Dashboard_Solution_Workbench_2(){
   
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-  //--- EPIC05 Retrieve TestDashBD1v2, TestBAQ1v2 and TestDashBD3v2  --------------------------------------------------\-----------------------------'
+  //--- EPIC05 Retrieve SWTestDashBD1v2, TestBAQ1v2 and SWTestDashBD3v2  --------------------------------------------------\-----------------------------'
     
     /*
       Step: 24 - 25
@@ -961,13 +960,13 @@ function TC_Dashboard_Solution_Workbench_2(){
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD1v2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("SWTestDashBD1v2")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
 
       if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
-        Log["Checkpoint"]("Dashboard TestDashBD1v2 retrieved")
+        Log["Checkpoint"]("Dashboard SWTestDashBD1v2 retrieved")
       }else{
-        Log["Error"]("Dashboard TestDashBD1v2 wasn't retrieved")
+        Log["Error"]("Dashboard SWTestDashBD1v2 wasn't retrieved")
       }
       
       ExitDashboard()
@@ -1007,30 +1006,30 @@ function TC_Dashboard_Solution_Workbench_2(){
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD3v2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("SWTestDashBD3v2")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
 
       if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
-        Log["Checkpoint"]("Dashboard TestDashBD3v2 retrieved")
+        Log["Checkpoint"]("Dashboard SWTestDashBD3v2 retrieved")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2 wasn't retrieved")
+        Log["Error"]("Dashboard SWTestDashBD3v2 wasn't retrieved")
       }
       
      if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
-        Log["Checkpoint"]("Dashboard TestDashBD3v2 'All Companies' checkbox is checked")
+        Log["Checkpoint"]("Dashboard SWTestDashBD3v2 'All Companies' checkbox is checked")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2 'All Companies' checkbox is not checked")
+        Log["Error"]("Dashboard SWTestDashBD3v2 'All Companies' checkbox is not checked")
       }
 
       ExitDashboard()
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //--- EPIC05 Delete TestDashBD1v2, TestBAQ1v2 and TestDashBD3v2  ----------------------------------------------------------------------------------'
+  //--- EPIC05 Delete SWTestDashBD1v2, TestBAQ1v2 and SWTestDashBD3v2  ----------------------------------------------------------------------------------'
     
    //  MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-   //    DeleteDashboard("TestDashBD1v2")
+   //    DeleteDashboard("SWTestDashBD1v2")
    //    ExitDashboard()
     
    // //Go to System Management> Business Activity Management;Setup;Business Activity Query
@@ -1041,7 +1040,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
    //  MainMenuTreeViewSelect("Epicor Europe;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-   //    DeleteDashboard("TestDashBD3v2")
+   //    DeleteDashboard("SWTestDashBD3v2")
    //    ExitDashboard()
 
    //  MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
@@ -1088,7 +1087,7 @@ function TC_Dashboard_Solution_Workbench_2(){
     Log["Checkpoint"]("Exported solution Installed on EPIC06")
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-  //--- EPIC06 Retrieve TestDashBD2v2, TestDashBD3v2  ---------------------------------------------------------------------------------------------'
+  //--- EPIC06 Retrieve SWTestDashBD2v2, SWTestDashBD3v2  ---------------------------------------------------------------------------------------------'
     
     /*
       Step: 31 - 32
@@ -1099,19 +1098,19 @@ function TC_Dashboard_Solution_Workbench_2(){
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD2v2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("SWTestDashBD2v2")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
 
       if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
-        Log["Checkpoint"]("Dashboard TestDashBD2v2 retrieved")
+        Log["Checkpoint"]("Dashboard SWTestDashBD2v2 retrieved")
       }else{
-        Log["Error"]("Dashboard TestDashBD2v2 wasn't retrieved")
+        Log["Error"]("Dashboard SWTestDashBD2v2 wasn't retrieved")
       }
       
       if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
-        Log["Checkpoint"]("Dashboard TestDashBD2v2 'All Companies' checkbox is not checked")
+        Log["Checkpoint"]("Dashboard SWTestDashBD2v2 'All Companies' checkbox is not checked")
       }else{
-        Log["Error"]("Dashboard TestDashBD2v2'All Companies' checkbox is checked")
+        Log["Error"]("Dashboard SWTestDashBD2v2'All Companies' checkbox is checked")
       }
 
       ExitDashboard()
@@ -1125,7 +1124,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD3v2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("SWTestDashBD3v2")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
 
       if (Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["Exists"]) {
@@ -1133,26 +1132,26 @@ function TC_Dashboard_Solution_Workbench_2(){
       }
 
       if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
-        Log["Checkpoint"]("Dashboard TestDashBD3v2 retrieved")
+        Log["Checkpoint"]("Dashboard SWTestDashBD3v2 retrieved")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2 wasn't retrieved")
+        Log["Error"]("Dashboard SWTestDashBD3v2 wasn't retrieved")
       }
       
      if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
-        Log["Checkpoint"]("Dashboard TestDashBD3v2 'All Companies' checkbox is not checked")
+        Log["Checkpoint"]("Dashboard SWTestDashBD3v2 'All Companies' checkbox is not checked")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2'All Companies' checkbox is checked")
+        Log["Error"]("Dashboard SWTestDashBD3v2'All Companies' checkbox is checked")
       }
 
       ExitDashboard()
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //--- EPIC06 Delete TestDashBD2v2, TestDashBD3v2  -----------------------------------------------------------------------------------------------'
+  //--- EPIC06 Delete SWTestDashBD2v2, SWTestDashBD3v2  -----------------------------------------------------------------------------------------------'
     
    //  MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-   //    DeleteDashboard("TestDashBD2v2")
+   //    DeleteDashboard("SWTestDashBD2v2")
    //    ExitDashboard()
     
    // //Go to System Management> Business Activity Management;Setup;Business Activity Query
@@ -1163,7 +1162,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
    //  MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-   //    DeleteDashboard("TestDashBD3v2")
+   //    DeleteDashboard("SWTestDashBD3v2")
    //    ExitDashboard()
 
    //  MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
@@ -1210,7 +1209,7 @@ function TC_Dashboard_Solution_Workbench_2(){
     Log["Checkpoint"]("Exported solution Installed on EPIC07")
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-  //--- EPIC07 Retrieve TestDashBD3v2, TestDashBD4v2  ---------------------------------------------------------------------------------------------'
+  //--- EPIC07 Retrieve SWTestDashBD3v2, SWTestDashBD4v2  ---------------------------------------------------------------------------------------------'
     
     /*
       Step: 35 - 36
@@ -1221,7 +1220,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD3v2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("SWTestDashBD3v2")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
 
       if (Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["Exists"]) {
@@ -1229,15 +1228,15 @@ function TC_Dashboard_Solution_Workbench_2(){
       }
 
       if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
-        Log["Checkpoint"]("Dashboard TestDashBD3v2 retrieved")
+        Log["Checkpoint"]("Dashboard SWTestDashBD3v2 retrieved")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2 wasn't retrieved")
+        Log["Error"]("Dashboard SWTestDashBD3v2 wasn't retrieved")
       }
       
      if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
-        Log["Checkpoint"]("Dashboard TestDashBD3v2 'All Companies' checkbox is not checked")
+        Log["Checkpoint"]("Dashboard SWTestDashBD3v2 'All Companies' checkbox is not checked")
       }else{
-        Log["Error"]("Dashboard TestDashBD3v2'All Companies' checkbox is checked")
+        Log["Error"]("Dashboard SWTestDashBD3v2'All Companies' checkbox is checked")
       }
 
       ExitDashboard()
@@ -1251,37 +1250,37 @@ function TC_Dashboard_Solution_Workbench_2(){
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("TestDashBD4v2")
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("SWTestDashBD4v2")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Keys"]("[Tab]")
 
       if (Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"] != "") {
-        Log["Checkpoint"]("Dashboard TestDashBD4v2 retrieved")
+        Log["Checkpoint"]("Dashboard SWTestDashBD4v2 retrieved")
       }else{
-        Log["Error"]("Dashboard TestDashBD4v2 wasn't retrieved")
+        Log["Error"]("Dashboard SWTestDashBD4v2 wasn't retrieved")
       }
       
       if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkAllCompanies"]["Checked"]) {
-        Log["Checkpoint"]("Dashboard TestDashBD4v2 'All Companies' checkbox is not checked")
+        Log["Checkpoint"]("Dashboard SWTestDashBD4v2 'All Companies' checkbox is not checked")
       }else{
-        Log["Error"]("Dashboard TestDashBD4v2'All Companies' checkbox is checked")
+        Log["Error"]("Dashboard SWTestDashBD4v2'All Companies' checkbox is checked")
       }
 
       var grid = Aliases["Epicor"]["Dashboard"]["dbPanel"]["FindChild"]("WndCaption", "*zCustomer01*", 30)
       if(grid["Exists"]){
-        Log["Checkpoint"]("TestDashBD4v2 is retrieved and it includes the zCustomer01 query")
+        Log["Checkpoint"]("SWTestDashBD4v2 is retrieved and it includes the zCustomer01 query")
       }else{
-        Log["error"]("TestDashBD4v2 is retrieved and it doesn't include the zCustomer01 query")
+        Log["error"]("SWTestDashBD4v2 is retrieved and it doesn't include the zCustomer01 query")
       }
 
       ExitDashboard()      
   
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-  //--- EPIC06 Delete TestDashBD2v2, TestDashBD3v2  -----------------------------------------------------------------------------------------------'
+  //--- EPIC06 Delete SWTestDashBD2v2, SWTestDashBD3v2  -----------------------------------------------------------------------------------------------'
     
    //  MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-   //    DeleteDashboard("TestDashBD3v2")
+   //    DeleteDashboard("SWTestDashBD3v2")
    //    ExitDashboard()
     
    // //Go to System Management> Business Activity Management;Setup;Business Activity Query
@@ -1292,7 +1291,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
    //  MainMenuTreeViewSelect("Epicor Mexico;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-   //    DeleteDashboard("TestDashBD4v2")
+   //    DeleteDashboard("SWTestDashBD4v2")
    //    ExitDashboard()
 
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
