@@ -1,16 +1,23 @@
 //USEUNIT ControlFunctions
 //USEUNIT General_Functions
 
-//Change to dev mode function
+//Enable Dashboard Developer Mode  
 function DevMode(){
-  //Enable Dashboard Developer Mode  
   if (!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["Exists"]) {
     Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Developer")
   }
 }
 
-//Basic deployment for dashboards
 // function CreateSimpleDashboards(dashboardID, dashboardCaption, dashDescription, generalOptions, baqQuery, deploymentOptions){
+/*Simple deployment of dashboards
+* @param: DashbData - An array that contains the information of the dashboard to define
+* @param: DashbData[dashboardID] - String that contains the information of the dashboard 'ID'
+* @param: DashbData[dashboardCaption] - String that contains the information of the dashboard 'Caption'
+* @param: DashbData[dashDescription] - String that contains the information of the dashboard 'Description'
+* @param: DashbData[generalOptions] - String that contains the information of the dashboard 'generalOptions'
+* @param: DashbData[baqQuery] - String that contains the information of the dashboard 'baqQuery'
+* @param: DashbData[deploymentOptions] - String that contains the information of the dashboard 'deploymentOptions'
+* @return: none*/
 function CreateSimpleDashboards(DashbData){
 
   NewDashboard(DashbData["dashboardID"],DashbData["dashboardCaption"],DashbData["dashDescription"], DashbData["generalOptions"])
@@ -26,6 +33,9 @@ function CreateSimpleDashboards(DashbData){
   ExitDashboard()
 }
 
+/*Simple deployment of dashboards
+* @param: dashboardID - String that contains the information of the dashboard 'ID'
+* @return: none*/
 function OpenDashboard(dashboardID) {
   var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
   dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
@@ -38,6 +48,12 @@ function OpenDashboard(dashboardID) {
   }
 }
 
+/*funtion that creates a dashboard
+* @param: dashboardID - String that contains the information of the dashboard 'ID'
+* @param: dashboardCaption - String that contains the information of the dashboard 'Caption'
+* @param: dashDescription - String that contains the information of the dashboard 'Description'
+* @param: generalOptions - String that contains the information of the dashboard 'generalOptions'
+* @return: none*/
 function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions){
   //Click New Dashboard
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&New...|New Dashboard")
@@ -92,6 +108,9 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
   }
 }
 
+/*funtion that adds a query on dashboard defined
+* @param: baqQuery - String that contains the information of the query (ID)
+* @return: none*/
 function AddQueriesDashboard(baqQuery){
   var arrBaqQueries = baqQuery.split(",")
 
@@ -111,24 +130,21 @@ function AddQueriesDashboard(baqQuery){
   }
 }
 
+//Saves Dashboard
 function SaveDashboard(){
   //Activate 'General' tab
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
 
-  //var dashboardCaption =  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]["Text"]
-  //var dashDescription = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDescription"]["Text"]
   Delay(1500)
 
   //Save the Dashboard
   // ClickMenu("File->Save")
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
- 
- /* if (Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Exists"]) {
-    Log["Message"]("Validated correctly: Cancelling Save operation: Dashboard Description and Caption is required.")
-      Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["btnOk"]["Click"]()
-    }*/
 }
 
+/*Reads the deployment options in order to deploy the dashboard
+* @param: deploymentOptions - String that contains the deployment options separated by ',' separator
+* @return: none*/
 function DeployDashboard(deploymentOptions){
   //Deploy Dashboard
   // ClickMenu("Tools->Deploy Dashboard")
@@ -249,6 +265,8 @@ function DeployDashboard(deploymentOptions){
 
   }
 */
+
+//Closes the dashboard form
 function ExitDashboard(){
    if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
     Log["Error"]("There is a dialog message active.")
@@ -258,6 +276,7 @@ function ExitDashboard(){
   }
 }
 
+//Closes only the dashboard not the form
 function CloseDashboard(){
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Close All")
   // ClickMenu("Close All")
@@ -265,8 +284,16 @@ function CloseDashboard(){
   // Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()
 }
 
-//Create menu from menu maintenance for dashboards
 // function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations)
+/*Creates menu from menu maintenance for dashboards
+* @param: MenuData - An array that contains the information of the menu to create
+* @param: MenuData[menuID] - String that contains the information of the menu 'ID'
+* @param: MenuData[menuName] - String that contains the information of the menu 'Name'
+* @param: MenuData[orderSequence] - String that contains the information of the menu 'Order Sequence'
+* @param: MenuData[menuType] - String that contains the information of the menu 'Type'
+* @param: MenuData[dll] - String that contains the information of the menu 'dll'
+* @param: MenuData[validations] - String that contains the information of the menu 'validations'
+* @return: none*/
 function CreateMenu(MenuData){  
   Delay(1000)
   var MenuMFormTree = Aliases["Epicor"]["MenuMForm"]["windowDockingArea2"]["dockableWindow2"]["jobTreeViewPanel"]["methodTree"]  
@@ -298,6 +325,7 @@ function CreateMenu(MenuData){
   MenuFormObject["grpProgramMain"]["cboType"]["Keys"]("[BS][BS][BS][BS][BS][BS][BS][BS][BS]")
   MenuFormObject["grpProgramMain"]["cboType"]["Keys"](MenuData["menuType"])
   
+  //Menu type
   if (MenuData["menuType"] == "Dashboard-Assembly") {
     MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"](MenuData["dll"])
     MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"]("[Tab]")
@@ -308,6 +336,7 @@ function CreateMenu(MenuData){
    
   var flag = true
 
+  //Validations on the form
   if(MenuData["validations"] != undefined && MenuData["validations"] != "" && MenuData["validations"] != null){
     var validations = MenuData["validations"].split(",")
 
@@ -384,15 +413,17 @@ function CreateMenu(MenuData){
   }
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")  
 }*/
-  
+
+/*Opens dashboard installed in Favorite menu
+* @param: DashboardID - An String that contains the id of the dashboard to open
+* @return: none*/  
 function OpenDashboardFavMenu(DashboardID) {
   // var DashboardID = "DashBBAQ"
   Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["shortcutBar"]["ClickItem"]("Dashboard Assemblies", DashboardID);
-
 }
 
 //MODIFY-remove
-function DashboardQueryProperties(tab){
+/*function DashboardQueryProperties(tab){
     var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
 
     for (var i = 0; i <= queryProperties["Tabs"]["VisibleTabsCount"] -1; i++) {
@@ -402,19 +433,26 @@ function DashboardQueryProperties(tab){
           queryProperties["Keys"]("[Enter]")
       }
     }
-}
+}*/
 
+/*Activates the tab specified in the parameter inside de grid of the properties panel of dahsboards
+* @param: dashboardPropsPanel - An object that contains the information of the panel of the dashboard properties 
+* @param: tab - An String that contains the tab name that needs to be activated
+* @return: none*/  
 function DashboardPropertiesTabs(dashboardPropsPanel, tab){
-    // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-    for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
-      if (dashboardPropsPanel["Tabs"]["Item_2"](i)["Text"] == tab) {
-          dashboardPropsPanel["ActiveTab"] = dashboardPropsPanel["Tabs"]["Item_2"](i)
-          dashboardPropsPanel["Focus"]()
-          dashboardPropsPanel["Keys"]("[Enter]")
-      }
+  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
+  for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
+    if (dashboardPropsPanel["Tabs"]["Item_2"](i)["Text"] == tab) {
+        dashboardPropsPanel["ActiveTab"] = dashboardPropsPanel["Tabs"]["Item_2"](i)
+        dashboardPropsPanel["Focus"]()
+        dashboardPropsPanel["Keys"]("[Enter]")
     }
+  }
 }
 
+/*Deletes dashboard
+* @param: dashboardIDs - An String that contains one or more dashboard separated by ',' 
+* @return: none*/  
 function DeleteDashboard(dashboardIDs) {
   var DashboardFormDefinition = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]
 
@@ -437,7 +475,7 @@ function DeleteDashboard(dashboardIDs) {
     }
 
     if (dashboardIDtext["Text"]["OleValue"] == "") {
-      //Retrieve BAQ
+      //Retrieve dashboard
       dashboardIDtext["Keys"](arrDashboards[i])
       dashboardIDtext["Keys"]("[Tab]")
       DashboardFormDefinition["dockableWindow1"]["Activate"]()
@@ -445,7 +483,7 @@ function DeleteDashboard(dashboardIDs) {
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
           Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
-          Log["Message"]("BAQ not found.")
+          Log["Message"]("Dashboard not found.")
         }      
       }else{
         Log["Message"](arrDashboards[i] + " was loaded.")
@@ -462,7 +500,7 @@ function DeleteDashboard(dashboardIDs) {
 
       Log["Message"](arrDashboards[i] + " was deleted.")
 
-      //Retrieve BAQ for validation
+      //Retrieve dashboard for validation
       dashboardIDtext["Keys"](arrDashboards[i])
       dashboardIDtext["Keys"]("[Tab]")
 
