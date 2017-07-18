@@ -161,8 +161,7 @@ function Dashboard_Deployment()
 
     //Creates Menu
     CreateMenu(MenuData)
-    Log["Checkpoint"]("Menu creaded correctly.")
-
+    
   // Step 14
    // Restart SmartClient
     RestartSmartClient()
