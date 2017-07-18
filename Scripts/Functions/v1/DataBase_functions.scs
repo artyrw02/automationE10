@@ -1,6 +1,9 @@
+/* Retrieves data of the database depending on the parameter set (Dashboard id)
+* @param: DashBDID - String that has the id of the dashboard to query in the database
+* @return: aRecSet - The result of the query*/
 function QueryDatabaseDashboards(DashBDID)
 {
-  var aCon, aCmd, aRecSet, RunTaskSeq, p, ConnectInfo, i;
+  var aCon, aCmd, aRecSet, ConnectInfo, i;
  
   ConnectInfo = "Provider=SQLOLEDB.1;User ID=sa; Password=Epicor123;Initial Catalog=erp10Staging;Persist Security Info=False;Data Source=" + Sys["HostName"];
  

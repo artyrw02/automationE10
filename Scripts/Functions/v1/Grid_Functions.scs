@@ -1,3 +1,7 @@
+/* Retrieves the column index of the grid specified in the parameter
+* @param: grid - An object that contains the information of a grid
+* @param: column - String that has the name of the column that will return the index
+* @return: the column Index*/
 function getColumn(grid, column) {
    var allColumns = grid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
 
@@ -17,7 +21,12 @@ function getColumn(grid, column) {
     return columnIndex
 }
 
-//Test case BAQ parameters 
+/* Selects a value from a dropdown that it's in a grid
+* @param: column - String that has the name of the column that will return the index
+* @param: dropValue - A String that has the value that will be retrieved from the dropdown
+* @param: ultraGrid - An object that contains the information of a grid
+* @return: none
+* Note: Works only for escenario 'Test case BAQ parameters' */
 function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
   var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
     Log["Message"]('columns' + allColumns)
@@ -47,7 +56,6 @@ function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
 
     Log["Message"]('columns rowIndex ' + rowIndex)
 
-    //var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
     var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
 
     Log["Message"]('columns rowIndex ' + rowIndex)
@@ -164,6 +172,13 @@ function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
 }
 
 
+/* Selects a value from a dropdown that it's in a grid
+* @param: column - String that has the name of the column that will return the index
+* @param: dropValue - A String that has the value that will be retrieved from the dropdown
+* @param: ultraGrid - An object that contains the information of a grid
+* @return: none
+* Note: Works only for any escenario except 'Test case BAQ parameters' */
+
 //IMPORTANT TO CHECK FUNTIONALITY WITH GRIDS - Ud tables
 function SelectCellDropdownGrid(column, dropValue, ultraGrid){
   var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
@@ -194,7 +209,6 @@ function SelectCellDropdownGrid(column, dropValue, ultraGrid){
 
     Log["Message"]('columns rowIndex ' + rowIndex)
 
-    //var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
     var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
 
     Log["Message"]('columns rowIndex ' + rowIndex)
@@ -251,8 +265,6 @@ function SelectCellDropdownGrid(column, dropValue, ultraGrid){
 
   var comboValue, indexValue
 
-  // var dropValue = "UD100A_Company"
-
   //find value index in dropdown list 
   for (var i = 0; i <= aRes.length -1; i++ ){
     comboValue = aqString.Trim(aRes[i])
@@ -307,6 +319,8 @@ function SelectCellDropdownGrid(column, dropValue, ultraGrid){
   }
 }
 
+//Retrieves all the grids in any Dashboard installed in the Main Panel
+//returns an array of objects with the grids
 function RetrieveGridsMainPanel(){
   var dashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
     
@@ -314,7 +328,11 @@ function RetrieveGridsMainPanel(){
   return gridDashboardPanelChildren
 }
 
-//Cells
+/* Finds value in cells inside a grid
+* @param: grid - An object that contains the information of a grid
+* @param: column - String that has the index of the column
+* @param: valueToFind - A String that has the value that will be find in the cell specified by the parameters
+* @return: none */
 function findValueInStringGrids(grid, column, valueToFind){
   for (var i = 0; i < grid["Rows"]["Count"]; i++) {
     var aString = grid["Rows"]["Item"](i)["Cells"]["Item"](column)["Text"]["OleValue"]

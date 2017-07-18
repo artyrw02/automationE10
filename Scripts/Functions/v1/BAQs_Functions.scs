@@ -1,6 +1,13 @@
 //USEUNIT Grid_Functions
 
-// Create a simple BAQ with one table 
+/*Create a simple BAQ with one table
+* @param: baqData - An array that contains the information of the BAQ to create
+* @param: baqData[Id] - String that contains the information of the BAQ 'Id'
+* @param: baqData[Description] - String that contains the information of the BAQ 'Description'
+* @param: baqData[GeneralConfig] - String that contains the information of the BAQ 'Order GeneralConfig'
+* @param: baqData[Table] - String that contains the information of the BAQ 'Table'
+* @param: baqData[Columns] - String that contains the information of the BAQ 'Columns'
+* @return: none*/
 // function CreateSimpleBAQ(baqID, baqDescription, table, columns, generalConfig){
 function CreateSimpleBAQ(baqData){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
@@ -20,6 +27,9 @@ function CreateSimpleBAQ(baqData){
   ExitBAQ()
 }
 
+/*Opens an existing BAQ
+* @param: baqID - String that contains the information of the BAQ 'Id'
+* @return: none*/
 function OpenBAQ(baqID){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
@@ -37,6 +47,11 @@ function OpenBAQ(baqID){
   }
 }
 
+/*Defines a BAQ and sets the basic information
+* @param: baqID - String that contains the information of the BAQ 'Id'
+* @param: baqDescription - String that contains the information of the BAQ 'Description'
+* @param: generalConfig - String that contains the information of the BAQ 'Order GeneralConfig'
+* @return: none*/
 function CreateBAQ(baqID, baqDescription, generalConfig){
   Delay(1500)
   
@@ -60,6 +75,10 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
   }
 }
 
+/*Adds a table on the BAQ
+* @param: BAQFormDefinition - Object that contains the definition of the form
+* @param: table - String that contains the name table that will be added to the BAQ
+* @return: none*/
 function AddTableBAQ(BAQFormDefinition, table){
   //Change to "Query Builder" tab
   BAQFormDefinition["dockableWindow2"]["Activate"]()
@@ -91,6 +110,11 @@ function AddTableBAQ(BAQFormDefinition, table){
   }
 }
 
+/*Adds a table on the BAQ
+* @param: BAQFormDefinition - Object that contains the definition of the form
+* @param: table - String that contains the name table that was be added to the BAQ in order to retrieve the columns
+* @param: columns - String that contains the name columns that will be added to the BAQ separated by ','
+* @return: none*/
 function AddColumnsBAQ(BAQFormDefinition, table, columns){
   //Change to "Query Builder" tab
   BAQFormDefinition["dockableWindow2"]["Activate"]()
@@ -130,6 +154,9 @@ function AddColumnsBAQ(BAQFormDefinition, table, columns){
   BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow2"]["displayPanel"]["windowDockingArea1"]["dockableWindow1"]["fieldsChooserPanel"]["gbColumns"]["btnMoveRight"]["Click"]()
 }
 
+/*Analyzes if there is no error in syntaxis of the data added to the BAQ
+* @param: BAQFormDefinition - Object that contains the definition of the form
+* @return: none*/
 function AnalyzeSyntaxisBAQ(BAQFormDefinition){
   //-Validate if windows4 is active
   BAQFormDefinition["dockableWindow4"]["Activate"]()
@@ -138,6 +165,10 @@ function AnalyzeSyntaxisBAQ(BAQFormDefinition){
   BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["btnAnalyze"]["Click"]()
 }
 
+/*Tests the data added to the BAQ
+* @param: BAQFormDefinition - Object that contains the definition of the form
+* @param: parameterValue - String. In case it's needed for testing purpose
+* @return: none*/
 function TestResultsBAQ(BAQFormDefinition, parameterValue){
   //Activate Analyze tab
   BAQFormDefinition["dockableWindow4"]["Activate"]()
@@ -168,7 +199,6 @@ function TestResultsBAQ(BAQFormDefinition, parameterValue){
         btnParameter[i]["Click"]()
         break
       }
-      
     }
   }
 
@@ -178,15 +208,19 @@ function TestResultsBAQ(BAQFormDefinition, parameterValue){
     Log["Message"]("Returned more than 0 Records on BAQ analysis")
 }
 
+//Saves BAQ
 function SaveBAQ(){
-  //Save BAQ
   Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")  
 }
 
+// Closes BAQ form
 function ExitBAQ(){
   Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit") 
 }
 
+/*Deletes BAQ
+* @param: baqIDs - String that contains one or more BAQs separated by ','
+* @return: none*/
 function DeleteBAQ(baqIDs){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
@@ -244,6 +278,10 @@ function DeleteBAQ(baqIDs){
   }
 }
 
+/*Creates a copy of any existing BAQ
+* @param: baqIDs - String that contains the id of an existing BAQ
+* @param: newID - String that contains the new id for the copy of the existing BAQ
+* @return: none*/
 function CopyBAQ(baqID, newID){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
