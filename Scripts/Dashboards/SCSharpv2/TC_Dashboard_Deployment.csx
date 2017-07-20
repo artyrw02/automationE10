@@ -148,7 +148,7 @@ function Dashboard_Deployment()
   // Step 12
     // Click Tools> Deploy Dashboard"        
     // Select Deploy Smart Client Application, Add Menu Tab, Add Favorite Item and Generate Web Form check boxes. Click on Deploy button and when finished click Ok.       
-    DeployDashboard("Deploy Smart Client,Add Favorite Item")
+    DeployDashboard("Deploy Smart Client,Add Favorite Item,Add Menu tab")
 
   // Step 13
     // Create the menu
