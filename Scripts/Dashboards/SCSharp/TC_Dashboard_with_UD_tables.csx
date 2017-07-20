@@ -196,10 +196,12 @@ function Dashboard_with_UD_tables(){
         Delay(1000)
 
         // Active Publish tab and select all columns to be published
-        DashboardQueryProperties("Publish")
+        var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
+        // DashboardQueryProperties("Publish")
+        DashboardPropertiesTabs(queryProperties, "Publish")
         Log["Message"]("BAQ1 - publish tab was selected")
 
-        var publishColumns = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]["tabPublish"]["eclpPublishedColumns"]["myCLB"]
+        var publishColumns = queryProperties["tabPublish"]["eclpPublishedColumns"]["myCLB"]
         
         //Select all columns to publish
         for (var i = 0; i <= publishColumns["Items"]["Count"] -1; i++) {
@@ -224,10 +226,11 @@ function Dashboard_with_UD_tables(){
         Log["Message"]("BAQ2 - Properties was selected")
 
         //active to 'Filter' tab
-        DashboardQueryProperties("Filter")
+        // DashboardQueryProperties("Filter")
+        DashboardPropertiesTabs(queryProperties, "Filter")
         Log["Message"]("BAQ1 - filter tab was selected")
 
-        var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
+        var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
 
         //GRID 
 

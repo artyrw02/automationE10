@@ -390,12 +390,15 @@ function TC_Dashboard_Tracker_Views_1(){
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
       Log["Message"]("BAQTrackerV1 Summary - New Tracker View was selected from Menu")
 
-      DashboardQueryProperties("General")
+
+      var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
+      // DashboardQueryProperties("General")
+      DashboardPropertiesTabs(queryProperties, "General")
 
       //Check Auto Refresh on Load and change the Refresh Interval to 10  
-      Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]["tabGeneral"]["chkAutoRefresh"]["Checked"] = true
-      Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]["tabGeneral"]["numRefresh"]["Click"]()
-      Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]["tabGeneral"]["numRefresh"]["Keys"]("[Del][Del][Del]10")
+      queryProperties["tabGeneral"]["chkAutoRefresh"]["Checked"] = true
+      queryProperties["tabGeneral"]["numRefresh"]["Click"]()
+      queryProperties["tabGeneral"]["numRefresh"]["Keys"]("[Del][Del][Del]10")
       Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
 
       //Save dashboard
