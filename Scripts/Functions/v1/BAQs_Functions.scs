@@ -152,6 +152,7 @@ function AddColumnsBAQ(BAQFormDefinition, table, columns){
 
   //Move selected columns to right panel
   BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow2"]["displayPanel"]["windowDockingArea1"]["dockableWindow1"]["fieldsChooserPanel"]["gbColumns"]["btnMoveRight"]["Click"]()
+  Log["Message"]("Columns where added to the BAQ")
 }
 
 /*Analyzes if there is no error in syntaxis of the data added to the BAQ
@@ -300,7 +301,7 @@ function CopyBAQ(baqID, newID){
   }
 }
 
-//Grid 'Updatable Columns' only
+//Grid 'Updatable Columns' only General Tab
 function UpdateTabBAQ(field, fieldAction, querySettings){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
@@ -332,7 +333,7 @@ function UpdateTabBAQ(field, fieldAction, querySettings){
       grid["Rows"]["Item"](i)["Cells"]["Item"](columnParameter)["Click"]()
       // Check Updatable check box on for the specified field
       grid["Rows"]["Item"](i)["Cells"]["Item"](columnParameter)["EditorResolved"]["CheckState"] = "Checked"
+      Log["Message"](field + " was sey to " + fieldAction)
     }
   }
-
 }

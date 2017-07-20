@@ -134,15 +134,20 @@ function ChangePlant(Plant){
   }
 }
 
-// Activates menu tab
 function ActivateFavoritesMenuTab() {
-  Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
-  Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  if(Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
+     Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false)   
+  }
+  Delay(1000)
+   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
+   Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()  
 }
 
 // Deactivates menu tab
 function DeactivateFavoritesMenuTab() {
-  Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false) 
+  if(Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
+    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false) 
+  }
 }
 
 /* Compares strings and finds any coincidence between them
