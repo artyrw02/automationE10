@@ -4,6 +4,7 @@
 //USEUNIT Grid_Functions
 
 https://community.smartbear.com/t5/TestComplete-General-Discussions/Accessing-the-Visible-property-of-Menu-Subitems-of-DevX-Menu/td-p/54358
+https://support.smartbear.com/testcomplete/docs/app-objects/specific-tasks/standard/tool-bar/checking-button-state.html
 
 function TC_Dashboard_Edition_Permissions_users(){
   
@@ -19,6 +20,10 @@ function TC_Dashboard_Edition_Permissions_users(){
       Login("manager","Epicor123") 
 
       ActivateFullTree()
+
+      ExpandComp("Epicor Education")
+
+      ChangePlant("Main Plant")
 
       MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;User Account Security Maintenance")
   //-------------------------------------------------------------------------------------------------------------------------------------------'

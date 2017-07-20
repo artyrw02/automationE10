@@ -64,6 +64,12 @@ function Login(username,password){
   //Delays the execution of script until the Menu form is opened
   while(!menuSCType["Exists"]){
     Delay(5000)
+
+    if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){
+      Log["Warning"]("Exception Dialog found - " + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"])
+      Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["btnOk"]["Click"]()
+      Log["Message"]("Clicked")
+    }
     var count = count + 1
     if (count == 90) {
       Log["Error"]("Menu not appear")
