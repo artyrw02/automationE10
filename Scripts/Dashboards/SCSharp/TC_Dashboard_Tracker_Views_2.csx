@@ -745,9 +745,12 @@ function TC_Dashboard_Tracker_Views_2(){
       }
       
       var epiPropertyGrid = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgProperties"]["pnlControlProperties"]["pnlProperties"]["pgdProperties"];
-      epiPropertyGrid["wItems"]("Layout")["ClickLabel"]("Size");
-      epiPropertyGrid["Keys"]("^a[Del]" + "0,20" + "[Enter]");
-
+      epiPropertyGrid["wItems"]("Layout")["Expand"]("Size");
+      epiPropertyGrid["wItems"]("Layout")["wItems"]("Size")["ClickLabel"]("Width");
+      epiPropertyGrid["Keys"]("^a[Del]" + "0" + "[Enter]");
+      epiPropertyGrid["wItems"]("Layout")["wItems"]("Size")["ClickLabel"]("Height");
+      epiPropertyGrid["Keys"]("^a[Del]" + "20" + "[Enter]");
+      
     /*
       Step No: 43
       Step: Click Tools>Toolbox and select an EpiTextBox and drop it in the tracker below the other fields        

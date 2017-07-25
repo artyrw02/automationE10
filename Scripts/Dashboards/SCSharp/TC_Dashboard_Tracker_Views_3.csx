@@ -6,15 +6,6 @@
 
 function TC_Dashboard_Tracker_Views_3(){
   
-  var MenuData = {
-    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
-    "menuID" : "DashT2",
-    "menuName" : "DashTrack2",
-    "orderSequence" : 102,
-    "menuType" : "Dashboard-Assembly",
-    "dll" : "DashTracker2"
-  }
-
   //--- Setup Estonian culture for Windows -----------------------------------------------------------------------------------------------------'
 
     /* Step 1: 

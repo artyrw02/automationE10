@@ -294,8 +294,8 @@ function CopyBAQ(baqID, newID){
 
   Aliases["Epicor"]["CopyQueryForm"]["copyQueryPanel1"]["gbCopyTo"]["txtToID"]["Keys"](newID)
   Aliases["Epicor"]["CopyQueryForm"]["btnOK"]["Click"]()
-
-  Delay(1000)
+  
+  Delay(5000)
   if(Aliases["Epicor"]["dlgInformation"]["Exists"]) {
     Aliases["Epicor"]["dlgInformation"]["btnOK"]["Click"]()
   }
