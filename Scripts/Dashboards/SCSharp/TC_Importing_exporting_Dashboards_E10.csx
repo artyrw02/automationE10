@@ -267,7 +267,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       // OpenDashboard("DashBDExport")
 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Import Dashboard Definition")
-
+      var dashboardImportE10 = "C:\ProgramData\Epicor\tyrell.playground.local-80\3.2.100.0\EPIC06\shared\Export\DashBDExport_E10.dbd"
     /*
       Step No: 6
       Step:  Write a new dashboard definition ID and click Ok.        
@@ -277,7 +277,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       if (windowExportDashBD["Exists"]) {
         var windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
       
-        windowExportDashBD["Keys"]("DashBDExport_E10.dbd")
+        windowExportDashBD["Keys"](dashboardImportE10)
         windowExportDashBDSaveBtn["Click"]()
 
         //Rename Window dialog

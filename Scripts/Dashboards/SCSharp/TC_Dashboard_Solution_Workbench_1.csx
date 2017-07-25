@@ -926,7 +926,7 @@ function TC_Dashboard_Solution_Workbench_1(){
       Step: 23
       Note: Install the exported solution
     */
-
+    var solutionEPIC05 = "C:\Users\Administrator\Documents\Stest_Customer Solution_3.2.100.0"
     //Go to System Management> Solution Management> Solution Type(Solution Workbench) Maintenance
     MainMenuTreeViewSelect("Epicor Europe;System Management;Solution Management;Solution Workbench")
 
@@ -939,7 +939,7 @@ function TC_Dashboard_Solution_Workbench_1(){
     var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
     var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
 
-    openSolutionWindow["Keys"]("Stest_Customer Solution_3.2.100.0")
+    openSolutionWindow["Keys"](solutionEPIC05)
     
     openSolutionWindowBtn["Click"]()
 
@@ -1068,14 +1068,15 @@ function TC_Dashboard_Solution_Workbench_1(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
- 
+    var solutionEPIC06 = "C:\Users\Administrator\Documents\Stest2_Customer Solution_3.2.100.0"
+
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
 
     var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
     var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
 
-    openSolutionWindow["Keys"]("Stest2_Customer Solution_3.2.100.0")
+    openSolutionWindow["Keys"](solutionEPIC06)
     
     openSolutionWindowBtn["Click"]()
 
@@ -1188,14 +1189,15 @@ function TC_Dashboard_Solution_Workbench_1(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
- 
+    var solutionEPIC07 = "C:\Users\Administrator\Documents\Stest3_Customer Solution_3.2.100.0"
+
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
 
     var openSolutionWindow = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*ComboBox*"],30)
     var openSolutionWindowBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"], ["*Open*","*Button*"],30)
 
-    openSolutionWindow["Keys"]("Stest3_Customer Solution_3.2.100.0")
+    openSolutionWindow["Keys"](solutionEPIC07)
     
     openSolutionWindowBtn["Click"]()
 

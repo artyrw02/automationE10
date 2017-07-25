@@ -5,8 +5,9 @@
 //USEUNIT DataBase_Functions
 
 function TC_Importing_exporting_Dashboards_E9E10(){
-  var dashboardID = "DashCaro"
-  var baqE9 = "EPIC06-testBAQCaro"
+  var dashboardImportedE10 = "C:\ProgramData\Epicor\tyrell.playground.local-80\3.2.100.0\EPIC06\shared\Export\DashDef -Regression.dbd"  
+  var dashboardID = "DashCaro" // Dashboard ID from imported dashboard
+  var baqE9 = "EPIC06-testBAQCaro" //BAQ ID from imported dashboard
 
   var MenuData = {
     "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
@@ -52,8 +53,7 @@ function TC_Importing_exporting_Dashboards_E9E10(){
       var windowImportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Import Dashboard*","*ComboBox*"], 30)
       if (windowImportDashBD["Exists"]) {
         var windowImportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
-      
-        windowImportDashBD["Keys"]("DashDef -Regression.dbd")
+        windowImportDashBD["Keys"](dashboardImportedE10)
         windowImportDashBDSaveBtn["Click"]()
         Log["Message"]("Dashboard imported correctly")
       }else{
