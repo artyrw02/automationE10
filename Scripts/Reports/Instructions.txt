@@ -1,0 +1,39 @@
+"Pre-requisites":
+
+Reports installed on Admin console
+Task Agent installed on Admin console.
+
+
+Configure Report Style
+
+1. Go to > System Management>Reporting>Report Style
+2. Seacrh for 'OrderAck'
+3. Expand and select on tree Sales Order Ack > Report Style > Standard - SSRS
+4. Click Actions>Copy Report Style
+5. Click 'Copy'
+6. Select Copied report - change output lcoation to 'xml'
+7. Click 'Save'
+
+
+Continue- 
+
+Create report Sales order
+1. Go to > Sales Management > Customer Relationship Management > General Operations > Order Entry
+2. Select any ID from sales order '5362'
+3. Click on 'Print'
+4. Select on Report Style the copy configured before 'SSRS - copy'
+5. Click on 'Filter' tab - New > Order set to the ID and tab out.
+6. Click on 'Generate only'
+
+
+
+script
+
+
+#XmlCheckpoint1 has the main structure of the report to be compared
+#pathFileReport variable that contains the complete path where the report to compare is located
+
+var pathFileReport = "C:\\Users\\Administrator\\Documents\\Reports\\Sales Order Acknowledgment00885.xml"
+
+XML["XmlCheckpoint1"]["Check"](pathFileReport);
+
