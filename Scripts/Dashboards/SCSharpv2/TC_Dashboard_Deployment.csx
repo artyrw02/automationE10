@@ -29,6 +29,8 @@ function Dashboard_Deployment()
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   // Step 2
+    Log["Message"]("Step 2 - Open Dashboard and enable DevMode")
+
     // Open Dashboard
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
@@ -36,6 +38,8 @@ function Dashboard_Deployment()
       DevMode()
 
   // Step 3 
+    Log["Message"]("Step 3 - Retrieve 'SalesPersonWorkbench' dashboard")
+    
     // - Retrieve SalesPersonWorkbench dashboard       
       OpenDashboard("SalesPersonWorkbench")
 
@@ -49,6 +53,7 @@ function Dashboard_Deployment()
             Log["Message"]("Validating Warning - System Dashboards may not be modified. - Clicked OK on message ")
             windowsExceptionDialogBtn[0]["Click"]()
             break
+            Log["Message"]("Dashboard retrived")
           }
         }
         count++
@@ -61,6 +66,7 @@ function Dashboard_Deployment()
       }
 
   // Step 4 
+    Log["Message"]("Step 4 - Create a copy of Dashboard")
     // - Click on File>Copy Dashboard and enter Dash1 as new ID. Click Ok        
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Copy Dashboard") 
 
@@ -69,21 +75,24 @@ function Dashboard_Deployment()
       Delay(2500)
 
   // Step 5, 6
+    Log["Message"]("Step 5, 6 - Deploy Dashboard")
     // - Click on Tools>Deploy Dashboard. Check mark the "Deploy Smart Client Application" checkbox and click on Deploy        
       DeployDashboard("Deploy Smart Client")
       Log["message"]("Dashboard Dash1Deploy deployed")
 
   // Step 7
+    Log["Message"]("Step 7 - Close Dashboard")
     //  - Click Close All and Ok
       CloseDashboard()
 
-  //  Step 8
+  // Step 8
     /*
       > Click File > New> New Dashboard
       > Type Dash2 as DefinitionID (and take note of it)and tab out, then leave the Caption and Description fields empty
       > Then add any BAQ clicking file> New> New Query, then click OK to add it to the dashboard
       > Click Tools> Deploy Dashboard"        
     */
+    Log["Message"]("Step 8 - Create new Dashboard 'Dash2Deploy'")
 
     NewDashboard("Dash2Deploy","","","")
 
@@ -104,6 +113,7 @@ function Dashboard_Deployment()
     }
 
   // Step 9
+    Log["Message"]("Step 9 - Validation of dialog messages")
     // Close the error message and then click “Save” button(do not fill caption or description field for this step)        
       ClickButton("OK")
       
@@ -123,6 +133,7 @@ function Dashboard_Deployment()
       }
 
    // Step 10
+    Log["Message"]("Step 10 - Validation of dialog messages")
     // Fill “Caption” field with “MyCaption” text but leave the “Description” field empty
     ClickButton("OK")
 
@@ -142,15 +153,18 @@ function Dashboard_Deployment()
     }
 
   // Step 11
+    Log["Message"]("Step 11 - Clear 'Description' field Validation of dialog messages")
     // Clear the “Description” field to leave it empty
     dashDescription["Keys"]("^a[Del]")
 
   // Step 12
+    Log["Message"]("Step 12 - Deploy Dashboard. Validation of dialog messages")
     // Click Tools> Deploy Dashboard"        
     // Select Deploy Smart Client Application, Add Menu Tab, Add Favorite Item and Generate Web Form check boxes. Click on Deploy button and when finished click Ok.       
     DeployDashboard("Deploy Smart Client,Add Favorite Item")
 
   // Step 13
+    Log["Message"]("Step 13 - Creating menu")
     // Create the menu
 
     // Go to System Setup>Security Maintenance> Menu Maintenance. In Menu Maintenance tree select Main Menu> Sales Management> CRM> Setup
@@ -163,47 +177,58 @@ function Dashboard_Deployment()
     CreateMenu(MenuData)
     
   // Step 14
+    Log["Message"]("Step 14 - Restart SmartClient")
    // Restart SmartClient
     RestartSmartClient()
 
- // Step 15
-  // On the Home Page from Smart Client on favorites tiles look for the created dashboard under Dashboard Assembly tile and open it
+  // Step 15
+    Log["Message"]("Step 15 - Activate Favorites Tab")
+   // On the Home Page from Smart Client on favorites tiles look for the created dashboard under Dashboard Assembly tile and open it
     ActivateFavoritesMenuTab()
     Log["Checkpoint"]("FavoritesMenuTab Activated")
 
   // Step 16
+    Log["Message"]("Step 15 - Opening Dashboard from Favorites Tab")
     OpenDashboardFavMenu("Dash2Deploy")
     Log["Checkpoint"]("Dashboard opened from Favorite Menu")
 
-  //Step 17
+  // Step 17
+    Log["Message"]("Step 17 - Refresh Dashboard and test data")
     DashboardPanelTest()
     Log["Checkpoint"]("Dashboard tested")
 
     DeactivateFavoritesMenuTab()
     Log["Checkpoint"]("Favorites MenuTab deactivated")
 
-  //Step 18
+  // Step 18
+    Log["Message"]("Step 18 - Open menu created")
     // Open Menu created
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
 
    //Step 19
+    Log["Message"]("Step 19 - Open menu created")
     // Test Dashboard
       DashboardPanelTest()
       Log["Checkpoint"]("Dashboard tested from menu")
 
     /*STEPS 20 TO 33 ARE FOR EWA */
+    Log["Message"]("Step 20 to 33 - EWA testing")
 
-  //Step 34
+  // Step 34
+    Log["Message"]("Step 34 - Open Dashboard Maintenance")
+
     // Open Dashboard maintenance
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
    //Step 35 - 36
+    Log["Message"]("Step 35,36 - Retrieve 'PartOnHandStatus' Dashboard")
     // Click Dashboard ID       
     // Search for PartOnHandStatus dashboard and retrieve it       
     Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("PartOnHandStatus")
     Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
 
   // Step 37
+    Log["Message"]("Step 37 - Click on Actions> Deploy UI Application")
     // Click on Actions> Deploy UI Application        
     // ClickMenu("Actions->Deploy UI Application")
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Deploy UI Application")
@@ -219,6 +244,7 @@ function Dashboard_Deployment()
     Log["Message"]("Status - " + statusBar)
 
   // Step 38
+    Log["Message"]("Step 38 - Click on Actions> Modify Dashboard")
     // Click on Actions> Modify Dashboard       
     // ClickMenu("Actions->Modify Dashboard")
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Modify Dashboard")
@@ -248,11 +274,13 @@ function Dashboard_Deployment()
     // ClickButton("OK")
 
   // Step 39
+    Log["Message"]("Step 39 - Tools> Deploy Dashboard")
     // Click on Tools> Deploy Dashboard       
     // ClickMenu("Tools->Deploy Dashboard")
     Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
 
   // Step 40
+    Log["Message"]("Step 40 - Select Deploy Smart Client Application")
     // Select Deploy Smart Client Application. Click on Deploy button and when finished click Ok.       
     ChangeCheckboxState("chkDeployApplication", true)
     ClickButton("Deploy")
@@ -266,17 +294,20 @@ function Dashboard_Deployment()
     //Return to system management> Upgrade/Mass regeneration> Dashboard maintenance       
 
   // Step 42
+    Log["Message"]("Step 42 - Select Deploy Smart Client Application")
     //Click Actions> Generate web form/Generate All web forms       
     // ClickMenu("Tools->Generate Web Form")
     // ClickMenu("Tools->Generate All Web Forms")
     // Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Generate Web Form")
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Generate All Web Forms")
     Delay(3500)
+  
   // Step 43
     // >Go to System Setup> Security Maintenance> Menu Maintenance and open it
     // >Create a new menu, enter MenuID, Name and Order Sequence
     // >Select Dashboard Assembly Menu Type and on Dashboard search for PartOnHandStatus
     // >Save
+    Log["Message"]("Step 43 - Open Menu Maintenance and create new menu")
 
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
@@ -296,6 +327,7 @@ function Dashboard_Deployment()
     // Return to system management> Upgrade/Mass regeneration> Dashboard maintenance       
 
   // Step 45  
+    Log["Message"]("Step 45 - retrieve 'SalesPersonWorkBench'")
     // Search for SalesPersonWorkBench dashboard and retrieve it       
     // ClickMenu("Clear")
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Clear")
@@ -305,6 +337,7 @@ function Dashboard_Deployment()
     Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
 
   // Step 46  
+    Log["Message"]("Step 46 - Click on Actions> Deploy UI Application")
     // Click on Actions> Deploy UI Application        
     // ClickMenu("Actions->Deploy UI Application")
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Deploy UI Application")
