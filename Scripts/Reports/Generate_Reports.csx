@@ -17,12 +17,33 @@ function Report_Testing(){
                 go to filter tab, click customers, select Addison, Inc.
                 Click generate Only.*/
 
-function ReportARInvoice(){ PENDING
+function ReportARInvoice(){
 	var customer = "ADDISON"
+	var reportStyle = "Standard - SSRS - ARFORM2"
+
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Demand Management;Reports;Mass Print AR Invoices")
 
 	if(Aliases["Epicor"]["ARInvForm"]["Exists"]){
 		Log["Message"]("Form 'Mass Print AR Invoices' opened.")
+	}
+
+	//Select Report style
+	var reportStyleCombo = Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpReportStyle"]["cboStyle"]
+
+	//Activates combo
+	reportStyleCombo["Click"]()
+	var count = 0
+	while(true){
+		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
+			Log["Message"]("Report style " + reportStyle + " selected from combo.")
+			break
+		}
+		reportStyleCombo["Keys"]("[Down]")
+		count++
+		if (count == 5) {
+		    Log["Error"]("Report Style not found.")
+		    break
+		}
 	}
 
 	//Activates 'Filter' Tab
@@ -45,8 +66,8 @@ function ReportARInvoice(){ PENDING
 			    searchGrid["Rows"]["Item"](i)["Selected"] = true
 			    // Click Ok to select customer
 			    ClickButton("OK")
-			    break
 			    Log["Message"]("Customer selected")
+			    break
 			}
 		}
 	}else{
@@ -63,8 +84,7 @@ function ReportARInvoice(){ PENDING
 
 			if (cell["Text"]["OleValue"] == customer) {
 			    Log["Message"]("Customer " + customer + " appears on grid.")
-			    //Click on menu 'Generate only' PENDING
-			    // Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+			    //Click on menu 'Generate only'
 			    break
 			}
 		}
@@ -73,6 +93,10 @@ function ReportARInvoice(){ PENDING
 		Log["Error"]("Customer was not selected.")
 	}
 
+	Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
+
+	Delay(4000)
 	//Close Form
 	Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
@@ -86,12 +110,32 @@ function ReportARInvoice(){ PENDING
                 Go to filter tab, Click on job button, select the first 3 jobs (005354-1-1, 2000, 2022) click ok.
                 Click Generate Only*/
 
-function ReportJobTraveler(){ PENDING
+function ReportJobTraveler(){
 	// var customer = "ADDISON"
+	var reportStyle = "Standard - SSRS - JOBTRAV2"
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Production Management;Job Management;Reports;Job Traveler")
 
 	if(Aliases["Epicor"]["JobTravForm"]["Exists"]){
 		Log["Message"]("Form 'Job Traveler' opened.")
+	}
+
+	//Select Report style
+	var reportStyleCombo = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox2"]["cboStyle"]
+
+	//Activates combo
+	reportStyleCombo["Click"]()
+	var count = 0
+	while(true){
+		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
+			Log["Message"]("Report style " + reportStyle + " selected from combo.")
+			break
+		}
+		reportStyleCombo["Keys"]("[Down]")
+		count++
+		if (count == 5) {
+		    Log["Error"]("Report Style not found.")
+		    break
+		}
 	}
 
 	// Activates 'Filter' tab
@@ -122,7 +166,10 @@ function ReportJobTraveler(){ PENDING
 	}
 
 	//Pending Generate only
+	Aliases["Epicor"]["JobTravForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
 
+	Delay(4000)
 	//Close Form
 	Aliases["Epicor"]["JobTravForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
@@ -136,11 +183,7 @@ function ReportJobTraveler(){ PENDING
                 Order: 5428
                 Actions > Print Sales Order Acknowledgement
                 Go to filter tab, click new.
-                Order: 5428
-
-                For ProFormaInvc we can use the same script.
-                Actions > Print Pro-Forma Invoice.
-                Generate Only*/
+                Order: 5428*/
 
 function ReportSalesOrder(){
 	var order = "5428"
@@ -168,8 +211,8 @@ function ReportSalesOrder(){
 	var count = 0
 	while(true){
 		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			break
 			Log["Message"]("Report style " + reportStyle + " selected from combo.")
+			break
 		}
 		reportStyleCombo["Keys"]("[Down]")
 		count++
@@ -192,10 +235,10 @@ function ReportSalesOrder(){
 	gridSalesOrder["Keys"](order + "[Del]" + "[Tab]")
 
 	//Pending Validation
-	// Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
 
-	//PENDING
-
+	Delay(4000)
 	//closes OrderAck form (print)
 	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 	if (!Aliases["Epicor"]["SalesOrderAckForm"]["Exists"]) {
@@ -220,10 +263,10 @@ function ReportSalesOrder(){
                 For ProFormaInvc we can use the same script.
                 Actions > Print Pro-Forma Invoice.
                 Generate Only*/
-
-function ReportProFormaInv(){ PENDING DOUBTS ON SECOND ACTIONS PART
+// NOT GENERATING
+function ReportProFormaInv(){
 	var order = "5428"
-	var reportStyle = "Standard - SSRS - ORDERACK2"
+	var reportStyle = "Standard - SSRS - ProFormaInvc2"
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;General Operations;Order Entry")
 
@@ -235,19 +278,19 @@ function ReportProFormaInv(){ PENDING DOUBTS ON SECOND ACTIONS PART
 	Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"](order)
 	Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"]("[Tab]")
 
-	//Click on 'print'
-	Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Sales Order Acknowledgement")
+	// Select Actions > Print Pro-Forma Invoice.
+	Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Pro-forma Invoice")
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+	var reportStyleCombo = Aliases["Epicor"]["ProFormaInvcReportForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["grbSched"]["cboStyle"]
 
 	//Activates combo
-	reportStyleCombo["Click"]()
 	var count = 0
 	while(true){
+		reportStyleCombo["Click"]()
 		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			break
 			Log["Message"]("Report style " + reportStyle + " selected from combo.")
+			break
 		}
 		reportStyleCombo["Keys"]("[Down]")
 		count++
@@ -257,26 +300,15 @@ function ReportProFormaInv(){ PENDING DOUBTS ON SECOND ACTIONS PART
 		}
 	}
 
-	//Go to 'filter' tab
-	Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
-
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|New")
-
-	var gridSalesOrder = Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdOrders"]
-
-	var orderColumn = getColumn(gridSalesOrder, "Order")
-
-	gridSalesOrder["ActiveRow"]["Cells"]["Item"](orderColumn)["Click"]()
-	gridSalesOrder["Keys"](order + "[Del]" + "[Tab]")
-
 	//Pending Validation
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
 
-	//PENDING
+	Delay(4000)
 
 	//closes OrderAck form (print)
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-	if (!Aliases["Epicor"]["SalesOrderAckForm"]["Exists"]) {
+	Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	if (!Aliases["Epicor"]["ProFormaInvcReportForm"]["Exists"]) {
 	    Log["Message"]("Order Ack form closed")
 	    //closes PO form (entry)
 		Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
@@ -293,8 +325,8 @@ function ReportProFormaInv(){ PENDING DOUBTS ON SECOND ACTIONS PART
                 PO Number: 4307
                 Actions > Print
                 Generate Only*/
-
-function ReportPurchaseOrder(){
+// NOT GENERATING
+function ReportPurchaseOrder(){ //CHECK Script
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Material Management;Purchase Management;General Operations;Purchase Order Entry")
 	var poNum = "4307"
 	var reportStyle = "Standard - SSRS - POForm2"
@@ -313,9 +345,9 @@ function ReportPurchaseOrder(){
 	var reportStyleCombo = Aliases["Epicor"]["POForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grp3"]["cboStyle"]
 
 	//Activates combo
-	reportStyleCombo["Click"]()
 	var count = 0
 	while(true){
+		reportStyleCombo["Click"]()
 		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
 			Log["Message"]("Report style " + reportStyle + " selected from combo.")
 			break
@@ -329,10 +361,10 @@ function ReportPurchaseOrder(){
 	}
 
 	//Pending Validation
-	// Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
 
-	//PENDING
-
+	Delay(4000)
     //closes PO form (print)
 	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 	if (!Aliases["Epicor"]["POForm"]["Exists"]) {
@@ -351,7 +383,7 @@ function ReportPurchaseOrder(){
                 Opportunity/Quote: 1114
                 Actions > Print Form
                 Generate Only*/
-
+// NOT GENERATING
 function ReportQuoteform(){
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;General Operations;Opportunity / Quote Entry")
 	var quote = "1114"
@@ -372,9 +404,9 @@ function ReportQuoteform(){
 	var reportStyleCombo = Aliases["Epicor"]["QuotFormForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["cboStyle"]
 
 	//Activates combo
-	reportStyleCombo["Click"]()
 	var count = 0
 	while(true){
+		reportStyleCombo["Click"]()
 		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
 			Log["Message"]("Report style " + reportStyle + " selected from combo.")
 			break
@@ -388,10 +420,10 @@ function ReportQuoteform(){
 	}
 
 	//Pending Validation
-	// Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
 
-	//PENDING
-
+	Delay(4000)
 	//closes Quote form (print)
 	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 	
@@ -409,9 +441,9 @@ function ReportQuoteform(){
 
 ---------------------------------------------------------------------------------------------------------
 
-APCheck: AP Payment Entry.
-                Finantial Management/Cash Management/General Operations/Payment Entry
-                Group: 
+// APCheck: AP Payment Entry.
+//                 Finantial Management/Cash Management/General Operations/Payment Entry
+//                 Group: 
 
 /*PackSlips: Mass PrintPacking Slips.
                 Sales Management/Demand Management/Reports/Mass Print Packing Slips
@@ -435,7 +467,33 @@ function ReportPrintPackingform(){
 	//enter 102 for customer Dalton Manufacturing
 	Aliases["Epicor"]["CustShipSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["tabSearchPacks"]["etpBasic"]["basicPanel1"]["gbSortBy"]["eneStartWith1"]["Keys"](manufacturing)
 
+	var customerShipGrid = Aliases["Epicor"]["CustShipSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
 
+	var packColumn = getColumn(customerShipGrid, "Pack")
 
+	for(var i = 0; i < customerShipGrid["wRowCount"]; i++){
+		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumn)
+
+		if(cell["Text"]["OleValue"] == manufacturing){
+			customerShipGrid["Rows"]["Item"](i)["Selected"] = true
+			Log["Message"]("Customer pack " +  manufacturing + " was selected.")
+			break
+		}
+	}
+	
+	ClickButton("OK")
+
+	var packListGrid = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdPackSlipList"]
+
+	var packColumnID = getColumn(packListGrid, "Pack ID")
+
+	for(var i = 0; i < packListGrid["wRowCount"]; i++){
+		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumnID)
+
+		if(cell["Text"]["OleValue"] == manufacturing){
+			Log["Message"]("Customer pack " +  manufacturing + " was selected and displayed on pack slips list.")
+			break
+		}
+	}
 }
    
