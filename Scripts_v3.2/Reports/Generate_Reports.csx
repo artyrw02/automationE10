@@ -324,7 +324,7 @@ function ReportProFormaInv(){
                 PO Number: 4307
                 Actions > Print
                 Generate Only*/
-function ReportPurchaseOrder(){ //CHECK Script
+function ReportPurchaseOrder(){
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Material Management;Purchase Management;General Operations;Purchase Order Entry")
 	var poNum = "4307"
 	var reportStyle = "Standard - SSRS - POForm2"
@@ -442,16 +442,31 @@ function ReportQuoteform(){
 //                 Finantial Management/Cash Management/General Operations/Payment Entry
 //                 Group: 
 
-/*PackSlips: Mass PrintPacking Slips.
-                Sales Management/Demand Management/Reports/Mass Print Packing Slips
-                Go to filter tab. 
-                Click Packing slips button.
-                Select 102 Dalton Manufacturing.*/
-function ReportPrintPackingform(){
-	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Demand Management;Reports;Mass Print Packing Slips")
+function ReportAPPaymentform(){
+	MainMenuTreeViewSelect("Epicor USA;Chicago;Financial Management;Cash Management;General Operations;Payment Entry")
+	var reportStyle = "Standard - SSRS - PACKSLIP2"
 
 	if (Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
 	    Log["Message"]("Form 'Mass Print Packing Slips' opened.")
+	}
+
+	//Select Report style
+	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+
+	//Activates combo
+	var count = 0
+	while(true){
+		reportStyleCombo["Click"]()
+		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
+			Log["Message"]("Report style " + reportStyle + " selected from combo.")
+			break
+		}
+		reportStyleCombo["Keys"]("[Down]")
+		count++
+		if (count == 5) {
+		    Log["Error"]("Report Style not found.")
+		    break
+		}
 	}
 
 	// Activates 'Filter' tab
@@ -491,6 +506,103 @@ function ReportPrintPackingform(){
 			Log["Message"]("Customer pack " +  manufacturing + " was selected and displayed on pack slips list.")
 			break
 		}
+	}
+
+	//Pending Validation
+	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
+
+	Delay(4000)
+	//closes Packing Slip form (print)
+	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	
+	if (!Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	    Log["Message"]("Packing Slip Form closed")
+	}
+}
+   
+
+/*PackSlips: Mass PrintPacking Slips.
+                Sales Management/Demand Management/Reports/Mass Print Packing Slips
+                Go to filter tab. 
+                Click Packing slips button.
+                Select 102 Dalton Manufacturing.*/
+function ReportPrintPackingform(){
+	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Demand Management;Reports;Mass Print Packing Slips")
+	var reportStyle = "Standard - SSRS - PACKSLIP2"
+
+	if (Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	    Log["Message"]("Form 'Mass Print Packing Slips' opened.")
+	}
+
+	//Select Report style
+	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+
+	//Activates combo
+	var count = 0
+	while(true){
+		reportStyleCombo["Click"]()
+		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
+			Log["Message"]("Report style " + reportStyle + " selected from combo.")
+			break
+		}
+		reportStyleCombo["Keys"]("[Down]")
+		count++
+		if (count == 5) {
+		    Log["Error"]("Report Style not found.")
+		    break
+		}
+	}
+
+	// Activates 'Filter' tab
+	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	
+	ClickButton("Packing Slips...")
+
+	var manufacturing = "102"
+	
+	//enter 102 for customer Dalton Manufacturing
+	Aliases["Epicor"]["CustShipSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["tabSearchPacks"]["etpBasic"]["basicPanel1"]["gbSortBy"]["eneStartWith1"]["Keys"](manufacturing)
+
+	var customerShipGrid = Aliases["Epicor"]["CustShipSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+
+	var packColumn = getColumn(customerShipGrid, "Pack")
+
+	for(var i = 0; i < customerShipGrid["wRowCount"]; i++){
+		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumn)
+
+		if(cell["Text"]["OleValue"] == manufacturing){
+			customerShipGrid["Rows"]["Item"](i)["Selected"] = true
+			Log["Message"]("Customer pack " +  manufacturing + " was selected.")
+			break
+		}
+	}
+	
+	ClickButton("OK")
+
+	var packListGrid = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdPackSlipList"]
+
+	var packColumnID = getColumn(packListGrid, "Pack ID")
+
+	for(var i = 0; i < packListGrid["wRowCount"]; i++){
+		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumnID)
+
+		if(cell["Text"]["OleValue"] == manufacturing){
+			Log["Message"]("Customer pack " +  manufacturing + " was selected and displayed on pack slips list.")
+			break
+		}
+	}
+
+	//Pending Validation
+	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
+
+	Delay(4000)
+	//closes Packing Slip form (print)
+	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	
+	if (!Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	    Log["Message"]("Packing Slip Form closed")
 	}
 }
    

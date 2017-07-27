@@ -1,0 +1,171 @@
+//Function to navigate through tree
+function ActivateFullTree(){
+  Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Full Tree", true)
+}
+
+function DeactivateFullTree(){
+  Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Full Tree", false)
+}
+
+function MainMenuTreeViewSelect(Path, element){ 
+  Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
+  
+  if(Path != undefined){
+    var MenuTree = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]
+    Log["Message"]("Epicor path to navigate: " + Path);
+    Depth = Path.split(";")   
+    Depth = aqString["Replace"](Depth, ",", "|"); 
+    Log["Message"](Depth);
+    MenuTree["ClickItem"](Depth); 
+  }
+  
+  if(element != undefined){
+    var ListView= Aliases["Epicor"]["MenuForm"]["windowDockingArea2"]["dockableWindow1"]["listView"]
+    ListView["DblClickItem"](element);
+  }
+}
+
+//Start smart Client
+function StartSmartClient(){
+  if (Aliases["Epicor"]["Exists"]) {
+    Aliases["Epicor"]["Terminate"]()
+    Delay(5500)
+  }
+
+  //Runs the "Epicor" tested application
+  TestedApps["Epicor"]["Run"]()
+}
+
+//Function to login
+function Login(username,password){
+
+  var epicor = Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["WPFObject"]("AvalonAdapter", "", 1)["WPFObject"]("Shell", "", 1)["WPFObject"]("Grid", "", 1)["WPFObject"]("ShellGrid")["WPFObject"]("ContentPanel")["WPFObject"]("userControl")["WPFObject"]("MainGrid")["WPFObject"]("logon")["WPFObject"]("LogonPopup")["WPFObject"]("Grid", "", 1)
+
+  //Activates Shell menu
+  if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == false ){
+    epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
+  }
+ 
+  //Enters the text 'epicor' in the 'txtUserID' text editor.
+  Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtUserID"]["Keys"](username)
+
+  //Enters 'Epicor123[Enter]' in the 'txtPassword' object.
+  Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtPassword"]["Keys"](password+"[Enter]")
+
+  //Activates Shell menu'
+  var menuSCType = Aliases["Epicor"]["MenuForm"]
+
+  while(!menuSCType["Exists"]){
+    Delay(5000)
+    var count = count + 1
+    if (count == 90) {
+      Log["Error"]("Menu not appear")
+      Runner["Stop"](false)
+    }  
+  }
+}
+
+function CloseSmartClient(){
+  //Close Epicor
+  Aliases["Epicor"]["Close"]()
+  Delay(5000)
+  
+  if (Aliases["Epicor"]["Exists"]) {
+    Aliases["Epicor"]["Terminate"]()
+    Delay(5500)
+  }
+}
+
+
+//Restart smart client
+function RestartSmartClient() {
+  //Close Epicor
+  CloseSmartClient()
+
+  //Runs the "Epicor" tested application
+  TestedApps["Epicor"]["Run"]()
+
+  //log in
+  Login("epicor", "Epicor123")
+}
+
+
+function ExpandComp(Company){
+  var ElemCountI
+  
+   //Expand Company
+    ElemCountI = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Count"]-1
+
+  for (var i = 0; i < ElemCountI; i++) {
+    var rect = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)
+    if( rect["Text"] == Company ){
+      rect["Selected"]= true
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["ActiveNode"] = rect
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Click"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)   
+      
+      break
+    }
+  }  
+}
+
+function ChangePlant(Plant){
+  var CountPlant, ActPlant
+  
+  CountPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Count"] -1
+
+  for (var i = 0; i < CountPlant; i++) {    
+    ActPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Item"](i)
+    if( ActPlant["Text"]["OleValue"] == Plant ){
+      ActPlant["Selected"] = true
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["ActiveNode"] = ActPlant
+      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Click"]((ActPlant["Bounds"]["Left"]+ ActPlant["Bounds"]["Right"])/2, (ActPlant["Bounds"]["Top"]+ ActPlant["Bounds"]["Bottom"])/2)   
+      
+      break
+    }
+  }
+  
+  // if (Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Text"] == Plant && Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["HasNodes"] == false ){
+  //   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Click"]("Options|Change Site...")
+  //   CountPlant = Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Count"] - 1
+    
+  //   for (var i = 0; i < CountPlant; i++) {
+  //     if( Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Item"](i)["Cells"]["Item"](2)["Text"] != Plant ){
+  //       Aliases["Epicor"]["PlantLku"]["grid"]["ClickCell"](i,"Name")
+  //       Aliases["Epicor"]["PlantLku"]["btnOK"]["Click"]()
+  //       break
+  //     }
+  //   }
+    
+  //   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Click"]("Options|Change Site...")
+  //   CountPlant = Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["Count"] - 1
+
+  //   for (var i = 0; i < CountPlant; i++) {
+  //     if (Aliases["Epicor"]["PlantLku"]["grid"]["Rows"]["IteWm"](i)["Cells"]["Item"](2)["Text"] == Plant) {
+  //       Aliases["Epicor"]["PlantLku"]["grid"]["ClickCell"](i,"Name")
+  //       Aliases["Epicor"]["PlantLku"]["btnOK"]["Click"]()
+  //       break
+  //     }
+  //   }
+}
+
+function ActivateFavoritesMenuTab() {
+  
+  // if(!Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Exists"]){
+  //   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false) 
+    
+  //   Delay(1500)
+  //   //Reactivates the option Favorites to recreate the object and activate it
+  //   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
+  
+  //   Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  // }else{
+    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
+    Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  // } 
+}
+
+function DeactivateFavoritesMenuTab() {
+  Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false) 
+}
+
+
