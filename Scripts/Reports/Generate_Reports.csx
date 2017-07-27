@@ -263,7 +263,6 @@ function ReportSalesOrder(){
                 For ProFormaInvc we can use the same script.
                 Actions > Print Pro-Forma Invoice.
                 Generate Only*/
-// NOT GENERATING
 function ReportProFormaInv(){
 	var order = "5428"
 	var reportStyle = "Standard - SSRS - ProFormaInvc2"
@@ -325,7 +324,6 @@ function ReportProFormaInv(){
                 PO Number: 4307
                 Actions > Print
                 Generate Only*/
-// NOT GENERATING
 function ReportPurchaseOrder(){ //CHECK Script
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Material Management;Purchase Management;General Operations;Purchase Order Entry")
 	var poNum = "4307"
@@ -383,7 +381,6 @@ function ReportPurchaseOrder(){ //CHECK Script
                 Opportunity/Quote: 1114
                 Actions > Print Form
                 Generate Only*/
-// NOT GENERATING
 function ReportQuoteform(){
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;General Operations;Opportunity / Quote Entry")
 	var quote = "1114"
