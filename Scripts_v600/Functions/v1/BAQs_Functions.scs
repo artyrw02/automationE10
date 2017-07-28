@@ -1,4 +1,5 @@
 //USEUNIT Grid_Functions
+//USEUNIT ControlFunctions
 
 /*Create a simple BAQ with one table
 * @param: baqData - An array that contains the information of the BAQ to create
@@ -56,7 +57,7 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
   Delay(1500)
   
   //click New BAQ
-  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
   
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
@@ -91,22 +92,34 @@ function AddTableBAQ(BAQFormDefinition, table){
   //Set text on table search field
   BAQFormPanel["zEpiBasePanel_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](0)["set_Text"](table)
 
-  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
-    Log["Error"]("There is a dialog message active.")
-  }else{
-    for (var i = 0; i <= BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Count"] - 1; i++) {
-      if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Erp." + table){
-        var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
-        BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
-        break;
+  var diagramCanvas = BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel"]["pnlQueryVisual"]["windowDockingArea1"]["dockableWindow1"]["diagramPanel"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["windowDockingArea2"]["dockableWindow2"]["diagCanvas"]
+  
+  for (var i = 0; i < BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Count"]; i++) {
+    if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Erp." + table ||
+      BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Ice." + table){
+      
+      var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
+      
+      if(diagramCanvas["Model"]["Nodes"]["Count"] == 0){
+        // BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)  
+        BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Click"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)  
+        BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Keys"]("[Enter]")
+        Delay(4000)
       }
-      if (BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i).Text.OleValue == "Ice." + table){
-        var item = BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Items"]["Item_2"](i)
-        BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
-        break;
+      
+      for (var i = 0; i < diagramCanvas["Model"]["Nodes"]["Count"]; i++) {
+        if(diagramCanvas["Model"]["Nodes"]["Item"](i)["TableAlias"]["OleValue"] == table){
+          Log["Message"]("Table " + table + " was added")
+          break
+        }else{
+          // BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["DblClick"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)  
+          BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Click"](item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)  
+          BAQFormPanel["EpiBasePanel_Fill_Panel"]["lbTables"]["Keys"]("[Enter]")
+          Delay(4000)  
+        }
       }
+      break
     }
-    Log["Checkpoint"]("Table Added")
   }
 }
 
@@ -293,11 +306,12 @@ function CopyBAQ(baqID, newID){
   Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&Actions|Copy Query")
 
   Aliases["Epicor"]["CopyQueryForm"]["copyQueryPanel1"]["gbCopyTo"]["txtToID"]["Keys"](newID)
-  Aliases["Epicor"]["CopyQueryForm"]["btnOK"]["Click"]()
-  
+  // Aliases["Epicor"]["CopyQueryForm"]["btnOK"]["Click"]()
+  ClickButton("OK")
+
   Delay(5000)
   if(Aliases["Epicor"]["dlgInformation"]["Exists"]) {
-    Aliases["Epicor"]["dlgInformation"]["btnOK"]["Click"]()
+    ClickButton("OK")
   }
 }
 

@@ -1,0 +1,13 @@
+Notes:
+
+Differences between script projects
+
+BAQ functions
+
+- 3.2 
+	* Toolbar -> Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+- 600 
+	* Toolbar -> Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
+	* Modification on 'AddTable' function
+	* Added 'ClickButton()' method on 'CopyBAQ'
+
