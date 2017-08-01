@@ -926,7 +926,7 @@ function TC_Dashboard_Solution_Workbench_1(){
       Step: 23
       Note: Install the exported solution
     */
-    var solutionEPIC05 = "C:\Users\Administrator\Documents\Stest_Customer Solution_3.2.100.0"
+    var solutionEPIC05 = "C:\\Users\\Administrator\\Documents\\Stest_Customer Solution_3.2.100.0"
     //Go to System Management> Solution Management> Solution Type(Solution Workbench) Maintenance
     MainMenuTreeViewSelect("Epicor Europe;System Management;Solution Management;Solution Workbench")
 
@@ -957,7 +957,7 @@ function TC_Dashboard_Solution_Workbench_1(){
   
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-  //--- EPIC05 Retrieve SWTestDashBD1, TestBAQ1 and SWTestDashBD3  --------------------------------------------------\-----------------------------'
+  //--- EPIC05 Retrieve SWTestDashBD1, TestBAQ1 and SWTestDashBD3  ----------------------------------------------------------------------------'
     
     /*
       Step: 24 - 25
@@ -1068,7 +1068,7 @@ function TC_Dashboard_Solution_Workbench_1(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
-    var solutionEPIC06 = "C:\Users\Administrator\Documents\Stest2_Customer Solution_3.2.100.0"
+    var solutionEPIC06 = "C:\\Users\\Administrator\\Documents\\Stest2_Customer Solution_3.2.100.0"
 
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
@@ -1189,7 +1189,7 @@ function TC_Dashboard_Solution_Workbench_1(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
-    var solutionEPIC07 = "C:\Users\Administrator\Documents\Stest3_Customer Solution_3.2.100.0"
+    var solutionEPIC07 = "C:\\Users\\Administrator\\Documents\\Stest3_Customer Solution_3.2.100.0"
 
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()

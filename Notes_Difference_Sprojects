@@ -6,8 +6,14 @@ BAQ functions
 
 - 3.2 
 	* Toolbar -> Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+	* Solution Workbench 1 on  new external baq Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+	* Solution Workbench 1 on  solution workbench form -- Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
+	* Solution Workbench 2 TC | Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
 - 600 
 	* Toolbar -> Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
-	* Modification on 'AddTable' function
-	* Added 'ClickButton()' method on 'CopyBAQ'
+	* Solution Workbench 1 on  new external baq Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
+	* Solution Workbench 1 on solution workbench form -- Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|Solution")
+	* Solution Workbench 2 TC | Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|Solution")
 
+
+Check solution workbench test case while creating data source

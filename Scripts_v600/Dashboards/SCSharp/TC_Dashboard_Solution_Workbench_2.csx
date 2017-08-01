@@ -136,7 +136,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       MainMenuTreeViewSelect("Epicor Europe;System Management;External Business Activity Query;External Business Activity Query")
 
         // Create a new query
-        Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+        Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
 
         var BAQDiagramForm = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
@@ -396,7 +396,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       MainMenuTreeViewSelect("Epicor Europe;System Management;Solution Management;Solution Workbench")
 
       // Create a new Solution, enter Type and Description and Save
-      Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
+      Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|Solution")
 
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Stestv2")
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtSolutionType"]["Keys"]("STypev2")
@@ -500,7 +500,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCreate")["Click"]()
 
       // When Save CAB file dialog opens select a path to save your file
-        //Stestv2_Customer Solution_3.2.100.0
+        //Stestv2_Customer Solution_3.1.600.0
         var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
         if (windowSaveCABFile["Exists"]) {
           var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
@@ -578,7 +578,7 @@ function TC_Dashboard_Solution_Workbench_2(){
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Solution Management;Solution Workbench")
 
       // Create a new Solution, enter Type and Description and Save
-      Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
+      Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|Solution")
 
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Stest2v2")
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtSolutionType"]["Keys"]("SType2v2")
@@ -682,7 +682,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCreate")["Click"]()
 
       // When Save CAB file dialog opens select a path to save your file
-        //Stestv2_Customer Solution_3.2.100.0
+        //Stestv2_Customer Solution_3.1.600.0
         var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
         if (windowSaveCABFile["Exists"]) {
           var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
@@ -764,7 +764,7 @@ function TC_Dashboard_Solution_Workbench_2(){
     MainMenuTreeViewSelect("Epicor Mexico;System Management;Solution Management;Solution Workbench")
 
       // Create a new Solution, enter Type and Description and Save
-      Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
+      Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|Solution")
 
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Stest3v2")
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtSolutionType"]["Keys"]("SType3v2")
@@ -868,7 +868,7 @@ function TC_Dashboard_Solution_Workbench_2(){
       Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["WinFormsObject"]("btnCreate")["Click"]()
 
       // When Save CAB file dialog opens select a path to save your file
-        //Stestv2_Customer Solution_3.2.100.0
+        //Stestv2_Customer Solution_3.1.600.0
         var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName","*Save*", 30)
         if (windowSaveCABFile["Exists"]) {
           var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*","*Button*"], 30)
@@ -932,7 +932,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
-    var solutionEPIC05 = "C:\Users\Administrator\Documents\Stestv2_Customer Solution_3.2.100.0"
+    var solutionEPIC05 = "C:\\Users\\Administrator\\Documents\\Stestv2_Customer Solution_3.1.600.0"
 
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
@@ -965,7 +965,7 @@ function TC_Dashboard_Solution_Workbench_2(){
   
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-  //--- EPIC05 Retrieve SWTestDashBD1v2, TestBAQ1v2 and SWTestDashBD3v2  --------------------------------------------------\-----------------------------'
+  //--- EPIC05 Retrieve SWTestDashBD1v2, TestBAQ1v2 and SWTestDashBD3v2  ----------------------------------------------------------------------'
     
     /*
       Step: 24 - 25
@@ -1077,7 +1077,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
-    var solutionEPIC06 = "C:\Users\Administrator\Documents\Stest2v2_Customer Solution_3.2.100.0"
+    var solutionEPIC06 = "C:\\Users\\Administrator\\Documents\\Stest2v2_Customer Solution_3.1.600.0"
 
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
@@ -1200,7 +1200,7 @@ function TC_Dashboard_Solution_Workbench_2(){
 
     // Click on Actions> Install Solution
     Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Install Solution")
-    var solutionEPIC07 = "C:\Users\Administrator\Documents\Stest3v2_Customer Solution_3.2.100.0"
+    var solutionEPIC07 = "C:\\Users\\Administrator\\Documents\\Stest3v2_Customer Solution_3.1.600.0"
 
     // Click on Solution File and search for the exported file
     Aliases["Epicor"]["InstallSolutionForm"]["pnlInstallSolution"]["btnBrowseSolutionFile"]["Click"]()
@@ -1314,9 +1314,9 @@ function TC_Dashboard_Solution_Workbench_2(){
 
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
-   DeactivateFullTree()
+   // DeactivateFullTree()
 
-   CloseSmartClient()
+   // CloseSmartClient()
 
 }
 

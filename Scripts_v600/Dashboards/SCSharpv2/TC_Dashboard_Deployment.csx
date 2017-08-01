@@ -23,16 +23,16 @@ function Dashboard_Deployment()
 
     ActivateFullTree()
 
-    ExpandComp("Epicor Education")
+    ExpandComp("Epicor USA")
 
-    ChangePlant("Main Plant")
+    ChangePlant("Chicago")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   // Step 2
     Log["Message"]("Step 2 - Open Dashboard and enable DevMode")
 
     // Open Dashboard
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+      MainMenuTreeViewSelect("Epicor USA;Chicago;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
     //Enable Dashboard Developer Mode  
       DevMode()
@@ -171,7 +171,7 @@ function Dashboard_Deployment()
     // Select New Menu.
     // Write a Menu ID, select module UD, write a Name for the menu, write an Order Sequence (the position where you will find the menu), in Program Type select Dashboard-Assembly and in Dashboard select the previously created one. Be sure the Enabled check box is selected. Click Save."       
 
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
+    MainMenuTreeViewSelect("Epicor USA;Chicago;System Setup;Security Maintenance;Menu Maintenance")
 
     //Creates Menu
     CreateMenu(MenuData)
@@ -203,7 +203,7 @@ function Dashboard_Deployment()
   // Step 18
     Log["Message"]("Step 18 - Open menu created")
     // Open Menu created
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
+      MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
 
    //Step 19
     Log["Message"]("Step 19 - Open menu created")
@@ -218,7 +218,7 @@ function Dashboard_Deployment()
     Log["Message"]("Step 34 - Open Dashboard Maintenance")
 
     // Open Dashboard maintenance
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
+    MainMenuTreeViewSelect("Epicor USA;Chicago;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
    //Step 35 - 36
     Log["Message"]("Step 35,36 - Retrieve 'PartOnHandStatus' Dashboard")
@@ -309,7 +309,7 @@ function Dashboard_Deployment()
     // >Save
     Log["Message"]("Step 43 - Open Menu Maintenance and create new menu")
 
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
+    MainMenuTreeViewSelect("Epicor USA;Chicago;System Setup;Security Maintenance;Menu Maintenance")
 
     var MenuData2 = {
       "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",

@@ -86,6 +86,7 @@ function AddTableBAQ(BAQFormDefinition, table){
 
   //Activate 'Phrase Build'
   BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+  Delay(4000)
 
   var BAQFormPanel = BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel"]["pnlQueryVisual"]["windowDockingArea1"]["dockableWindow1"]["diagramPanel"]["windowDockingArea1"]["dockableWindow2"]["palettePanel"]
 
@@ -306,6 +307,7 @@ function CopyBAQ(baqID, newID){
   Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&Actions|Copy Query")
 
   Aliases["Epicor"]["CopyQueryForm"]["copyQueryPanel1"]["gbCopyTo"]["txtToID"]["Keys"](newID)
+  Delay(2000)
   // Aliases["Epicor"]["CopyQueryForm"]["btnOK"]["Click"]()
   ClickButton("OK")
 
@@ -347,7 +349,7 @@ function UpdateTabBAQ(field, fieldAction, querySettings){
       grid["Rows"]["Item"](i)["Cells"]["Item"](columnParameter)["Click"]()
       // Check Updatable check box on for the specified field
       grid["Rows"]["Item"](i)["Cells"]["Item"](columnParameter)["EditorResolved"]["CheckState"] = "Checked"
-      Log["Message"](field + " was sey to " + fieldAction)
+      Log["Message"](field + " was set to " + fieldAction)
     }
   }
 }

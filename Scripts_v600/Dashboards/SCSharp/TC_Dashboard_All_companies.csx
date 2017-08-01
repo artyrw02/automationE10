@@ -17,7 +17,7 @@ function TC_Dashboard_All_companies(){
   }    
   var MenuData2 = {
     "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
-    "menuID" : "DashMenu2",
+    "menuID" : "DashMen2",
     "menuName" : "DashMenu2",
     "orderSequence" : 4,
     "menuType" : "Dashboard-Assembly",
@@ -41,9 +41,9 @@ function TC_Dashboard_All_companies(){
 
     ActivateFullTree()
 
-    ExpandComp("Epicor Education")
+    ExpandComp("Epicor USA")
 
-    ChangePlant("Main Plant")
+    ChangePlant("Chicago")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
@@ -62,7 +62,7 @@ function TC_Dashboard_All_companies(){
                  
       Result:  Verify the BAQ is created        
     */ 
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+      MainMenuTreeViewSelect("Epicor USA;Chicago;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
       CreateSimpleBAQ(baqData1)
 
@@ -77,7 +77,7 @@ function TC_Dashboard_All_companies(){
     */
 
       //Navigate and open Dashboard
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+      MainMenuTreeViewSelect("Epicor USA;Chicago;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
       var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
       Log["Checkpoint"]("Dashboard opened")
@@ -142,7 +142,7 @@ function TC_Dashboard_All_companies(){
     */ 
     
       //Open Menu maintenance   
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
+      MainMenuTreeViewSelect("Epicor USA;Chicago;System Setup;Security Maintenance;Menu Maintenance")
 
       //Creates Menu
       CreateMenu(MenuData1)
@@ -163,7 +163,7 @@ function TC_Dashboard_All_companies(){
       Result: Verify the menu with the dashboard is loaded   
     */
 
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
+      MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
 
     /*
       Step No: 15
@@ -374,9 +374,9 @@ function TC_Dashboard_All_companies(){
 
     */    
 
-      ExpandComp("Epicor Education")
-      ChangePlant("Main Plant")
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
+      ExpandComp("Epicor USA")
+      ChangePlant("Chicago")
+      MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;Setup;"+MenuData1["menuName"])
 
     /*
       Step No: 33
@@ -410,9 +410,9 @@ function TC_Dashboard_All_companies(){
       Step: Go to Main Menu> System Management> Upgrade/Mass Regeneration       
       Result: Verify the form loads       
     */
-      ExpandComp("Epicor Education")
-      ChangePlant("Main Plant")
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
+      ExpandComp("Epicor USA")
+      ChangePlant("Chicago")
+      MainMenuTreeViewSelect("Epicor USA;Chicago;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
     /*
       Step No: 35

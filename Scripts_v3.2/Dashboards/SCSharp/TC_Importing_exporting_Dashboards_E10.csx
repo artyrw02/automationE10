@@ -72,6 +72,7 @@ function TC_Importing_exporting_Dashboards_E10(){
         Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnYes2"]["Click"]()
       }
       
+      Delay(2500)
       SaveBAQ()
       Log["Message"]("BAQ Saved")
 
@@ -237,7 +238,7 @@ function TC_Importing_exporting_Dashboards_E10(){
     */ 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Export Dashboard and BAQs")
 
-      //stores directly on C:\ProgramData\Epicor\tyrell.playground.local-80\3.2.100.0\EPIC06\shared\Export
+      //stores directly on C:\\ProgramData\\Epicor\\tyrell.playground.local-80\\3.2.100.0\\EPIC06\\shared\\Export
       
       var windowExportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Export Dashboard*","*ComboBox*"], 30)
       if (windowExportDashBD["Exists"]) {
@@ -267,7 +268,8 @@ function TC_Importing_exporting_Dashboards_E10(){
       // OpenDashboard("DashBDExport")
 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Import Dashboard Definition")
-      var dashboardImportE10 = "C:\ProgramData\Epicor\tyrell.playground.local-80\3.2.100.0\EPIC06\shared\Export\DashBDExport_E10.dbd"
+      
+      var dashboardImportE10 = "C:\\ProgramData\\Epicor\\tyrell.playground.local-80\\3.2.100.0\\EPIC06\\shared\\Export\\DashBDExport_E10.dbd"
     /*
       Step No: 6
       Step:  Write a new dashboard definition ID and click Ok.        
@@ -397,7 +399,8 @@ function TC_Importing_exporting_Dashboards_E10(){
      }else{
       Log["Error"]("There was a problem. Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
      }
-  
+    
+    Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")  
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
    DeactivateFullTree()

@@ -17,7 +17,7 @@ function Report_Testing(){
                 go to filter tab, click customers, select Addison, Inc.
                 Click generate Only.*/
 
-function ReportARInvoice(){
+function ReportARInvoice() {
 	var customer = "ADDISON"
 	var reportStyle = "Standard - SSRS - ARFORM2"
 

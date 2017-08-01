@@ -279,6 +279,10 @@ function TC_Dashboard_Tracker_Views_3(){
 
       ActivateFullTree()
 
+      ExpandComp("Epicor Education")
+
+      ChangePlant("Main Plant")
+
   //--- User Account Security Maintenance -----------------------------------------------------------------------------------------------------'
     // Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
     /*
