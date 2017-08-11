@@ -49,6 +49,8 @@ function ClickButton(btnName) {
   }
 }
 
+/* Working problems with activation of Window\
+
 function ClickMenu(menuNamePath){
   var aMenuName = menuNamePath.split("->")
 
@@ -114,4 +116,29 @@ function expandPopupMenu(menuItems, aMenuName)
   }    
   return aItemIndex         
 }
+*/
 
+/* Selects a value from a combobox (not in grid)
+* @param: comboObject - Obejct that contains the data of the target combobox that will select the value
+* @param: value - String that will be selected from the combobox
+* @return: none*/
+function DropDownValue(comboObject, value){
+
+  var count = 0
+
+  comboObject["Click"]()
+
+  while(true){
+    if(comboObject["Text"]["OleValue"] == value){
+      Log["Message"]("Value " + value + " selected from combo.")
+      break
+    }
+    comboObject["Keys"]("[Down]")
+    count++
+    if (count == 5) {
+        Log["Error"]("Value from combo not found.")
+        break
+    }
+  }
+
+}
