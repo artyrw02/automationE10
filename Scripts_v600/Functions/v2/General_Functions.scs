@@ -28,6 +28,20 @@ function MainMenuTreeViewSelect(Path){
   }
 }
 
+function setCompanyMainTree(company,plant){
+  var result = ""
+
+  if(company != null && company != "" && company != undefined ){
+    result = company + ";"
+  }
+
+  if(result != "" && plant != null && plant != "" && plant != undefined ){
+    result = result + plant + ";"
+  }
+
+  return result
+}
+
 //Start smart Client
 function StartSmartClient(){
   if (Aliases["Epicor"]["Exists"]) {
@@ -98,7 +112,7 @@ function RestartSmartClient() {
   TestedApps["Epicor"]["Run"]()
 
   //log in
-  Login("epicor", "Epicor123")
+  Login(Project["Variables"]["username"], Project["Variables"]["password"])
 }
 
 /*Finds for the company and activates it
