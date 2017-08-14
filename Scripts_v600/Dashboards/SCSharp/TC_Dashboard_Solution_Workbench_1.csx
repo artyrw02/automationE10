@@ -3,6 +3,7 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 //USEUNIT DataBase_Functions
+//USEUNIT Data_Solution_Workbench_sc1
 
 //*************************************
 /*PRE-REQUISITE NOTES
@@ -11,62 +12,6 @@
 //*************************************
 
 function TC_Dashboard_Solution_Workbench_1(){
-  //Defining variables
-
-    // Login
-    // var username = "epicor"
-    // var password = "epicor"
-
-    //Companies that will be used thru the test case
-    var company1 = "Epicor Europe"
-    var company2 = "Epicor Education"
-    var plant2 = "Main"
-    var company3 = "Epicor Mexico"
-
-    //Used to navigate thru the Main tree panel
-    var treeMainPanel1 = setCompanyMainTree(company1)
-    var treeMainPanel2 = setCompanyMainTree(company2,plant2)
-    var treeMainPanel3 = setCompanyMainTree(company3)
-
-    //Location of exported solution
-    var solutionEPIC05 = "C:\\Users\\Administrator\\Documents\\Stest_Customer Solution_3.1.600.0"
-    var solutionEPIC06 = "C:\\Users\\Administrator\\Documents\\Stest2_Customer Solution_3.1.600.0"
-    var solutionEPIC07 = "C:\\Users\\Administrator\\Documents\\Stest3_Customer Solution_3.1.600.0"
-
-    //BAQs used for Test
-    var baqs1 = "TestBAQ1"
-    var baqs2 = "TestBAQ2"
-    var baqs3 = "TestBAQ3"
-
-    //Dashboards used for Test
-    var dashb1 = "SW1TestDashBD1"
-    var dashb2 = "SW1TestDashBD2"
-    var dashb3 = "SW1TestDashBD3"
-    var dashb4 = "SW1TestDashBD4"
-
-    //External Datasource definition
-    var dsInfo = "TestDT"
-    var dsType = "TestDTType"
-
-    var ADOprovider = "SqlClient Data Provider"
-
-    //External DS connection properties
-    var dsName = " TYRELL"
-    var initialCatalog = "erp10Staging"
-    var userID = "sa"
-    var password = "Epicor123"
-
-    //Solution por EPIC05 definition
-    var solutionDefEpic05 = "Sol1EPIC05"
-    var solDefEpic05Type = "Sol1EPIC05Type"
-
-    //Solution por EPIC06 definition
-    var solutionDefEpic06 = "Sol1EPIC06"
-    var solDefEpic06Type = "Sol1EPIC06Type"
-
-    //Solution por EPIC07 definition
-    var solutionDefEpic07 = "Sol1EPIC07"
-    var solDefEpic07Type = "Sol1EPIC07Type"
 
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
@@ -97,9 +42,9 @@ function TC_Dashboard_Solution_Workbench_1(){
         var DsTypeForm = Aliases["Epicor"]["DsTypeForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]
 
         //Datasource Type: testDTType
-        DsTypeForm["typeDetailPanel1"]["epiGroupBox1"]["txtDsType"]["Keys"]("TestDTType")
+        DsTypeForm["typeDetailPanel1"]["epiGroupBox1"]["txtDsType"]["Keys"](dsType)
         // Description: testDTType
-        DsTypeForm["typeDetailPanel1"]["epiGroupBox1"]["txtDescr"]["Keys"]("TestDTType")
+        DsTypeForm["typeDetailPanel1"]["epiGroupBox1"]["txtDescr"]["Keys"](dsType)
 
         // Save
         Aliases["Epicor"]["DsTypeForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
@@ -175,7 +120,7 @@ function TC_Dashboard_Solution_Workbench_1(){
         for (var i = 0; i < gridDatasources["wRowCount"]; i++) {
           var cell = gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](DSName)
 
-          if (cell["Text"]["OleValue"] == "TestDT") {
+          if (cell["Text"]["OleValue"] == dsInfo) {
             gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](enabledCol)["Click"]()
             gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](enabledCol)["EditorResolved"]["CheckState"] = "Checked"
           }
@@ -703,7 +648,7 @@ function TC_Dashboard_Solution_Workbench_1(){
       
       Aliases["Epicor"]["SolutionTypeForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
       
-      Log["Message"]("Solution Type was created "  solDefEpic07Type)
+      Log["Message"]("Solution Type was created " + solDefEpic07Type)
 
       Aliases["Epicor"]["SolutionTypeForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 

@@ -12,6 +12,18 @@ function DeactivateFullTree(){
   }
 }
 
+function ActivateMainDevMode(){
+  if(!Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](3)["Tools"]["Item"](9)["Checked"]){
+    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("Options|Developer Mode", true)  
+  }
+}
+
+function DeactivateMainDevMode(){
+  if(Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](3)["Tools"]["Item"](9)["Checked"]){
+    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("Options|Developer Mode", false)  
+  }
+}
+
 /*Navigates through the path set in the parameter 
 * @param: Path - String that contains the path of the form that will be selected separated by ';' separator
 * @return: none*/
@@ -26,20 +38,6 @@ function MainMenuTreeViewSelect(Path){
     Log["Message"](Depth);
     MenuTree["ClickItem"](Depth); 
   }
-}
-
-function setCompanyMainTree(company,plant){
-  var result = ""
-
-  if(company != null && company != "" && company != undefined ){
-    result = company + ";"
-  }
-
-  if(result != "" && plant != null && plant != "" && plant != undefined ){
-    result = result + plant + ";"
-  }
-
-  return result
 }
 
 //Start smart Client
@@ -112,7 +110,7 @@ function RestartSmartClient() {
   TestedApps["Epicor"]["Run"]()
 
   //log in
-  Login(Project["Variables"]["username"], Project["Variables"]["password"])
+  Login("epicor", "Epicor123")
 }
 
 /*Finds for the company and activates it
@@ -192,4 +190,18 @@ function GetStatusBar(){
 // Aliases["Epicor"]["DashboardForm"]["WinFormsObject"]("baseStatusBar")["Panels"]["Item"](0)["DisplayText"]
   var statusBar = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["UltraStatusPanel","*StatusBar*"], 30)
   return  statusBar["Panels"]["Item"](0)["DisplayText"]
+}
+
+function setCompanyMainTree(company,plant){
+  var result = ""
+
+  if(company != null && company != "" && company != undefined ){
+    result = company + ";"
+  }
+
+  if(result != "" && plant != null && plant != "" && plant != undefined ){
+    result = result + plant + ";"
+  }
+
+  return result
 }
