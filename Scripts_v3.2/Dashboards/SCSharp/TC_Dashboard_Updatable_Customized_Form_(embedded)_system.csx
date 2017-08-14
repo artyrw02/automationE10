@@ -4,23 +4,28 @@
 //USEUNIT Grid_Functions
 //USEUNIT DataBase_Functions
 
-function TC_Dashboard_Updatable_Customized_Form(){
+function TC_Dashboard_Updatable_Customized_Form_sys(){
   //Test Case -UD Dashboard
+
+    // Variables
+    var company1 = "Epicor Education"
+    var plant1 = "Main"
+
+    //Used to navigate thru the Main tree panel
+    var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
     StartSmartClient()
 
-    Login("epicor","Epicor123") 
-
+    Login(Project["Variables"]["username"], Project["Variables"]["password"])
     ActivateFullTree()
 
     Delay(1500)
-    ExpandComp("Epicor Education")
+    ExpandComp(company1)
 
-    ChangePlant("Main Plant")
+    ChangePlant(plant1)
   //-------------------------------------------------------------------------------------------------------------------------------------------'
-
 
   //---- Add the dashboard in a Customization --------------------------------------------------------------------------------------------------'
 
@@ -28,7 +33,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
     Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")
 
     // 3- Go to Production Management> Job Management> Setup> Part
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Production Management;Job Management;Setup;Part")
+    MainMenuTreeViewSelect(treeMainPanel1 + "Production Management;Job Management;Setup;Part")
 
     // 4- Check Base Only and click Ok       
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["grpNoLayer"]["chkBaseOnly"]["Checked"] = true
@@ -79,7 +84,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
     Aliases["Epicor"]["CustomWizardDialog"]["WinFormsObject"]("btnFinish")["Click"]()
     // 17- Press Right arrow to move tab to ""PartStatus Sheets"" panel
     Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnAddCustomSheet"]["Click"]()
-    Log["Checkpoint"]("Sheet was added to Custom Sheets.")
+    Log["Message"]("Sheet was added to Custom Sheets.")
     // 18- Click File> Save customization As  
     Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Save Customization As ...")
 
@@ -89,59 +94,83 @@ function TC_Dashboard_Updatable_Customized_Form(){
     Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("btnOk")["Click"]()
     Aliases["Epicor"]["WinFormsObject"]("CustomCommentDialog")["WinFormsObject"]("btnOK")["Click"]()
 
-    Log["Checkpoint"]("Customization saved.")
+    Log["Message"]("Customization saved.")
     // 21- close the customization 
     Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Close")
+    Log["Message"]("Customization closed.")   
     // 22- Close the form"  
     Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")   
-    Log["Checkpoint"]("Customization closed.")   
+    Log["Message"]("Part Form closed.")   
 
-    // 23- Go to Production Management> Job Management> Setup> Part
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Production Management;Job Management;Setup;Part")
+
+    // 23- Go to Production Management> Job Management> Setup> Part (Open again Part Maintenance (using developer mode)
+    ActivateMainDevMode()
+    MainMenuTreeViewSelect(treeMainPanel1 + "Production Management;Job Management;Setup;Part")
+
+    Delay(2000)
 
     /*(FUTURE REFERENCE FOR TREE LIST ITEMS)*/
     // 24- Select the created customizacion       
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["etvAvailableLayers"]["ClickItem"]("Base|EP|Customizations|EmbDash")
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
 
-    // In the Customer> Detail tab retrieve ""Addison""
-    Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
-    Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Addison")
-    Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
+    var testPart = "00P1"
+    // 25, 26 - Click on Part button - Click Search and select a Part and click Ok                              
+    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["partDetailPanel1"]["groupBox1"]["tbPart"]["Keys"](testPart)
+    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["partDetailPanel1"]["groupBox1"]["tbPart"]["Keys"]("[Tab]")
 
-    Log["Checkpoint"]("Addison customer was retrived")
-    // Go to the ""TEST"" tab (where the dashboard is contained) and take a look at its content"    
-    Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["DockableWindow"]["Activate"]();
+    Log["Message"]("00P1 customer was retrived")
+
+    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["WinFormsObject"]("DockableWindow", "", 7)["Activate"]()
+    Log["Message"]("PartStatus tab Activated")
+
+    Delay(4500)
     
-    /*
-      Step No: 19
-      Step: in the "TEST" tab click "Retrieve" button
-      Result: The dashboard opens without errors        
-    */ 
+    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
+    
+    var PartTxtfield = Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["WinFormsObject"]("DockableWindow", "", 7)["WinFormsObject"]("PartStatus")["WinFormsObject"]("PartStatusDashboardPanel")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow3")["WinFormsObject"]("dbFillPanel1")["WinFormsObject"]("WindowDockingArea", "", 5)["WinFormsObject"]("DockableWindow", "", 1)["WinFormsObject"]("a01b8010-d16b-4b6c-8e86-337ac824f218")["WinFormsObject"]("QueryFillPanel")["WinFormsObject"]("WindowDockingArea", "")["WinFormsObject"]("DockableWindow", "", 1)["WinFormsObject"]("b96666ad-9cbc-482e-8793-97d8650c6b0c")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow1")["WinFormsObject"]("TrackerPanel")["WinFormsObject"]("txtPart_PartNum")
 
-    var retrieveBtn = Aliases["Epicor"]["CustomerEntryForm"]["FindChild"](["WndCaption", "ClrClassName"], ["*Retrieve*", "*EpiButton*"], 30)
-    retrieveBtn["Click"]()
+    if(PartTxtfield["Text"]["OleValue"] == testPart){
+        Log["Checkpoint"]("Part " + testPart + " was retrieved and displayed on PartStatus")
+        ClickButton("Retrieve")
+    }else{
+        Log["Error"]("Part " + testPart + " was not retrieved and displayed on PartStatus")
+    }
+    
+    var searchGrid = Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]
+    
+    var searchResultGrid = searchGrid["FindChild"](["FullName", "WndCaption"], ["*grid*","*Search Results*"], 15)
 
-    var grid = Aliases["Epicor"]["CustomerEntryForm"]["FindChild"](["WndCaption", "ClrClassName"], ["*TestBAQ: Summary*", "*Grid*"], 30)
-    if(grid["wRowCount"] > 0){
-      Log["Checkpoint"]("Dashboard retrived data")
-    }else {
-      Log["Error"]("Dashboard didn't retrive data")
+    if (searchResultGrid["Rows"]["Count"] > 0) {
+       Log["Checkpoint"]("There is a part retrieved and displayed on grid")
+    }else{
+        Log["Error"]("There is not a part retrieved and displayed on grid")
     }
 
-    /*
-      Step No: 20
-      Step: Go back to Customer> Detail  tab and retrieve ""Dalton"" customer
-      Result: The customer is retrieved without errors        
-    */ 
-      Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
-      Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Dalton")
-      Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
-       
-      Log["Checkpoint"]("Dalton customer was retrived")
-      // Go to the ""TEST"" tab (where the dashboard is contained) and take a look at its content"    
-      Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["DockableWindow"]["Activate"]();
+    var columnPartGrid = searchResultGrid["Rows"]["Item"](0)["Cells"]["Item"](0)
 
+    if (columnPartGrid["Text"]["OleValue"] == testPart) {
+       Log["Checkpoint"]("Part "+ testPart+" is displayed on grid")
+    }else{
+       Log["Error"]("Part "+ testPart+" is not displayed on grid")
+    }
+
+    //Activate Warehouse tab
+    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["DockableWindow"]["PartStatus"]["PartStatusDashboardPanel"]["windowDockingArea1"]["dockableWindow3"]["dbFillPanel1"]["WindowDockingArea"]["DockableWindow"]["Activate"]()
+
+    var warehouseResultGrid = searchGrid["FindChild"](["FullName", "WndCaption"], ["*grid*","*All*"], 20)
+
+    if (warehouseResultGrid["Rows"]["Count"] > 0) {
+       Log["Checkpoint"]("There is a part retrieved and displayed on warhouse grid")
+    }else{
+        Log["Error"]("There is not a part retrieved and displayed on warhouse grid")
+    }
+
+    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+    Log["Message"]("Part Form closed")
+
+    DeactivateMainDevMode()
   //-------------------------------------------------------------------------------------------------------------------------------------------' 
 
    DeactivateFullTree()
