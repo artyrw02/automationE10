@@ -10,7 +10,7 @@ function TC_Dashboard_Solution_Workbench_1(){
    
     StartSmartClient()
 
-    Login("epicor","Epicor123") 
+    Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
     ActivateFullTree()
 

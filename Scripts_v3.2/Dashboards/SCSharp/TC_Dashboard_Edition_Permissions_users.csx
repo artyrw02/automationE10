@@ -17,7 +17,7 @@ function TC_Dashboard_Edition_Permissions_users(){
 
       StartSmartClient()
 
-      Login("manager","Epicor123") 
+      Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
       ActivateFullTree()
 

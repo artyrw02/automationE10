@@ -19,7 +19,7 @@ function Dashboard_Deployment()
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
     StartSmartClient()
 
-    Login("epicor","Epicor123") 
+    Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
     ActivateFullTree()
 
