@@ -1,3 +1,4 @@
+//USEUNIT General_Functions
 //***************************************************************************
     //Description: definition of the variables used in the script scenario.
     //Testcase type: 'Dashboard'
