@@ -110,7 +110,7 @@ function RestartSmartClient() {
   TestedApps["Epicor"]["Run"]()
 
   //log in
-  Login("epicor", "Epicor123")
+  Login(Project["Variables"]["username"], Project["Variables"]["password"])
 }
 
 /*Finds for the company and activates it

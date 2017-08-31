@@ -17,7 +17,7 @@ function Report_Testing(){
                 go to filter tab, click customers, select Addison, Inc.
                 Click generate Only.*/
 
-function ReportARInvoice(){
+function ReportARInvoice() {
 	var customer = "ADDISON"
 	var reportStyle = "Standard - SSRS - ARFORM2"
 
@@ -31,20 +31,7 @@ function ReportARInvoice(){
 	var reportStyleCombo = Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpReportStyle"]["cboStyle"]
 
 	//Activates combo
-	reportStyleCombo["Click"]()
-	var count = 0
-	while(true){
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Activates 'Filter' Tab
 	Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
@@ -123,20 +110,7 @@ function ReportJobTraveler(){
 	var reportStyleCombo = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
-	reportStyleCombo["Click"]()
-	var count = 0
-	while(true){
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
@@ -207,20 +181,7 @@ function ReportSalesOrder(){
 
 
 	//Activates combo
-	reportStyleCombo["Click"]()
-	var count = 0
-	while(true){
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Go to 'filter' tab
 	Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
@@ -284,20 +245,7 @@ function ReportProFormaInv(){
 	var reportStyleCombo = Aliases["Epicor"]["ProFormaInvcReportForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["grbSched"]["cboStyle"]
 
 	//Activates combo
-	var count = 0
-	while(true){
-		reportStyleCombo["Click"]()
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Pending Validation
 	Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
@@ -343,20 +291,7 @@ function ReportPurchaseOrder(){
 	var reportStyleCombo = Aliases["Epicor"]["POForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grp3"]["cboStyle"]
 
 	//Activates combo
-	var count = 0
-	while(true){
-		reportStyleCombo["Click"]()
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Pending Validation
 	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
@@ -401,20 +336,7 @@ function ReportQuoteform(){
 	var reportStyleCombo = Aliases["Epicor"]["QuotFormForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["cboStyle"]
 
 	//Activates combo
-	var count = 0
-	while(true){
-		reportStyleCombo["Click"]()
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Pending Validation
 	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
@@ -436,7 +358,7 @@ function ReportQuoteform(){
 }
     
 
----------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------
 
 // APCheck: AP Payment Entry.
 //                 Finantial Management/Cash Management/General Operations/Payment Entry
@@ -454,20 +376,7 @@ function ReportAPPaymentform(){
 	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
-	var count = 0
-	while(true){
-		reportStyleCombo["Click"]()
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
@@ -539,20 +448,7 @@ function ReportPrintPackingform(){
 	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
-	var count = 0
-	while(true){
-		reportStyleCombo["Click"]()
-		if(reportStyleCombo["Text"]["OleValue"] == reportStyle){
-			Log["Message"]("Report style " + reportStyle + " selected from combo.")
-			break
-		}
-		reportStyleCombo["Keys"]("[Down]")
-		count++
-		if (count == 5) {
-		    Log["Error"]("Report Style not found.")
-		    break
-		}
-	}
+	DropDownValue(reportStyleCombo, reportStyle)
 
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
