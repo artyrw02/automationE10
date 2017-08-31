@@ -20,7 +20,7 @@ function TC_Importing_exporting_Dashboards_E10(){
    
     StartSmartClient()
 
-    Login("epicor","Epicor123") 
+    Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
     ActivateFullTree()
 

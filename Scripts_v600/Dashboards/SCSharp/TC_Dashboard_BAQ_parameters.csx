@@ -24,7 +24,7 @@ function Dashboard_BAQ_Parameters(){
    
     StartSmartClient()
 
-    Login("epicor","Epicor123") 
+    Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
     ActivateFullTree()
     

@@ -31,7 +31,7 @@ function TC_Dashboard_Tracker_Views_3(){
     // Step2- Log in  
       StartSmartClient()
 
-      Login("epicor","Epicor123") 
+      Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
       ActivateFullTree()
 
@@ -275,7 +275,7 @@ function TC_Dashboard_Tracker_Views_3(){
     // Step 22 - Log in  
       StartSmartClient()
 
-      Login("epicor","Epicor123") 
+      Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
       ActivateFullTree()
 

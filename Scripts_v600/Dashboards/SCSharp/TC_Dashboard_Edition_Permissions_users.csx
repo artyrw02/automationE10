@@ -3,6 +3,8 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 
+
+JIRA - FW: EATN-577 - Cr
 https://community.smartbear.com/t5/TestComplete-General-Discussions/Accessing-the-Visible-property-of-Menu-Subitems-of-DevX-Menu/td-p/54358
 https://support.smartbear.com/testcomplete/docs/app-objects/specific-tasks/standard/tool-bar/checking-button-state.html
 
@@ -17,7 +19,7 @@ function TC_Dashboard_Edition_Permissions_users(){
 
       StartSmartClient()
 
-      Login("manager","Epicor123") 
+      Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
       ActivateFullTree()
 
