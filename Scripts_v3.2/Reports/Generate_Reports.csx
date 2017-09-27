@@ -9,6 +9,7 @@ function Report_Testing(){
 	//XML["XmlCheckpoint1"]["Check"]("C:\\Users\\Administrator\\Documents\\Reports\\Sales Order Acknowledgment00885.xml");
  	// XML["XmlCheckpoint1"]["Check"](pathFileReport);
   Log["Message"]("Starting - Generate Reports")
+
 }
 
 
@@ -20,6 +21,10 @@ function Report_Testing(){
 function ReportARInvoice() {
 	var customer = "ADDISON"
 	var reportStyle = "Standard - SSRS - ARFORM2"
+
+	ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Demand Management;Reports;Mass Print AR Invoices")
 
@@ -80,7 +85,8 @@ function ReportARInvoice() {
 		Log["Error"]("Customer was not selected.")
 	}
 
-	Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+Delay(2500)
+	Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
@@ -100,6 +106,11 @@ function ReportARInvoice() {
 function ReportJobTraveler(){
 	// var customer = "ADDISON"
 	var reportStyle = "Standard - SSRS - JOBTRAV2"
+
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Production Management;Job Management;Reports;Job Traveler")
 
 	if(Aliases["Epicor"]["JobTravForm"]["Exists"]){
@@ -140,7 +151,8 @@ function ReportJobTraveler(){
 	}
 
 	//Pending Generate only
-	Aliases["Epicor"]["JobTravForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Delay(2500)
+	Aliases["Epicor"]["JobTravForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
@@ -162,6 +174,10 @@ function ReportJobTraveler(){
 function ReportSalesOrder(){
 	var order = "5428"
 	var reportStyle = "Standard - SSRS - ORDERACK2"
+
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;General Operations;Order Entry")
 
@@ -196,7 +212,8 @@ function ReportSalesOrder(){
 	gridSalesOrder["Keys"](order + "[Del]" + "[Tab]")
 
 	//Pending Validation
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Delay(2500)
+	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
@@ -227,6 +244,10 @@ function ReportSalesOrder(){
 function ReportProFormaInv(){
 	var order = "5428"
 	var reportStyle = "Standard - SSRS - ProFormaInvc2"
+
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;General Operations;Order Entry")
 
@@ -273,9 +294,15 @@ function ReportProFormaInv(){
                 Actions > Print
                 Generate Only*/
 function ReportPurchaseOrder(){
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Material Management;Purchase Management;General Operations;Purchase Order Entry")
+	
 	var poNum = "4307"
 	var reportStyle = "Standard - SSRS - POForm2"
+
 	if(Aliases["Epicor"]["POEntryForm"]["Exists"]){
 		Log["Message"]("Form 'Purchase Order Entry' opened.")
 	}
@@ -294,7 +321,8 @@ function ReportPurchaseOrder(){
 	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Pending Validation
-	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Delay(2500)
+	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
@@ -317,7 +345,13 @@ function ReportPurchaseOrder(){
                 Actions > Print Form
                 Generate Only*/
 function ReportQuoteform(){
+
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Customer Relationship Management;General Operations;Opportunity / Quote Entry")
+	
 	var quote = "1114"
 	var reportStyle = "Standard - SSRS - QuotForm2"
 
@@ -339,7 +373,8 @@ function ReportQuoteform(){
 	DropDownValue(reportStyleCombo, reportStyle)
 
 	//Pending Validation
-	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Delay(2500)
+	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
@@ -365,6 +400,10 @@ function ReportQuoteform(){
 //                 Group: 
 
 function ReportAPPaymentform(){
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Financial Management;Cash Management;General Operations;Payment Entry")
 	var reportStyle = "Standard - SSRS - PACKSLIP2"
 
@@ -418,7 +457,8 @@ function ReportAPPaymentform(){
 	}
 
 	//Pending Validation
-	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Delay(2500)
+	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
@@ -437,6 +477,10 @@ function ReportAPPaymentform(){
                 Click Packing slips button.
                 Select 102 Dalton Manufacturing.*/
 function ReportPrintPackingform(){
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Demand Management;Reports;Mass Print Packing Slips")
 	var reportStyle = "Standard - SSRS - PACKSLIP2"
 
@@ -453,7 +497,7 @@ function ReportPrintPackingform(){
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
 	
-	ClickButton("Packing Slips...")
+	ClickButton("Pack Slips...")
 
 	var manufacturing = "102"
 	
@@ -490,7 +534,8 @@ function ReportPrintPackingform(){
 	}
 
 	//Pending Validation
-	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Generate Only")
+	Delay(2500)
+	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
