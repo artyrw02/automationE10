@@ -54,7 +54,7 @@ function Dashboard_Publishing(){
     //****** Creating BAQ1 ***************'
     //1- Call function to create a simple BAQ
     CreateSimpleBAQ(baqData1)
-    Log["Checkpoint"]("BAQ " + baqData1["Id"] + " created correctly.")
+    Log["Message"]("BAQ " + baqData1["Id"] + " created correctly.")
 
     //****** End of BAQ1 creation ********'
 
@@ -64,7 +64,7 @@ function Dashboard_Publishing(){
     //****** Creating BAQ2 ***************'
     //2- Call function to create a simple BAQ
     CreateSimpleBAQ(baqData2)
-    Log["Checkpoint"]("BAQ " + baqData2["Id"] + " created correctly.")
+    Log["Message"]("BAQ " + baqData2["Id"] + " created correctly.")
     //****** End of BAQ2 creation ******
 
   //--------------------------------------------------------------------------------------------------------------------------------------------'

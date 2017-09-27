@@ -49,18 +49,16 @@ function TC_Dashboard_Solution_Workbench_1()
         // Save
     Aliases["Epicor"]["DsTypeForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
 
-        if (!Aliases["Epicor"]["ExceptionDialog"]["Exists"])
+    if (!Aliases["Epicor"]["ExceptionDialog"]["Exists"])
     {
         Log["Message"]("Datasource created correctly")
           Aliases["Epicor"]["DsTypeForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit")
-        }
-    else
-    {
-        Log["Error"]("There was a problem. Datasource wasn't created correctly")
-        }
+    else{
+            Log["Error"]("There was a problem. Datasource wasn't created correctly")
+    }
 
-    //Go to System Management> External Business Activity Query> External Datasource
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Management;External Business Activity Query;External Datasources")
+        //Go to System Management> External Business Activity Query> External Datasource
+        MainMenuTreeViewSelect(treeMainPanel1 + "System Management;External Business Activity Query;External Datasources")
 
         // Create a new datasource
     Aliases["Epicor"]["DatasourceForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
@@ -83,34 +81,34 @@ function TC_Dashboard_Solution_Workbench_1()
 
         // Data Source: MX0416-MJ014ZZ
     GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Data Source");
-    GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + dsName + "[Enter]");
+        GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + dsName + "[Enter]");
 
-    // Initial Catalog: Demo DB
-    GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Initial Catalog");
-    GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + initialCatalog + "[Enter]");
+        // Initial Catalog: Demo DB
+        GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Initial Catalog");
+        GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + initialCatalog + "[Enter]");
 
-    // UserID: sa
-    GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("User ID");
-    GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + userID + "[Enter]");
+        // UserID: sa
+        GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("User ID");
+        GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + userID + "[Enter]");
 
-    // Password: Epicor123
-    GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Password");
-    GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + password + "[Enter]");
+        // Password: Epicor123
+        GridAdapterProperties["wItems"]("Connection specific")["ClickLabel"]("Password");
+        GridAdapterProperties["PropertyGridView"]["Keys"]("^a[Del]" + password + "[Enter]");
 
-    Aliases["Epicor"]["DatasourceForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
+        Aliases["Epicor"]["DatasourceForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
 
         if (!Aliases["Epicor"]["ExceptionDialog"]["Exists"])
-    {
-        Log["Message"]("Datasource created correctly")
+        {
+            Log["Message"]("Datasource created correctly")
           Aliases["Epicor"]["DatasourceForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit")
         }
-    else
-    {
-        Log["Error"]("There was a problem. Datasource wasn't created correctly")
-        }
+        else
+        {
+            Log["Error"]("There was a problem. Datasource wasn't created correctly")
+            }
 
-    //Go to System Setup> Company/Site Maintenance> Company Maintenance
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Company/Site Maintenance;Company Maintenance")
+        //Go to System Setup> Company/Site Maintenance> Company Maintenance
+        MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Company/Site Maintenance;Company Maintenance")
 
         var CompanyMaintenanceForm = Aliases["Epicor"]["CompanyMaintenanceForm"]["windowDockingArea2"]["dockableWindow1"]["systemDockPanel1"]["windowDockingArea1"]
 
@@ -124,31 +122,31 @@ function TC_Dashboard_Solution_Workbench_1()
         var DSName = getColumn(gridDatasources, "Datasource Name")
 
         for (var i = 0; i < gridDatasources["wRowCount"]; i++)
-    {
-        var cell = gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](DSName)
+        {
+            var cell = gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](DSName)
 
           if (cell["Text"]["OleValue"] == dsInfo)
-        {
-            gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](enabledCol)["Click"]()
+            {
+                gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](enabledCol)["Click"]()
             gridDatasources["Rows"]["Item"](i)["Cells"]["Item"](enabledCol)["EditorResolved"]["CheckState"] = "Checked"
           }
-    }
+        }
 
-    // Save
-    Aliases["Epicor"]["CompanyMaintenanceForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
+        // Save
+        Aliases["Epicor"]["CompanyMaintenanceForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
 
         if (!Aliases["Epicor"]["ExceptionDialog"]["Exists"])
-    {
-        Log["Message"]("Datasource created correctly")
+        {
+            Log["Message"]("Datasource created correctly")
           Aliases["Epicor"]["CompanyMaintenanceForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
         }
-    else
-    {
-        Log["Error"]("There was a problem. Datasource wasn't created correctly")
-        }
+        else
+        {
+            Log["Error"]("There was a problem. Datasource wasn't created correctly")
+            }
 
-    // Go to System Management> External Business Activity Query> External business Activity Query
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Management;External Business Activity Query;External Business Activity Query")
+        // Go to System Management> External Business Activity Query> External business Activity Query
+        MainMenuTreeViewSelect(treeMainPanel1 + "System Management;External Business Activity Query;External Business Activity Query")
 
         // Create a new query
     Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
@@ -185,7 +183,7 @@ function TC_Dashboard_Solution_Workbench_1()
       Result:  Verify the form with developer mode activated, is loaded       
     */
     //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
-    MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+        MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
         var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
         Log["Message"]("Dashboard opened")
@@ -226,7 +224,7 @@ function TC_Dashboard_Solution_Workbench_1()
       ChangePlant(plant2)
 
       // Move to EPIC06 company and open Executive analysis> Business Activity Management> Setup> Business Activity Query
-    MainMenuTreeViewSelect(treeMainPanel2 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+        MainMenuTreeViewSelect(treeMainPanel2 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
         // Enter the following in the "General" tab
     var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
@@ -253,8 +251,8 @@ function TC_Dashboard_Solution_Workbench_1()
       Result:  Click on New Query. Search for the BAQ TestBAQ1 and click Ok. Save
     */
 
-    //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
-    MainMenuTreeViewSelect(treeMainPanel2 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+        //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
+        MainMenuTreeViewSelect(treeMainPanel2 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
         var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
         Log["Message"]("Dashboard opened")
@@ -294,7 +292,7 @@ function TC_Dashboard_Solution_Workbench_1()
       ExpandComp("Epicor Mexico")
 
     // Move to EPIC07 company and open Executive analysis> Business Activity Management> Setup> Business Activity Query
-      MainMenuTreeViewSelect(treeMainPanel3 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+        MainMenuTreeViewSelect(treeMainPanel3 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
         // Enter the following in the "General" tab
     var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
@@ -320,8 +318,8 @@ function TC_Dashboard_Solution_Workbench_1()
       Result:  Click on New Query. Search for the BAQ TestBAQ1 and click Ok. Save
     */
 
-    //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
-    MainMenuTreeViewSelect(treeMainPanel3 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+        //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
+        MainMenuTreeViewSelect(treeMainPanel3 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
         var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
         Log["Message"]("Dashboard opened")
@@ -385,20 +383,20 @@ function TC_Dashboard_Solution_Workbench_1()
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
-    //---  EPIC05 create the solution -----------------------------------------------------------------------------------------------------------'
+        //---  EPIC05 create the solution -----------------------------------------------------------------------------------------------------------'
 
-    /*
-      Step No: 10
-      Result:  Click on New Query. Search for the BAQ TestBAQ2 and click Ok. Save       
-    */
+        /*
+          Step No: 10
+          Result:  Click on New Query. Search for the BAQ TestBAQ2 and click Ok. Save       
+        */
 
      ExpandComp(company1)
 
     // Go to System Management> Solution Management> Solution Type Maintenance
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Solution Management;Solution Type Maintenance")
+        MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Solution Management;Solution Type Maintenance")
 
       // Create a new type, enter Solution Type and Description. Save
-    Aliases["Epicor"]["SolutionTypeForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution Type")
+        Aliases["Epicor"]["SolutionTypeForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution Type")
 
       Aliases["Epicor"]["SolutionTypeForm"]["windowDockingArea1"]["dockableWindow4"]["mainPanelControl"]["windowDockingArea1"]["dockableWindow2"]["solutionTypePanel1"]["grpSolutionType"]["txtKeyField"]["Keys"](solDefEpic05Type)
       Aliases["Epicor"]["SolutionTypeForm"]["windowDockingArea1"]["dockableWindow4"]["mainPanelControl"]["windowDockingArea1"]["dockableWindow2"]["solutionTypePanel1"]["grpSolutionType"]["txtDescription"]["Keys"](solDefEpic05Type)
@@ -410,11 +408,11 @@ function TC_Dashboard_Solution_Workbench_1()
       Aliases["Epicor"]["SolutionTypeForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
       // Go to System Management> Solution Management> Solution Workbench
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Solution Management;Solution Workbench")
+        MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Solution Management;Solution Workbench")
 
       // Create a new Solution, enter Type and Description and Save
       // Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
-    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
+        Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|New...|New Solution")
 
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"](solutionDefEpic05)
       Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtDescription"]["Keys"](solutionDefEpic05)
@@ -423,38 +421,38 @@ function TC_Dashboard_Solution_Workbench_1()
 
       // Click on Add To Solution
       //Aliases["Epicor"]["SolutionWorkbenchForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["btnAddToSolution"]["click"]()
-    ClickButton("Add To Solution")
+        ClickButton("Add To Solution")
 
       // On Solution Element Search select Dashboard and click Search
       //Search for dashboard item and select dashboards to add to the solution
-    SearchSolutionItemsDashboard(dashb1 + "," + dashb3, "SW1")
+        SearchSolutionItemsDashboard(dashb1 + "," + dashb3, "SW1")
 
       //Accepting dependencies 
-    while (true)
-    {
-        //find button of the "add dependency" dialog
-        var addDepDialogBtnYes = Aliases["Epicor"]["FindChild"](["FullName", "WndCaption"],["*Add Dependency*", "*&Yes*"], 5)
+        while (true)
+        {
+            //find button of the "add dependency" dialog
+            var addDepDialogBtnYes = Aliases["Epicor"]["FindChild"](["FullName", "WndCaption"],["*Add Dependency*", "*&Yes*"], 5)
         var addDepDialog = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Add Dependency*", "*Static*"], 5)
 
         if (addDepDialogBtnYes["Exists"])
-        {
-            addDepDialogBtnYes["Click"]()
+            {
+                addDepDialogBtnYes["Click"]()
           Log["Checkpoint"]("Dialog " + addDepDialog["WndCaption"] + " clicked")
         }
-        else
-        {
-            break
+            else
+            {
+                break
+            }
         }
-    }
 
-    // Click Actions>Build Solution
-    Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Build Solution")
+        // Click Actions>Build Solution
+        Aliases["Epicor"]["SolutionWorkbenchForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|Actions|Build Solution")
 
       // Check all the options and click Build
       // var BuildSolChks = Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["grpSettings"]["FindAllChildren"](["FullName", "Style"], ["*chk*","*Check*"], 30)
       // var BuildSolChks = Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["grpSettings"]["FindAllChildren"]("FullName", "*chk*", 30)
 
-    Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["grpSettings"]["WinFormsObject"]("chkEncryptSource")["Checked"] = true
+        Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["grpSettings"]["WinFormsObject"]("chkEncryptSource")["Checked"] = true
       Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["grpSettings"]["WinFormsObject"]("chkCreateCodeDocs")["Checked"] = true
       Aliases["Epicor"]["BuildSolutionForm"]["pnlBuildSolution"]["grpSettings"]["WinFormsObject"]("chkPromtFileDetails")["Checked"] = true
 
@@ -468,16 +466,16 @@ function TC_Dashboard_Solution_Workbench_1()
 
       // When Save CAB file dialog opens select a path to save your file
       //Stest_Customer Solution_3.1.600.0
-    var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName", "*Save*", 30)
+        var windowSaveCABFile = Aliases["Epicor"]["FindChild"]("FullName", "*Save*", 30)
 
         if (windowSaveCABFile["Exists"])
-    {
-        var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*", "*Button*"], 30)
+        {
+            var windowSaveCABFileSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Save*", "*Button*"], 30)
           windowSaveCABFileSaveBtn["Click"]()
           var windowExportReplaceDashBD = Aliases["Epicor"]["FindChild"](["FullName", "ClassName"],["*_already_exists*", "*Element*"], 30)
           if (windowExportReplaceDashBD["Exists"])
-        {
-            windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["WndCaption", "WndClass"],["*Yes*","*Button*"], 30)
+            {
+                windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["WndCaption", "WndClass"],["*Yes*","*Button*"], 30)
             windowExportDashBDSaveBtn["Click"] ()
           }
           Log["Message"] ("CAB File saved correctly")
