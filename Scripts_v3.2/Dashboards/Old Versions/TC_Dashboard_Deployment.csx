@@ -3,19 +3,11 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 //USEUNIT ControlFunctions
+//USEUNIT Data_Dashboard_Deployment
 
 function Dashboard_Deployment()
 {
-
-  var MenuData = {
-    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
-    "menuID" : "DashDepl",
-    "menuName" : "DashDepl",
-    "orderSequence" : 6,
-    "menuType" : "Dashboard-Assembly",
-    "dll" : "Dash2Deploy"
-  }
-
+ 
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
     StartSmartClient()
 
@@ -23,25 +15,25 @@ function Dashboard_Deployment()
 
     ActivateFullTree()
 
-    ExpandComp("Epicor Education")
+    ExpandComp(company1)
 
-    ChangePlant("Main Plant")
+    ChangePlant(plant1)
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   // Step 2
     Log["Message"]("Step 2 - Open Dashboard and enable DevMode")
 
     // Open Dashboard
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+      MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
     //Enable Dashboard Developer Mode  
       DevMode()
 
   // Step 3 
-    Log["Message"]("Step 3 - Retrieve 'SalesPersonWorkbench' dashboard")
+    Log["Message"]("Step 3 - Retrieve " + dashb1 + " dashboard")
     
     // - Retrieve SalesPersonWorkbench dashboard       
-      OpenDashboard("SalesPersonWorkbench")
+      OpenDashboard(dashb1)
 
       var count = 0
       while(true){
@@ -70,7 +62,7 @@ function Dashboard_Deployment()
     // - Click on File>Copy Dashboard and enter Dash1 as new ID. Click Ok        
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Copy Dashboard") 
 
-      Aliases["Epicor"]["CopyDashboardForm"]["txtDefinitionId"]["Keys"]("Dash1Deploy")
+      Aliases["Epicor"]["CopyDashboardForm"]["txtDefinitionId"]["Keys"](dashb1Copy)
       ClickButton("OK")
       Delay(2500)
 
@@ -78,7 +70,7 @@ function Dashboard_Deployment()
     Log["Message"]("Step 5, 6 - Deploy Dashboard")
     // - Click on Tools>Deploy Dashboard. Check mark the "Deploy Smart Client Application" checkbox and click on Deploy        
       DeployDashboard("Deploy Smart Client")
-      Log["message"]("Dashboard Dash1Deploy deployed")
+      Log["message"]("Dashboard " + dashb1Copy + " deployed")
 
   // Step 7
     Log["Message"]("Step 7 - Close Dashboard")
@@ -92,11 +84,11 @@ function Dashboard_Deployment()
       > Then add any BAQ clicking file> New> New Query, then click OK to add it to the dashboard
       > Click Tools> Deploy Dashboard"        
     */
-    Log["Message"]("Step 8 - Create new Dashboard 'Dash2Deploy'")
+    Log["Message"]("Step 8 - Create new Dashboard '"+ dashb2 + "'")
 
-    NewDashboard("Dash2Deploy","","","")
+    NewDashboard(dashb2,"","","")
 
-    AddQueriesDashboard("COM-90daysSORel")
+    AddQueriesDashboard(dashb2Query1)
 
     Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
 
@@ -104,7 +96,7 @@ function Dashboard_Deployment()
     if (Aliases["Epicor"]["ExceptionDialog"]){
       var eDialog = findValueInString(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"], "Cancelling AppBuilder operation: Dashboard Description and Caption is required.")  
       if (eDialog) {
-        Log['Message']("Validated correctly: Cancelling AppBuilder operation: Dashboard Description and Caption is required.")
+        Log["Message"]("Validated correctly: Cancelling AppBuilder operation: Dashboard Description and Caption is required.")
       }else{
         Log["Error"]("There is another message on dialog - '" + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"] + "'")
       }
@@ -139,7 +131,7 @@ function Dashboard_Deployment()
 
     var dashboardCaption = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]
     
-    dashboardCaption["Keys"]("Dash2Deploy")
+    dashboardCaption["Keys"](dashb2)
 
     // Click “Save” icon"        
     SaveDashboard()
@@ -171,7 +163,7 @@ function Dashboard_Deployment()
     // Select New Menu.
     // Write a Menu ID, select module UD, write a Name for the menu, write an Order Sequence (the position where you will find the menu), in Program Type select Dashboard-Assembly and in Dashboard select the previously created one. Be sure the Enabled check box is selected. Click Save."       
 
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
+    MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
 
     //Creates Menu
     CreateMenu(MenuData)
@@ -185,31 +177,32 @@ function Dashboard_Deployment()
     Log["Message"]("Step 15 - Activate Favorites Tab")
    // On the Home Page from Smart Client on favorites tiles look for the created dashboard under Dashboard Assembly tile and open it
     ActivateFavoritesMenuTab()
-    Log["Checkpoint"]("FavoritesMenuTab Activated")
+    Log["Message"]("FavoritesMenuTab Activated")
 
   // Step 16
     Log["Message"]("Step 15 - Opening Dashboard from Favorites Tab")
-    OpenDashboardFavMenu("Dash2Deploy")
-    Log["Checkpoint"]("Dashboard opened from Favorite Menu")
+    OpenDashboardFavMenu(dashb2)
+    Log["Message"]("Dashboard opened from Favorite Menu")
 
   // Step 17
     Log["Message"]("Step 17 - Refresh Dashboard and test data")
     DashboardPanelTest()
-    Log["Checkpoint"]("Dashboard tested")
+    Log["Message"]("Dashboard tested")
 
     DeactivateFavoritesMenuTab()
-    Log["Checkpoint"]("Favorites MenuTab deactivated")
+    Log["Message"]("Favorites MenuTab deactivated")
 
   // Step 18
     Log["Message"]("Step 18 - Open menu created")
     // Open Menu created
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
+      MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
 
    //Step 19
     Log["Message"]("Step 19 - Open menu created")
+    
     // Test Dashboard
-      DashboardPanelTest()
-      Log["Checkpoint"]("Dashboard tested from menu")
+    DashboardPanelTest()
+    Log["Message"]("Dashboard tested from menu")
 
     /*STEPS 20 TO 33 ARE FOR EWA */
     Log["Message"]("Step 20 to 33 - EWA testing")
@@ -218,13 +211,13 @@ function Dashboard_Deployment()
     Log["Message"]("Step 34 - Open Dashboard Maintenance")
 
     // Open Dashboard maintenance
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
+    MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
    //Step 35 - 36
-    Log["Message"]("Step 35,36 - Retrieve 'PartOnHandStatus' Dashboard")
+    Log["Message"]("Step 35,36 - Retrieve '"+ dashb3 + "' Dashboard")
     // Click Dashboard ID       
     // Search for PartOnHandStatus dashboard and retrieve it       
-    Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("PartOnHandStatus")
+    Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"](dashb3)
     Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
 
   // Step 37
@@ -287,7 +280,7 @@ function Dashboard_Deployment()
     Delay(5000)
     ClickButton("OK")
 
-    Log["Message"]("Dashboard 'PartOnHandStatus' deployed")
+    Log["Message"]("Dashboard '" + dashb3 + "' deployed")
     ExitDashboard()
 
   // Step 41
@@ -309,31 +302,23 @@ function Dashboard_Deployment()
     // >Save
     Log["Message"]("Step 43 - Open Menu Maintenance and create new menu")
 
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
+    MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
 
-    var MenuData2 = {
-      "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
-      "menuID" : "DashDep2",
-      "menuName" : "DashDepl2",
-      "orderSequence" : 7,
-      "menuType" : "Dashboard-Assembly",
-      "dll" : "PartOnHandStatus"
-    }
     //Creates Menu
     CreateMenu(MenuData2)
-    Log["Checkpoint"]("Menu creaded correctly.")
+    Log["Message"]("Menu creaded correctly.")
 
   // Step 44  
     // Return to system management> Upgrade/Mass regeneration> Dashboard maintenance       
 
   // Step 45  
-    Log["Message"]("Step 45 - retrieve 'SalesPersonWorkBench'")
+    Log["Message"]("Step 45 - retrieve '" + dashb1 +"'")
     // Search for SalesPersonWorkBench dashboard and retrieve it       
     // ClickMenu("Clear")
     Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Clear")
     ClickButton("Yes")
 
-    Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("SalesPersonWorkBench")
+    Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"](dashb1)
     Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
 
   // Step 46  
@@ -355,10 +340,10 @@ function Dashboard_Deployment()
     Delay(1000)
     
     DeactivateFullTree()
-    Log["Checkpoint"]("FullTree Deactivated")
+    Log["Message"]("FullTree Deactivated")
 
     CloseSmartClient()
-    Log["Checkpoint"]("SmartClient Closed")
+    Log["Message"]("SmartClient Closed")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 }
 

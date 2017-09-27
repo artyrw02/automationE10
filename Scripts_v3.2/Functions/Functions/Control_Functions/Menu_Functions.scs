@@ -1,0 +1,100 @@
+//USEUNIT ObjectLib
+
+var E10 = Sys.Process("Epicor")
+
+function GetMenus(pnlPath){
+    var fullNamePath = "*" + (pnlPath || "?") + "*"
+    
+    //DEBUG
+    fullNamePath = fullNamePath.replace(/\//g, "*")
+    var wnd = pnlPath? E10 : FindTopMostForm() 
+
+    obj = FindObjects("*UltraToolbarsDockArea", ["Name", "FullName"], ["*_Toolbars_Dock_Area_Top*", fullNamePath], wnd)
+    if (obj != undefined && obj["length"] != 0) 
+        return obj
+    
+    obj = FindObjects("*UltraToolbarsDockArea", ["Name", "FullName"], ["*ToolbarsDockAreaTop*", fullNamePath], wnd)
+    if (obj != undefined && obj["length"] != 0) 
+        return obj
+}
+
+function ClickMenu(menuName, pnlPath){    
+    try{        
+        var aMenuName = menuName["split"]("->")
+
+        var tbDockAreas = GetMenus(pnlPath) 
+        
+        if (!tbDockAreas.length){ 
+            throw "Toolbar dock area not found"
+        }    
+        
+        var menuItems
+        for (var i=0; i<tbDockAreas["length"] && !menuItems; i++){
+            var tbDockArea = tbDockAreas[i]
+            var menuItems = findToolBar(tbDockArea, aMenuName[0])
+        } 
+
+        if (!menuItems)
+            throw "Menu item not found - '" + menuName + "'"
+       
+        //expand menu from ToolbarManager using DropDown method and get array of item's indexes
+        var aItemIndex = expandPopupMenu(menuItems, aMenuName)
+        
+        //navigate to the last menu item from UltraToolbarsDockArea extended collection and Click last item
+        menuItems = tbDockArea["wItems"]["Item"](aItemIndex[0])
+        for (var i = 1; i < aItemIndex["length"]; i++)        
+            menuItems = menuItems["Items"]["Item"](aItemIndex[i])
+        
+        menuItems["Click"]()
+        
+        Log["Message"]("Menu clicked - '" + menuName + "'")
+        // CheckForErrorWindow()
+        
+        return true
+    }    
+    catch(e){        
+        // LogError(e + ": " + e.message)
+        return false
+    }
+}
+
+function findToolBar(tbDockArea, toolText)
+{
+  //for each toolBar in the <dockArea>
+  for ( var b = 0; b < tbDockArea.ToolbarsManager.Toolbars.Count; b++)  {        
+      //get current toolbar object
+      var bar = tbDockArea.ToolbarsManager.Toolbars.Item(b)
+      //trying to find tool with <toolText> ToolTip in the current toolBar
+      for ( var t = 0; t < bar.Tools.Count; t++ ) {            
+          var tool = bar.Tools.Item(t)
+          if (tool.CaptionAsToolTip == toolText)
+              return bar
+      }        
+  }    
+  //all toolBars checked. No tool with <toolText> ToolTip found.
+  return null
+}
+
+function expandPopupMenu(menuItems, aMenuName)
+{    
+  var aItemIndex = [menuItems.Text.OleValue]
+  for(var i in aMenuName){        
+      var menuItems = menuItems.Tools
+      
+      for(var j = 0; j < menuItems.Count 
+              && aqString.Trim(menuItems.Item(j).CaptionResolved.OleValue.replace(/[&.]/g, "")) != aqString.Trim(aMenuName[i].replace(/[&.]/g, "")); j++){}        
+      
+      if (j >= menuItems.Count)                                       
+          throw new Error(2, "Menu item not found - '" + aMenuName[i] + "'")
+      
+      var menuItems = menuItems.Item(j)
+      aItemIndex.push(menuItems.CaptionResolved.OleValue)
+      
+      if (i < aMenuName.length - 1) 
+          menuItems.DropDown()
+      
+      BuiltIn.Delay(100)   //Wait for popup window appears
+  }    
+  return aItemIndex         
+}
+
