@@ -1,3 +1,5 @@
+//USEUNIT ControlFunctions
+
 //Function to activate tree
 function ActivateFullTree(){
   if(!Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](2)["Checked"]){
@@ -57,18 +59,26 @@ function StartSmartClient(){
 * @return: none*/
 function Login(username,password){
 
-  var epicor = Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["WPFObject"]("AvalonAdapter", "", 1)["WPFObject"]("Shell", "", 1)["WPFObject"]("Grid", "", 1)["WPFObject"]("ShellGrid")["WPFObject"]("ContentPanel")["WPFObject"]("userControl")["WPFObject"]("MainGrid")["WPFObject"]("logon")["WPFObject"]("LogonPopup")["WPFObject"]("Grid", "", 1)
+  // var epicor = Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["WPFObject"]("AvalonAdapter", "", 1)["WPFObject"]("Shell", "", 1)["WPFObject"]("Grid", "", 1)["WPFObject"]("ShellGrid")["WPFObject"]("ContentPanel")["WPFObject"]("userControl")["WPFObject"]("MainGrid")["WPFObject"]("logon")["WPFObject"]("LogonPopup")["WPFObject"]("Grid", "", 1)
 
-  //Activates Shell menu
-  if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == false ){
-    epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
-  }
- 
+  // //Activates Shell menu
+  // if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == false ){
+  //   epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
+  // }
+  
+
   //Enters the text 'epicor' in the 'txtUserID' text editor.
-  Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtUserID"]["Keys"](username)
+  // Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtUserID"]["Keys"](username)
+
+
+  userField = GetTextBox("txtUserID")
+  userField["Keys"](username + "[Tab]")
+
+  passwordField = GetTextBox("txtPassword")
+  passwordField["Keys"](password + "[Enter]")
 
   //Enters 'Epicor123[Enter]' in the 'txtPassword' object.
-  Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtPassword"]["Keys"](password+"[Enter]")
+  // Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtPassword"]["Keys"](password+"[Enter]")
 
   //Activates Shell menu
   var menuSCType = Aliases["Epicor"]["MenuForm"]
@@ -108,6 +118,8 @@ function RestartSmartClient() {
 
   //Runs the "Epicor" tested application
   TestedApps["Epicor"]["Run"]()
+
+  Delay(2000)
 
   //log in
   Login(Project["Variables"]["username"], Project["Variables"]["password"])

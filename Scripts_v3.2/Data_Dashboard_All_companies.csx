@@ -2,7 +2,7 @@
 //***************************************************************************
     //Description: definition of the variables used in the script scenario.
     //Testcase type: 'Dashboard'
-    //TC Name: Deployment
+    //TC Name: All_companies
     //Script File: TC_Dashboard_All_companies.csx
 //***************************************************************************
 
@@ -22,8 +22,7 @@ var baqData1 = {
 	"Description" : "baqAllcomp",
 	"Table" : "Customer",
 	"Columns" : "Company,CustID,CustNum,Name,Address1",
-	"GeneralConfig" : "Shared,Companies"
-
+	"GeneralConfig" : "chkShared,chkAllCompanies"
 }
 
 //Dashboards used for Test
@@ -31,7 +30,7 @@ var dashb1 = "TestDashBD"
 var dashb2 = "JobStatusPlus"
 
 //Dashboards configurations
-var dashb1Config = "All Companies"
+var dashb1Config = "chkAllCompanies"
 
 //Queries
 var dashb1Query1 = baqData1["Id"]

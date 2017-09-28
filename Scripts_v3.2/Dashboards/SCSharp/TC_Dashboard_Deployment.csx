@@ -69,7 +69,7 @@ function Dashboard_Deployment()
     */
     Log["Message"]("Step 8 - Create new Dashboard '"+ dashb2 + "'")
 
-    NewDashboard(dashb2,"","","")
+    NewDashboard(dashb2,"","")
 
     AddQueriesDashboard(dashb2Query1)
 
@@ -234,7 +234,7 @@ function Dashboard_Deployment()
   // Step 40
     Log["Message"]("Step 40 - Select Deploy Smart Client Application")
     // Select Deploy Smart Client Application. Click on Deploy button and when finished click Ok.       
-    ChangeCheckboxState("chkDeployApplication", true)
+    CheckboxState("chkDeployApplication", true)
     ClickButton("Deploy")
     
     Delay(5000)

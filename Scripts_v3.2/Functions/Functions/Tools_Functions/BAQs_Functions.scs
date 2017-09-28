@@ -1,5 +1,6 @@
-//USEUNIT Grid_Functions
 //USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
 
 /*Create a simple BAQ with one table
 * @param: baqData - An array that contains the information of the BAQ to create
@@ -35,11 +36,13 @@ function OpenBAQ(baqID){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
   //Change to "General" tab
-  BAQFormDefinition["dockableWindow1"]["Activate"]()
+  OpenPanelTab("General")
+  // BAQFormDefinition["dockableWindow1"]["Activate"]()
   
   //Set ID and description
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"]("[Tab]")
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"]("[Tab]")
+  EnterText("txtQueryID", baqID + "[Tab]")
 
   if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
     Log["Error"]("There is a dialog message active.")
@@ -57,21 +60,27 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
   Delay(1500)
   
   //click New BAQ
-  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+  // Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
+  ClickMenu("File->New")
   
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
   //Set ID and description
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"](baqDescription)
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"]("[Tab]")
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"](baqDescription)
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"]("[Tab]")
+  EnterText("txtQueryID", baqID + "[Tab]")
+  EnterText("txtDescription", baqDescription + "[Tab]")
 
   if(generalConfig != undefined){
     generalConfig = generalConfig.split(",")
 
     for(var i = 0; i < generalConfig["length"]; i++){
-      var checkbox = BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["FindAllChildren"]("FullName", "*chk"+"*"+generalConfig[i]+"*", 30)["toArray"]();
-      checkbox[0]["Checked"] = true
+      // var checkbox = BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["FindAllChildren"]("FullName", "*chk"+"*"+generalConfig[i]+"*", 30)["toArray"]();
+      // checkbox[0]["Checked"] = true
+      //ACCEPTS ONLY IDS = CHECK SCRIPTS FOR EDITION
+      CheckboxState(generalConfig[i], true)
+
     }
   }
 }
@@ -82,10 +91,11 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
 * @return: none*/
 function AddTableBAQ(BAQFormDefinition, table){
   //Change to "Query Builder" tab
-  BAQFormDefinition["dockableWindow2"]["Activate"]()
+  // BAQFormDefinition["dockableWindow2"]["Activate"]()
 
   //Activate 'Phrase Build'
-  BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+  // BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+  OpenPanelTab("Query Builder->Phrase Build")
 
   var BAQFormPanel = BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel"]["pnlQueryVisual"]["windowDockingArea1"]["dockableWindow1"]["diagramPanel"]["windowDockingArea1"]["dockableWindow2"]["palettePanel"]
 
@@ -130,10 +140,11 @@ function AddTableBAQ(BAQFormDefinition, table){
 * @return: none*/
 function AddColumnsBAQ(BAQFormDefinition, table, columns){
   //Change to "Query Builder" tab
-  BAQFormDefinition["dockableWindow2"]["Activate"]()
+  // BAQFormDefinition["dockableWindow2"]["Activate"]()
 
   //Activate Display Fields
-  BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  // BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  OpenPanelTab("Query Builder->Display Fields")
 
   //Select columns'
   var fieldsAvailable = BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow2"]["displayPanel"]["windowDockingArea1"]["dockableWindow1"]["fieldsChooserPanel"]["gbColumns"]["availColTreePanel1"]["treeAvailCol"]
@@ -172,11 +183,13 @@ function AddColumnsBAQ(BAQFormDefinition, table, columns){
 * @param: BAQFormDefinition - Object that contains the definition of the form
 * @return: none*/
 function AnalyzeSyntaxisBAQ(BAQFormDefinition){
-  //-Validate if windows4 is active
-  BAQFormDefinition["dockableWindow4"]["Activate"]()
+  //-Validate if Analize is active
+  // BAQFormDefinition["dockableWindow4"]["Activate"]()
+  OpenPanelTab("Analyze")
 
   //Analyze and run test for BAQ
-  BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["btnAnalyze"]["Click"]()
+  // BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["btnAnalyze"]["Click"]()
+  ClickButton("Analyze...")
 }
 
 /*Tests the data added to the BAQ
@@ -185,12 +198,15 @@ function AnalyzeSyntaxisBAQ(BAQFormDefinition){
 * @return: none*/
 function TestResultsBAQ(BAQFormDefinition, parameterValue){
   //Activate Analyze tab
-  BAQFormDefinition["dockableWindow4"]["Activate"]()
+  // BAQFormDefinition["dockableWindow4"]["Activate"]()
+  OpenPanelTab("Analyze")
 
   //Analyze and run test for BAQ
-  BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["btnTest"]["Click"]()
+  // BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["btnTest"]["Click"]()
+  ClickButton("Test...")
 
   if (Aliases["Epicor"]["BaseForm"]["Exists"]) {
+
     var pnlParametersBAQField = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpFields"]["pnlFields"]
     var pnlParametersBAQBtn = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpButtons"]
     
@@ -224,12 +240,13 @@ function TestResultsBAQ(BAQFormDefinition, parameterValue){
 
 //Saves BAQ
 function SaveBAQ(){
-  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")  
+  // Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")  
+  ClickMenu("File->Save")
 }
 
 // Closes BAQ form
 function ExitBAQ(){
-  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit") 
+  ClickMenu("File->Exit")
 }
 
 /*Deletes BAQ
@@ -238,9 +255,11 @@ function ExitBAQ(){
 function DeleteBAQ(baqIDs){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
-  BAQFormDefinition["dockableWindow1"]["Activate"]()
+  // BAQFormDefinition["dockableWindow1"]["Activate"]()
+  OpenPanelTab("General")
   // var baqID = "baq1"
-  var queryIDtext = BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]
+  // var queryIDtext = BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]
+  var queryIDtext = GetTextBox("txtQueryID")
 
   //Split string baqIDs into an array  
   var arrBaqs
@@ -249,18 +268,19 @@ function DeleteBAQ(baqIDs){
   
   for (var i = 0; i < arrBaqs["length"] ; i++) {
     if (queryIDtext["Text"]["OleValue"] != arrBaqs[i] && queryIDtext["Text"]["OleValue"] != "") {
-      Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[1]|Clear") 
+      // Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[1]|Clear") 
+      ClickMenu("Edit->Clear")
       Log["Message"](queryIDtext["Text"] + " was cleared.")
     }
 
     if (queryIDtext["Text"]["OleValue"] == "") {
       //Retrieve BAQ
-      queryIDtext["Keys"](arrBaqs[i])
-      queryIDtext["Keys"]("[Tab]")
+      EnterText("txtQueryID", arrBaqs[i] + "[Tab]")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
-          Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
+          // Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
+          ClickButton("No")
           Log["Message"]("BAQ not found.")
         }      
       }else{
@@ -269,16 +289,19 @@ function DeleteBAQ(baqIDs){
     }
 
     if (queryIDtext["Text"]["OleValue"] == arrBaqs[i]) {
-      Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|Delete") 
+      // Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|Delete") 
+      ClickMenu("File->Delete")
 
       //Click 'Yes' to confirm 
-      Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnYes2"]["Click"]()
+      // Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnYes2"]["Click"]()
+      ClickButton("Yes")
 
       Log["Message"](arrBaqs[i] + " was deleted.")
 
       //Retrieve BAQ for validation
-      queryIDtext["Keys"](arrBaqs[i])
-      queryIDtext["Keys"]("[Tab]")
+      EnterText("txtQueryID", arrBaqs[i] + "[Tab]")
+      // queryIDtext["Keys"](arrBaqs[i])
+      // queryIDtext["Keys"]("[Tab]")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
@@ -300,12 +323,14 @@ function CopyBAQ(baqID, newID){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
   //Set ID and description
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
-  BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"]("[Tab]")
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
+  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtDescription"]["Keys"]("[Tab]")
+  EnterText("txtQueryID", baqID + "[Tab]")
 
-  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&Actions|Copy Query")
-
-  Aliases["Epicor"]["CopyQueryForm"]["copyQueryPanel1"]["gbCopyTo"]["txtToID"]["Keys"](newID)
+  // Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&Actions|Copy Query")
+  ClickMenu("Actions->Copy Query")
+  // Aliases["Epicor"]["CopyQueryForm"]["copyQueryPanel1"]["gbCopyTo"]["txtToID"]["Keys"](newID)
+  EnterText("txtToID", newID + "[Tab]")
   Delay(2000)
   // Aliases["Epicor"]["CopyQueryForm"]["btnOK"]["Click"]()
   ClickButton("OK")
@@ -321,18 +346,21 @@ function UpdateTabBAQ(field, fieldAction, querySettings){
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
   //Change to "Update" tab
-  BAQFormDefinition["dockableWindow3"]["Activate"]()
+  // BAQFormDefinition["dockableWindow3"]["Activate"]()
 
   //Activate 'General Properties'
-  BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+  OpenPanelTab("Update->General Properties")
 
   if (querySettings != undefined) {
     //querySettings = "AllowNew,Multiple Row"
     querySettings = querySettings.split(",")
 
     for (var i = 0; i < querySettings.length; i++) {      
-      var checkbox = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["upMainPanel1"]["grpProps"]["FindAllChildren"](["Text", "Style"], ["*"+querySettings[i]+"*","*Check*"], 30)["toArray"]()
-      checkbox[0]["Checked"] = true
+      // var checkbox = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow2"]["upMainPanel1"]["grpProps"]["FindAllChildren"](["Text", "Style"], ["*"+querySettings[i]+"*","*Check*"], 30)["toArray"]()
+      // checkbox[0]["Checked"] = true
+      // THIS FUNCTIONS ACCEPTS ONLY IDS, MODIFY SCRIPTS TO GET THE ID
+      CheckboxState(querySettings[i], true)
     }
   }
 

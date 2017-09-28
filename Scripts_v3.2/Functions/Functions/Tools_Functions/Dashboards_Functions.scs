@@ -107,13 +107,7 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
     var arrOptions = generalOptions.split(",")
 
     for( var i = 0; i <= arrOptions["length"] - 1 ; i++){
-      if(generalOptions == "All Companies"){
-        dashboardPanel["chkAllCompanies"]["Checked"] = true
-      }else if( generalOptions == "Refresh All"){
-        dashboardPanel["chkInhibitRefreshAll"]["Checked"] = true
-      }else if(generalOptions == "Mobile"){
-        dashboardPanel["chkMobile"]["Checked"] = true
-      }
+      CheckboxState(arrOptions[i], true)
     }
   }
 }
@@ -169,22 +163,22 @@ function DeployDashboard(deploymentOptions){
 
   for (var i = 0; i <= arrdeploymentOptions.length - 1; i++) {
     if(arrdeploymentOptions[i] == "Deploy Smart Client"){
-      ChangeCheckboxState("chkDeployApplication", true)
+      CheckboxState("chkDeployApplication", true)
     }
     if(arrdeploymentOptions[i] == "Add Menu tab"){
-      ChangeCheckboxState("chkAddMenuTab", true)
+      CheckboxState("chkAddMenuTab", true)
     }
     if(arrdeploymentOptions[i] == "Add Favorite Item"){
-      ChangeCheckboxState("chkAddFavItem", true)
+      CheckboxState("chkAddFavItem", true)
     }
     if(arrdeploymentOptions[i] == "Generate Web Form"){
-      ChangeCheckboxState("chkGenWebForm", true)
+      CheckboxState("chkGenWebForm", true)
     }
     if(arrdeploymentOptions[i] == "Generate Mobile App"){
-      ChangeCheckboxState("chkGenMobile", true)
+      CheckboxState("chkGenMobile", true)
     }
     if(arrdeploymentOptions[i] == "Available for Mobile Menu"){
-      ChangeCheckboxState("chkMobileMenuAvail", true)
+      CheckboxState("chkMobileMenuAvail", true)
     }
   }
 
@@ -365,8 +359,9 @@ function CreateMenu(MenuData){
 
     for(var i = 0; i < validations["length"]; i++){
       if(validations[i] != "Web Access"){
-        var checkbox = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["FindAllChildren"]("FullName", "*chk"+"*"+validations[i]+"*", 30)["toArray"]()
-        checkbox[0]["Checked"] = true
+        // var checkbox = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["FindAllChildren"]("FullName", "*chk"+"*"+validations[i]+"*", 30)["toArray"]()
+        // checkbox[0]["Checked"] = true
+        CheckboxState("*chk"+"*"+validations[i]+"*", true)
         Log["Checkpoint"]("Checkbox from menu was selected - " + validations[i])
       }else{
         var webAccess = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpProgramMain"]["eshWebAccess"]["EnabledCaption"]

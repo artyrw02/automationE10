@@ -13,20 +13,34 @@ var E10 = Sys.Process("Epicor")
   }
 
   //Changes the state of the checkbox depending of status parameter
-  function ChangeCheckboxState(cbName, status){
+  function CheckboxState(cbName, state){
     var checkbox = GetCheckbox(cbName)
 
+    if (!checkbox["Exists"])
+      throw "CheckBox not found '" + cbName + "'"
+
     try{
-      if (checkbox["Exists"]) {
-        checkbox["Checked"] = status
-      }else{
-        Log["Error"]("Checkbox " + cbName + " was not found.")
-      }
+        if (!verifyCheckbox(checkbox, state)){            
+            checkbox.Click(checkbox.Width / 2,checkbox.Height / 2 )
+            if (typeof(state) == "Boolean") 
+                checkbox.Checked = state
+        }
+        if (checkbox.ThreeState && !verifyCheckbox(checkbox, state)){            
+            checkbox.Click(checkbox.Width / 2,checkbox.Height / 2 )
+            if (typeof(state) == "Boolean") 
+                checkbox.Checked = state
+
+        }
     }catch(e){
-      LogError(e, e.message)
+      Log["Error"](e["message"])
     }
   }
 
+  function verifyCheckbox(cbCtrl, state)
+  {
+      var cbState = cbCtrl.ThreeState ? cbCtrl.CheckState.OleValue : cbCtrl.get_Checked() 
+      return (cbState == state)            
+  }
 //-------------------------------
 //BUTTONS FUNTIONS
 //-------------------------------
@@ -40,6 +54,16 @@ var E10 = Sys.Process("Epicor")
     if (!objBtn["length"]) {
       Log["Error"]("Button " + (btnCaption || btnName) + " not found.")
     }
+
+
+    if (objBtn["length"] > 1) {
+      for(var i = 0; i < objBtn["length"]; i++){
+        if (objBtn[i]["WndCaption"] == btnCaption) {
+          return objBtn[i]
+        }
+      }
+    }
+
     return objBtn[0]
     // if(objBtn["Exists"]){
     //   return objBtn
@@ -96,7 +120,13 @@ var E10 = Sys.Process("Epicor")
     var obj = FindObject("*Edit*", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
     if (obj["Exists"]) 
         return obj
-    return FindObject("*Combo*", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    var obj = FindObject("*Combo*", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    if (obj["Exists"]) 
+        return obj
+    //Used for login window
+    var obj = FindObject("*Box*", "Name", "*" + ctrlName + "*", wnd)   
+    if (obj["Exists"]) 
+        return obj
 
   }
 
@@ -263,9 +293,9 @@ var E10 = Sys.Process("Epicor")
     finally{
         //close dropdown List. Exit from function.
         try{
-            if (E10["WaitWinFormsObject"]("DropDownForm", "", 0)["Exists"]){
+            if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
                 Log["Warning"]("ddWnd not closed correctly 2")
-                E10["WaitWinFormsObject"]("DropDownForm", "", 0)["parent"]["Click"]()
+                E10["WaitWinFormsObject"]("*DropDown*", "", 0)["parent"]["Click"]()
             }
         }
         catch(e){
@@ -274,16 +304,17 @@ var E10 = Sys.Process("Epicor")
     }    
   }
 
-  function popupComboDropDown(cmbCtrl){    
+  function popupComboDropDown(cmbCtrl){  
+    Delay(1000)  
     cmbCtrl["Click"]()
     cmbCtrl["Refresh"]()
 
-    if (!E10["WaitWinFormsObject"]("DropDownForm", "", 900)["Exists"]){        
+    if (!E10["WaitWinFormsObject"]("*DropDown*", "", 900)["Exists"]){        
         Log["Message"]("Calling DropDown")
         cmbCtrl["Keys"]("[Down]")
         cmbCtrl["Keys"]("[Hold]~[Down][Release]")
     }    
-    if (!E10["WaitWinFormsObject"]("DropDownForm", "", 30000)["Exists"])
+    if (!E10["WaitWinFormsObject"]("*DropDown*", "", 30000)["Exists"])
         throw "Failed to popup dropdown form"
     
     // Log.Warning("List Index: " + cmbCtrl.SelectedRow.ListIndex)
@@ -314,10 +345,12 @@ var E10 = Sys.Process("Epicor")
 
     cmbCtrl["Click"](1,1)
 
-    if (E10["WaitWinFormsObject"]("DropDownForm", "", 0)["Exists"]){
+    if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
         Log["Warning"]("ddWnd not closed correctly")
         cmbCtrl["parent"]["Click"]()
     }
 
     return true
   }
+
+
