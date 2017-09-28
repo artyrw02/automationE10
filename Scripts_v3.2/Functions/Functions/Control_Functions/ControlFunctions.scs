@@ -257,6 +257,11 @@ var E10 = Sys.Process("Epicor")
     return FindObject("*Combo*", "Name", "*" + ctrlName + "*", wnd) 
   }
 
+  function GetDropdownForm(ctrlName, parentCtrl){
+    var wnd = parentCtrl || FindTopMostForm()
+    return FindObject("*Dropdown*", "Name", "*" + ctrlName + "*", wnd) 
+  }
+
   /** Select item from dropdown form(combobox)
   * @param cmbName \a required. ID of the object
   * @param parentCtrl \a required Path(in kasper format) to combobox
@@ -309,13 +314,8 @@ var E10 = Sys.Process("Epicor")
     cmbCtrl["Click"]()
     cmbCtrl["Refresh"]()
 
-    if (!E10["WaitWinFormsObject"]("*DropDown*", "", 900)["Exists"]){        
-        Log["Message"]("Calling DropDown")
-        cmbCtrl["Keys"]("[Down]")
-        cmbCtrl["Keys"]("[Hold]~[Down][Release]")
-    }    
-    if (!E10["WaitWinFormsObject"]("*DropDown*", "", 30000)["Exists"])
-        throw "Failed to popup dropdown form"
+    cmbCtrl["Keys"]("[Down]")
+    cmbCtrl["Keys"]("[Hold]~[Down][Release]")
     
     // Log.Warning("List Index: " + cmbCtrl.SelectedRow.ListIndex)
     if (cmbCtrl["SelectedRow"] && cmbCtrl["SelectedRow"]["ListIndex"])
@@ -345,10 +345,10 @@ var E10 = Sys.Process("Epicor")
 
     cmbCtrl["Click"](1,1)
 
-    if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
-        Log["Warning"]("ddWnd not closed correctly")
-        cmbCtrl["parent"]["Click"]()
-    }
+    // if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
+    //     Log["Warning"]("ddWnd not closed correctly")
+    //     cmbCtrl["parent"]["Click"]()
+    // }
 
     return true
   }
