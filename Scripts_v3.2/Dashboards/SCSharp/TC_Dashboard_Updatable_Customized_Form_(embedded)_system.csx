@@ -3,6 +3,7 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 //USEUNIT DataBase_Functions
+//USEUNIT ControlFunctions
 
 function TC_Dashboard_Updatable_Customized_Form_sys(){
   //Test Case -UD Dashboard
@@ -30,20 +31,25 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
   //---- Add the dashboard in a Customization --------------------------------------------------------------------------------------------------'
 
     // 2- Developer mode 
+    Log["Message"]("Step 2")
     Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")
 
     // 3- Go to Production Management> Job Management> Setup> Part
+    Log["Message"]("Step 3")
     MainMenuTreeViewSelect(treeMainPanel1 + "Production Management;Job Management;Setup;Part")
 
     // 4- Check Base Only and click Ok       
+    Log["Message"]("Step 4")
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["grpNoLayer"]["chkBaseOnly"]["Checked"] = true
 
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
 
     // 5- click Tools > Customization
+    Log["Message"]("Step 5")
     Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Customization")
 
     // 6- go to Wizards > Sheet Wizard  tab
+    Log["Message"]("Step 6")
     var CustomToolsDialog = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]
     CustomToolsDialog["tpgCodeWizards"]["Tab"]["Selected"] = true
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["Tab"]["Selected"] = true
@@ -51,59 +57,80 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnNewCustomSheet"]["Click"]()
 
     // 7- Select mainPanel1 from Dockable Sheets Listing
+    Log["Message"]("Step 7")
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["lstStandardSheets"]["ClickItem"]("mainPanel1")
     Log["Message"]("mainPanel1 sheet selected")
 
     // 8- Name, text, tab text = ""TEST""
+    Log["Message"]("Step 8")
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["txtSheetName"]["Keys"]("PartStatus")
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["txtSheetText"]["Keys"]("PartStatus")
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["txtSheetTextTab"]["Keys"]("PartStatus") 
 
     // 9- Click Add Dashboard Button
+    Log["Message"]("Step 9")
     Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnAddDashboard"]["Click"]()
     
     // 10- Click on Dashboard ID button       
+    Log["Message"]("Step 10")
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep1"]["txtDashboardID"]["Keys"]("PartOnHandStatus")
 
     // 12- click ""Next"" button
+    Log["Message"]("Step 12")
     Aliases["Epicor"]["CustomWizardDialog"]["btnNext"]["Click"]()
 
     // 13- Select Subscribe to UI data (include retrieve button)
+    Log["Message"]("Step 13")
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep2"]["radRetrieveWButton"]["ultraOptionSet1"]["Click"]()
 
     // click ""Next"" button
     Aliases["Epicor"]["CustomWizardDialog"]["btnNext"]["Click"]()
 
     // 14- Choose ""Part"" data view
+    Log["Message"]("Step 14")
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep3a"]["lstDataViews"]["ClickItem"]("Part")
+
     // 15- Choose ""PartNum"" column
+    Log["Message"]("Step 15")
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep3a"]["lstDataColumns"]["ClickItem"]("PartNum")
+
     // click ""Add Subscribe column"" button
     Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep3a"]["btnAddSubscribeColumn"]["Click"]()
+    
     // 16- click "Finish" button
+    Log["Message"]("Step 16")
     Aliases["Epicor"]["CustomWizardDialog"]["WinFormsObject"]("btnFinish")["Click"]()
+    
     // 17- Press Right arrow to move tab to ""PartStatus Sheets"" panel
+    Log["Message"]("Step 17")
     Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnAddCustomSheet"]["Click"]()
     Log["Message"]("Sheet was added to Custom Sheets.")
     // 18- Click File> Save customization As  
+    Log["Message"]("Step 18")
     Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Save Customization As ...")
 
     // 19- On Name enter EmbDash and on Description enter Embedded Dashboard and click Save        
+    Log["Message"]("Step 19")
     Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("grpNewCustInfo")["WinFormsObject"]("txtKey1a")["Keys"]("EmbDash")
     Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("grpNewCustInfo")["WinFormsObject"]("txtDescription")["Keys"]("Embedded Dashboard")
     Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("btnOk")["Click"]()
     Aliases["Epicor"]["WinFormsObject"]("CustomCommentDialog")["WinFormsObject"]("btnOK")["Click"]()
 
     Log["Message"]("Customization saved.")
+    
     // 21- close the customization 
+    Log["Message"]("Step 21")
     Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Close")
     Log["Message"]("Customization closed.")   
+
     // 22- Close the form"  
+    Log["Message"]("Step 22")
     Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")   
     Log["Message"]("Part Form closed.")   
 
 
     // 23- Go to Production Management> Job Management> Setup> Part (Open again Part Maintenance (using developer mode)
+    Log["Message"]("Step 23")
     ActivateMainDevMode()
     MainMenuTreeViewSelect(treeMainPanel1 + "Production Management;Job Management;Setup;Part")
 
@@ -111,11 +138,13 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
 
     /*(FUTURE REFERENCE FOR TREE LIST ITEMS)*/
     // 24- Select the created customizacion       
+    Log["Message"]("Step 24")
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["etvAvailableLayers"]["ClickItem"]("Base|EP|Customizations|EmbDash")
     Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
 
     var testPart = "00P1"
     // 25, 26 - Click on Part button - Click Search and select a Part and click Ok                              
+    Log["Message"]("Step 25,26")
     Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
     Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["partDetailPanel1"]["groupBox1"]["tbPart"]["Keys"](testPart)
     Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["partDetailPanel1"]["groupBox1"]["tbPart"]["Keys"]("[Tab]")
