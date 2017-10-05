@@ -3,6 +3,7 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 //USEUNIT DataBase_Functions
+//USEUNIT ControlFunctions
 
 function TC_Dashboard_Updatable_Customized_Form(){
   
@@ -16,7 +17,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
   }  
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
-    StartSmartClient()
+  /* StartSmartClient()
 
     Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
@@ -25,7 +26,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
     Delay(1500)
     ExpandComp("Epicor Education")
 
-    ChangePlant("Main Plant")
+    ChangePlant("Main Plant")*/
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
@@ -35,6 +36,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       step: Create an updatable BAQ
       Result: Verify the BAQ is created       
     */ 
+    Log["Message"]("Step 2")
 
     // Move to EPIC06 company and open Executive analysis> Business Activity Management> Setup> Business Activity Query
     MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
@@ -45,7 +47,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       // QueryID: TestBAQ
       // Description: TestBAQ
       // Shared: Checked | Updatable: Checked
-      CreateBAQ("TestBAQ", "TestBAQ", "Shared,Updatable")
+      CreateBAQ("TestBAQ", "TestBAQ", "chkShared,chkUpdatable")
       // drag and drop the "Customer" table design area in "Phrase Build" tab
       AddTableBAQ(BAQFormDefinition, "Customer")
       // In the Display Fields> Column Select tab for the "Customer" table select the Company, CustID, CustNum, Name and Address1 columns and add them to "Display Columns" area
@@ -74,7 +76,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       step: Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
       Result:  Verify the developer mode is activated       
     */ 
-
+      Log["Message"]("Step 3")
       //Go to Executive Analysis> Business Activity Management> General Operations> Dashboard. Go to Tools> Developer Mode        
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
@@ -95,13 +97,15 @@ function TC_Dashboard_Updatable_Customized_Form(){
           // Description: TestDashBDCustom
         Result: Verify the Dashboard is created       
       */ 
-
+        Log["Message"]("Step 4")
         NewDashboard("TestDashBDCustom","TestDashBDCustom","TestDashBDCustom")
          
       /*
         Step No: 5
         Result:  Click on New Query. Search for the BAQ TestBAQ2 and click Ok. Save       
-      */ 
+      */
+        Log["Message"]("Step 5") 
+        Delay(2000)
           AddQueriesDashboard("TestBAQ")
           
           SaveDashboard()
@@ -111,6 +115,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
         Step No: 6
         Result:  Right click on the BAQ and select Properties - Properties dialog open     
       */ 
+        Log["Message"]("Step 6")
         var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
         Log["Message"]("BAQ - right click")
@@ -127,10 +132,11 @@ function TC_Dashboard_Updatable_Customized_Form(){
         Step No: 7
         Result:  Open dialog and filter data
       */ 
+        Log["Message"]("Step 7")
         var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
 
         // Go to Filter tab and add the condition: Customer_CustNum = Dashboard Browse        
-        DashboardPropertiesTabs(queryProperties, "Filter")
+        DashboardPropertiesTabs("Filter")
 
         var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
 
@@ -156,7 +162,8 @@ function TC_Dashboard_Updatable_Customized_Form(){
       /*
         Step No: 8
         Result:  Open dialog and filter data
-      */       
+      */      
+        Log["Message"]("Step 8") 
         //On Dashboard Browse Properties on Display column dropdown select CustNum       
         Aliases["Epicor"]["QueryNavProperties"]["cboDisplayColumn"]["SetFocus"]()
         while(Aliases["Epicor"]["QueryNavProperties"]["cboDisplayColumn"]["Text"] != "CustNum"){
@@ -187,6 +194,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
         Step No: 9
         Result:  Right click on the BAQ grid and select Properties - Properties dialog open     
       */ 
+        Log["Message"]("Step 9")
         var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
         Log["Message"]("BAQ grid - right click")
@@ -204,6 +212,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
         Step: Check the Updatable check box
         Result: Verify the changes are applied and the dialog is closed       
       */    
+        Log["Message"]("Step 10")
         //Check the Updatable check box
         Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["chkUpdatable"]["Checked"] = true
 
@@ -212,6 +221,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
         Step: Check the Updatable check box
         Result: Verify the changes are applied and the dialog is closed       
       */    
+        Log["Message"]("Step 11")
         // Check the ""prompt"" option for ""Name"" and ""Address"" field 
         var dashboardGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
         
@@ -242,7 +252,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
         Step: Save the dashboard , then Click on Tools>Deploy Dashboard. 
         Result: Verify the changes are applied and the dialog is closed       
       */    
-
+        Log["Message"]("Step 12")
         // Save the dashboard
         SaveDashboard()
 
@@ -258,6 +268,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Descr: Go to System Setup>Security Maintenance> Menu Maintenance.
       Result: Verify the Dashboard is created       
     */ 
+    Log["Message"]("Step 13")
     // In Menu Maintenance tree select Main Menu>Sales Management>Customer Relationship Management > Setup, 
     // then Select File> New>New Menu
     // Write a Menu ID, select module UD, write a Name for the menu, write an Order Sequence (the position where you will find the menu), 
@@ -276,7 +287,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: Restart E10       
       Result: E10 is restarted        
     */    
-
+    Log["Message"]("Step 14")
     Delay(1000)
     RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
@@ -288,6 +299,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: Refresh
       Result: The dashboard opens without errors        
     */   
+    Log["Message"]("Step 15")
     MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
@@ -311,7 +323,6 @@ function TC_Dashboard_Updatable_Customized_Form(){
     oldValue1 = grid["Rows"]["Item"](0)["Cells"]["Item"](nameColumn)["Text"]["OleValue"]
     newValue1 = grid["Rows"]["Item"](0)["Cells"]["Item"](addressColumn)["EditorResolved"]["SelectedText"] = "Test"
 
-
     //Activates row 1
     grid["Rows"]["Item"](1)["Cells"]["Item"](nameColumn)["Click"]()
 
@@ -333,6 +344,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: Refresh
       Result: The dashboard opens without errors        
     */ 
+    Log["Message"]("Step 17")
     //Validate if it's on dev mode already
 
     //Developer mode 
@@ -415,7 +427,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: Test embedded dasboard
       Result: The dashboard opens without errors        
     */ 
-
+    Log["Message"]("Step 18")
     // Go to Sales Management> Customer Relationship Management> Setup> Customer and select the customization from previous step
     MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;Customer")
     /*(FUTURE REFERENCE FOR TREE LIST ITEMS)*/
@@ -436,7 +448,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: in the "TEST" tab click "Retrieve" button
       Result: The dashboard opens without errors        
     */ 
-
+    Log["Message"]("Step 19")
     var retrieveBtn = Aliases["Epicor"]["CustomerEntryForm"]["FindChild"](["WndCaption", "ClrClassName"], ["*Retrieve*", "*EpiButton*"], 30)
     retrieveBtn["Click"]()
 
@@ -452,6 +464,7 @@ function TC_Dashboard_Updatable_Customized_Form(){
       Step: Go back to Customer> Detail  tab and retrieve ""Dalton"" customer
       Result: The customer is retrieved without errors        
     */ 
+      Log["Message"]("Step 20")
       Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
       Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("Dalton")
       Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
