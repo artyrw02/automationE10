@@ -2,19 +2,13 @@
 //USEUNIT Dashboards_Functions
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
+//USEUNIT ControlFunctions
+//USEUNIT Data_Dashboard_TrackerViews_2
+
 var continueTest = true
 
 function TC_Dashboard_Tracker_Views_2(){
   
-  var MenuData = {
-    "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",
-    "menuID" : "DashT2",
-    "menuName" : "DashTrack2",
-    "orderSequence" : 102,
-    "menuType" : "Dashboard-Assembly",
-    "dll" : "DashTracker2"
-  }
-
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
     
     // Step1- Log in  
@@ -24,21 +18,23 @@ function TC_Dashboard_Tracker_Views_2(){
 
       ActivateFullTree()
 
-      ExpandComp("Epicor Education")
+      ExpandComp(company1)
 
-      ChangePlant("Main Plant")
+      ChangePlant(plant1)
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
     
       // BAQ 1
+        Log["Message"]("Step 2")
         //Open Business Activity Query to create BAQ   
-        MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
-        Log["Checkpoint"]("BAQ opened")
+        MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+        Log["Message"]("BAQ opened")
 
+        Delay(2000)
         //Create a copy of 'zCustomer01' table
         CopyBAQ("zCustomer01", "zCustomer01Copy")
-        Log["Checkpoint"]("BAQ 'zCustomer01' copied to 'zPartTracker01Copy'")
+        Log["Message"]("BAQ 'zCustomer01' copied to 'zCustomer01Copy'")
         
         //Go to Query Builder Tab and on Display Fields tab add GroupCode to Display Column(s)
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
@@ -47,7 +43,7 @@ function TC_Dashboard_Tracker_Views_2(){
         BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
 
         AddColumnsBAQ(BAQFormDefinition, "Customer", "GroupCode")
-        Log["Checkpoint"]("BAQ1 created")
+        Log["Message"]("BAQ1 created")
 
         //Change to "Update" tab
         BAQFormDefinition["dockableWindow3"]["Activate"]()
@@ -67,13 +63,15 @@ function TC_Dashboard_Tracker_Views_2(){
         ExitBAQ()
       // -----
       // BAQ 2
+        Log["Message"]("Step 3")
         //Open Business Activity Query to create BAQ   
-        MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
-        Log["Checkpoint"]("BAQ opened")
+        MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+        Log["Message"]("BAQ opened")
 
+        Delay(2000)
         //Create a copy of 'zCustomer01' table
         CopyBAQ("zPartTracker01", "zPartTracker01Copy")
-        Log["Checkpoint"]("BAQ 'zPartTracker01' copied to 'zPartTracker01Copy'")
+        Log["Message"]("BAQ 'zPartTracker01' copied to 'zPartTracker01Copy'")
         
         //Go to Query Builder Tab and on Display Fields tab add GroupCode to Display Column(s)
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
@@ -81,8 +79,10 @@ function TC_Dashboard_Tracker_Views_2(){
         BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
         BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
 
+        Log["Message"]("Step 3A")
         //Change to "Update" tab
-        BAQFormDefinition["dockableWindow3"]["Activate"]()
+        // BAQFormDefinition["dockableWindow3"]["Activate"]()
+        OpenPanelTab("Update->General Properties")
 
         //Activate 'General Properties'
         UpdateTabBAQ("Part_ClassID", "Updatable")
@@ -90,7 +90,8 @@ function TC_Dashboard_Tracker_Views_2(){
         UpdateTabBAQ("Part_TaxCatID", "Updatable")
 
         //Activate 'Update Processing' tab
-        BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+        // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+        OpenPanelTab("Update->Update Processing")
 
         // Select Erp.Customer business object
         BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["updProcess1"]["epiGroupBox1"]["updBOSettings1"]["windowDockingArea1"]["dockableWindow1"]["updBOInfo1"]["btnBusObj"]["Click"]()
@@ -103,29 +104,31 @@ function TC_Dashboard_Tracker_Views_2(){
   //-------------------------------------------------------------------------------------------------------------------------------------------'  
   
   //--- Creates Dashboards --------------------------------------------------------------------------------------------------------------------'
-
+    Log["Message"]("Step 4")
     //Navigate and open Dashboard
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+    MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
     var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-    Log["Checkpoint"]("Dashboard opened")
+    Log["Message"]("Dashboard opened")
     //Enable Dashboard Developer Mode  
     DevMode()
-    Log["Checkpoint"]("DevMode activated")
+    Log["Message"]("DevMode activated")
 
     /*
       Step No: 5
       Step: Create a new Dashboard, fill up the ID, Caption and Description fields. Check Enable Refresh All        
       Result: Verify the Dashboard is created       
     */
-
-      NewDashboard("DashTracker2", "DashTracker2", "DashTracker2", "Refresh All")
+      Log["Message"]("Step 5")
+      NewDashboard("DashTracker2", "DashTracker2", "DashTracker2", "chkInhibitRefreshAll")
       
     /*
       Step No: 6
       Step: Add a New Query and select the QueryId "zCustomer01Copy"        
       Result: Verify the query is retrieved on the tree panel       
     */    
+      Log["Message"]("Step 6")
+      Delay(2500)
       AddQueriesDashboard("zCustomer01Copy")
       
       var rect 
@@ -135,7 +138,9 @@ function TC_Dashboard_Tracker_Views_2(){
       Step No: 7
       Step: Right click on the added grid and go to Properties        
       Result: Verify the properties dialog appears        
-    */          
+    */     
+          Log["Message"]("Step 7")
+
           rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
           dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
           // dashboardTree["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
@@ -153,6 +158,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Check the Updatable check box and select prompt for Phone and EMailAddress. Click Ok
       Result: Verify the changes are applied and the dialog is closed       
     */    
+          Log["Message"]("Step 8")
           //Check the Updatable check box
           Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["chkUpdatable"]["Checked"] = true
 
@@ -187,6 +193,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Add a New Tracker View        
       Result: Verify the Dashboard Tracker View Properties window is displayed and the  Visible check box is selected in all fields       
     */    
+          Log["Message"]("Step 9")
           //Right click on the query summary and click on the Query        
           rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
           dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -201,6 +208,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Check Prompt for CustID and enter condition: StartsWith and check prompt for Phone, EMailAddress and GroupCode. Click Ok        
       Result: Verify the tracker view is added        
     */  
+          Log["Message"]("Step 10")
+
           var TrackerViewsGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
           
           var column = getColumn(TrackerViewsGrid, "Column")
@@ -251,6 +260,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Add a New Tracker View        
       Result: Verify the Dashboard Tracker View Properties window is displayed and the  Visible check box is selected in all fields       
     */   
+          Log["Message"]("Step 11")
 
           //Right click on the query summary and click on the Query        
           rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
@@ -266,6 +276,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Check Prompt for CustID and enter condition: StartsWith and check prompt for Phone, EMailAddress and GroupCode. Click Ok        
       Result: Verify the tracker view is added        
     */
+          Log["Message"]("Step 12")
+
           for (var i = 0; i <= TrackerViewsGrid["wRowCount"] - 1; i++) {
             //Select row and check Prompt checkbox
             var cell = TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
@@ -314,6 +326,7 @@ function TC_Dashboard_Tracker_Views_2(){
         Step: Display Group drop down from the trackers                   
         Result: Verify they have a list of values       
       */
+        Log["Message"]("Step 15")
 
         var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]
 
@@ -336,11 +349,13 @@ function TC_Dashboard_Tracker_Views_2(){
 
         SaveDashboard()
 
-        /*
-          Step No: 16
-          Step: Close Dashboard designer
-          Result: Verify the form is closed       
-        */
+      /*
+        Step No: 16
+        Step: Close Dashboard designer
+        Result: Verify the form is closed       
+      */
+
+        Log["Message"]("Step 16")
         ExitDashboard()
         
         if (!Aliases["Epicor"]["Dashboard"]["Exists"]) {
@@ -352,7 +367,8 @@ function TC_Dashboard_Tracker_Views_2(){
         Step: Reopen it and retrieve the created dashboard  
         Result: The dashboard is retrieved   
       */     
-        MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+        Log["Message"]("Step 17")
+        MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
         OpenDashboard("DashTracker2")
 
         if(Aliases["Epicor"]["Dashboard"]["Text"] != ""){
@@ -364,6 +380,7 @@ function TC_Dashboard_Tracker_Views_2(){
         Step: Display the Group combos again                    
         Result: Verify the data is present        
       */
+        Log["Message"]("Step 18")
         var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]
         var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
         
@@ -389,6 +406,8 @@ function TC_Dashboard_Tracker_Views_2(){
         Step: Add a New Query and select the QueryId  "zPartTracker01Copy"        
         Result: the zPartTracker01Copy query is added       
       */   
+        Log["Message"]("Step 19")
+         Delay(2500)
         AddQueriesDashboard("zPartTracker01Copy")
       
       /*
@@ -402,6 +421,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Right click on the grid and change the caption to All       
       Result: The caption is changed        
     */  
+        Log["Message"]("Step 21")
+
         //Right click on the query summary and click on the Query        
         var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)["Nodes"]["Item"](0)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -421,6 +442,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Right click on the query and add a new Grid View        
       Result: A new grid view is added        
     */    
+        Log["Message"]("Step 22")
         //Right click on the query summary and click on the Query        
         rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -435,6 +457,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Change Caption to Manufactured Parts        
       Result: The caption is changed        
     */       
+        Log["Message"]("Step 23")
         if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
           Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["txtCaption"]["Text"] = "Manufactured Parts"
           var gridPaneldialog = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]
@@ -449,7 +472,8 @@ function TC_Dashboard_Tracker_Views_2(){
       
       Result: The values are entered and the grid view is added       
     */  
-          DashboardPropertiesTabs(gridPaneldialog, "Filter")
+        Log["Message"]("Step 24")
+          DashboardPropertiesTabs("Filter")
 
           var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
 
@@ -476,6 +500,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Right click on the query and add a new Grid View        
       Result: A new grid view is added        
     */    
+        Log["Message"]("Step 26")
         //Right click on the query summary and click on the Query        
         rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -490,6 +515,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Change Caption to Purchased Parts
       Result: The caption is changed        
     */       
+      Log["Message"]("Step 27")
       if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
           Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["txtCaption"]["Text"] = "Purchased Parts"
           var gridPaneldialog = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]
@@ -504,7 +530,8 @@ function TC_Dashboard_Tracker_Views_2(){
       
       Result: The values are entered and the grid view is added       
     */  
-          DashboardPropertiesTabs(gridPaneldialog, "Filter")
+          Log["Message"]("Step 28")
+          DashboardPropertiesTabs("Filter")
 
           var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
 
@@ -532,6 +559,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Right click on the query and add a new Grid View        
       Result: A new grid view is added        
     */    
+      Log["Message"]("Step 30")
       //Right click on the query summary and click on the Query        
       rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
       dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -546,6 +574,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Change Caption to Sales Kit Parts       
       Result: The caption is changed        
     */       
+      Log["Message"]("Step 31")
         if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
           Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["txtCaption"]["Text"] = "Sales Kit Parts"
           var gridPaneldialog = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]
@@ -560,7 +589,8 @@ function TC_Dashboard_Tracker_Views_2(){
       
       Result: The values are entered and the grid view is added       
     */  
-          DashboardPropertiesTabs(gridPaneldialog, "Filter")
+        Log["Message"]("Step 32")
+          DashboardPropertiesTabs("Filter")
 
           var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
 
@@ -587,6 +617,8 @@ function TC_Dashboard_Tracker_Views_2(){
             Uncheck Visible option for: InActive, GlobalPart, NonStock, TrackLots, TrackDimension, TrackSerialNumber, Method and the three Company fields. Click Ok       
       Result: Verify the tracker is added       
     */   
+        Log["Message"]("Step 34")
+
         //Right click on the query summary and click on the Query        
         rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -681,9 +713,9 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: Verify the layout of the dashboard is correct       -PENDING-
 
     */ 
-
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
-      Log["Checkpoint"]("BAQ opened")
+      Log["Message"]("Step 39")
+      MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+      Log["Message"]("BAQ opened")
 
       OpenBAQ("zPartTracker01Copy")
       UpdateTabBAQ("Part_PartDescription", "Updatable")
@@ -698,9 +730,9 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Go to the created Dashboard       
       Result: The dashboard is retrieved again        
     */ 
-
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
-      Log["Checkpoint"]("BAQ opened")
+      Log["Message"]("Step 40")
+      MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+      Log["Message"]("BAQ opened")
       //  Maximize Dashboard
       Aliases["Epicor"]["Dashboard"]["Maximize"]();
       
@@ -713,7 +745,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Right click on the tracker view from zPartTracker02 query and click on Customize tracker view       
       Result: The customization dialog appears        
     */ 
-
+      Log["Message"]("Step 41")
       var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)["Nodes"]["Item"](4)
       dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
       Log["Message"]("BAQ - right click")
@@ -727,7 +759,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Select Description label (lblPart_PartDescription) and change the Width property to '0' so the Size now is '0,20'       
       Result: The changes are set       
     */ 
-
+      Log["Message"]("Step 42")
       var trackerNode = Aliases["Epicor"]["CustomToolsDialog"]["grpControlTree"]["utrControls"]["Nodes"]["Item"](0)
       trackerNode["Expanded"] = true
       
@@ -756,6 +788,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Click Tools>Toolbox and select an EpiTextBox and drop it in the tracker below the other fields        
       Result: An EpiTextBox appears now, below the other fields    
     */ 
+      Log["Message"]("Step 43")
       var trackerPanelsDashboard = dashboardPanel["FindAllChildren"]("FullName", "*TrackerPanel", 20)["toArray"]();     
 
       // Aliases["Epicor"]["CustomToolsDialog"]["UltraMainMenu"]["Click"]("Tools|ToolBox");
@@ -772,7 +805,7 @@ function TC_Dashboard_Tracker_Views_2(){
             Save and close"       
       Result: An EpiTextBox appears now, below the other fields    
     */ 
-
+      Log["Message"]("Step 44")
       for (var i = 0; i < trackerNode["Nodes"]["Count"]; i++) {
         if (trackerNode["Nodes"]["Item"](i)["Text"] == "TrackerPanel") {
           trackerNode["Nodes"]["Item"](i)["Selected"] = true
@@ -801,6 +834,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Add a New Query and select Query zAPInvDtl        
       Result: The query is added        
     */    
+      Log["Message"]("Step 45")
+       Delay(2500)
       AddQueriesDashboard("zAPInvDtl")
 
     /*
@@ -808,6 +843,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Add a new tracker view and Click on Clear All and select Visible and Prompt only for InvoiceNum, check Input Prompts Only and click Ok              
       Result: The empty tracker view is added              
     */   
+      Log["Message"]("Step 46")
         //Right click on the query summary and click on the Query        
         rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](2)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -871,7 +907,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Right click on the tracker view from zAPInvDtl query and click on Customize tracker view        
       Result: The customization dialog appears        
     */ 
-     
+      Log["Message"]("Step 47")
+
       rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](2)["Nodes"]["Item"](1)
       dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
       Log["Message"]("BAQ - right click")
@@ -885,6 +922,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Click Tools>Toolbox and select an EpiCombo and drop it in the tracker below the other fields
       Result: An EpiTextBox appears now, below the other fields    
     */ 
+      Log["Message"]("Step 48")
       var trackerPanelsDashboard = dashboardPanel["FindAllChildren"]("FullName", "*TrackerPanel", 20)["toArray"]();  
 
       // Aliases["Epicor"]["CustomToolsDialog"]["UltraMainMenu"]["Click"]("Tools|ToolBox");
@@ -907,7 +945,7 @@ function TC_Dashboard_Tracker_Views_2(){
             Save and close Customization Tools Dialog"        
       Result: The values are set and the customization is saved and the Customization Tools dialog is closed        
     */ 
-
+      Log["Message"]("Step 49")
       trackerNode = Aliases["Epicor"]["CustomToolsDialog"]["grpControlTree"]["utrControls"]["Nodes"]["Item"](0)
       trackerNode["Expanded"] = true
 
@@ -972,8 +1010,9 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Save and deploy dashboard to a Smart Client Application and Generate Web Form       
       Result: The deployment is finished without errors       
     */    
-
+    Log["Message"]("Step 56")
     SaveDashboard()
+     Delay(2500)
     DeployDashboard("Deploy Smart Client,Generate Web Form")
     ExitDashboard()
   //-------------------------------------------------------------------------------------------------------------------------------------------'
@@ -987,8 +1026,8 @@ function TC_Dashboard_Tracker_Views_2(){
             select Dashboard-Assembly and in Dashboard select the previously created. Be sure the Enabled check box is selected. Click Save.                  
       Result:  The menu is created       
     */    
-
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
+    Log["Message"]("Step 57")
+    MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
 
     CreateMenu(MenuData)
   //-------------------------------------------------------------------------------------------------------------------------------------------'
@@ -999,10 +1038,10 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Restart E10       
       Result: E10 is restarted        
     */    
-
-    Delay(1000)
-    RestartSmartClient()
-    Log["Checkpoint"]("SmartClient Restarted")
+      Log["Message"]("Step 60")
+      Delay(1000)
+      RestartSmartClient()
+      Log["Message"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Open Menu created --- -----------------------------------------------------------------------------------------------------------------'
@@ -1011,13 +1050,14 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Open the menu with the dashboard            
       Result: The dashboard opens without errors        
     */   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
+      Log["Message"]("Step 61")
+      MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
-     testQuery1()
-     testQuery2()
-     testQuery3()
+       testQuery1()
+       testQuery2()
+       testQuery3()
 
-     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+       Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
@@ -1048,6 +1088,7 @@ function testQuery1(){
     Result: Verify the grids are populated. Check that the tracker panel at the top is hidden.        
 
   */    
+  Log["Message"]("Step 62")
   Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh All")
 
   var gridsMainPanel = RetrieveGridsMainPanel()
@@ -1067,6 +1108,7 @@ function testQuery1(){
     Step: Move through the rows from the grid       
     Result: Verify the GroupCode fields from both trackers are updated        
   */  
+    Log["Message"]("Step 63")
     if (gridPanel["Rows"]["Count"] > 0) {
       Log["Message"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
     }else{
@@ -1094,7 +1136,7 @@ function testQuery1(){
     Step: Display the GroupCode combos        
     Result: Verify they have values       
   */  
-
+    Log["Message"]("Step 64")
     custGroupCodeTrackerP1["Keys"]("Aerospace")
     custGroupCodeTrackerP2["Keys"]("Aerospace")
 
@@ -1111,7 +1153,7 @@ function testQuery1(){
     Step: Clear the form        
     Result: Verify the form the dashboard is cleared              
   */ 
-
+    Log["Message"]("Step 65")
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Clear")
 
     if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
@@ -1129,6 +1171,7 @@ function testQuery1(){
     Step: On the tracker from the top enter A on CustID field then click Refresh        
     Result: Verify only Customers starting with A appear on the grid        
   */     
+    Log["Message"]("Step 66")
     var custIDTrackerP1 = trackerMainPanel[0]["FindChild"]("FullName", "*txtCustomer_CustID", 1);
     // var custCompanyTrackerP2 = trackerMainPanel[1]["FindChild"]("FullName", "*txtCustomer_CustID", 1);
 
@@ -1165,6 +1208,7 @@ function testQuery1(){
     Step: Clear the form        
     Result: Verify the form the dashboard is cleared        
   */
+    Log["Message"]("Step 67")
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Clear")
 
     if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
@@ -1182,7 +1226,7 @@ function testQuery1(){
     Step: On the tracker from below enter DALTON on CustID field then click Refresh
     Result: Verify only DALTON Customer appears on the grid       
   */
-
+    Log["Message"]("Step 68")
     var custIDTrackerP2 = trackerMainPanel[1]["FindChild"]("FullName", "*txtCustomer_CustID", 1);
     // var custCompanyTrackerP2 = trackerMainPanel[1]["FindChild"]("FullName", "*txtCustomer_CustID", 1);
 
@@ -1219,6 +1263,7 @@ function testQuery1(){
     Step: Clear the form        
     Result: Verify the form the dashboard is cleared        
   */
+    Log["Message"]("Step 69")
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Clear")
 
     if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
@@ -1236,6 +1281,7 @@ function testQuery1(){
     Step: Click Refresh All again               
     Result: Verify the dashbboard informations is loaded again        
   */
+    Log["Message"]("Step 70")
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh All")
 
   /*
@@ -1243,6 +1289,8 @@ function testQuery1(){
     Step: On the grid select any line and on the tracker enter any value on Phone Number field, then focus on another row       
     Result: Verify the grid is not updated        
   */
+    Log["Message"]("Step 71")
+
     var phoneNum = getColumn(gridPanel, "Phone")
 
     gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum)["Activate"]()
@@ -1266,6 +1314,8 @@ function testQuery1(){
     Step: On the grid select any line and on the tracker enter any value on Email Address field, then focus on another row        
     Result: Verify the grid is not updated        
   */
+    Log["Message"]("Step 72")
+
     var oldValueEmail = gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum+1)["Text"]["OleValue"]
 
     gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum+1)["Activate"]()
@@ -1282,7 +1332,6 @@ function testQuery1(){
     }
 
 }
-
 
 function testQuery2(){
   Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh All")
@@ -1313,6 +1362,8 @@ function testQuery2(){
     Result: Verify the vertical tracker panel is hidden and that there are 4 tabs (All, Manufactured Parts, Purchased Parts and Sales Kit Parts..
             Each one showing only parts with their respective Type Code)        
   */  
+    Log["Message"]("Step 74")
+
     if (gridPanelAll["Rows"]["Count"] > 0) {
       Log["Message"]("Grid " + gridPanelAll["WndCaption"] + " retrieved " + gridPanelAll["Rows"]["Count"] + " records.")
     }else{
@@ -1401,7 +1452,8 @@ function testQuery2(){
     Step: Click on any row        
     Result: Verify the panel shows the info for that row, also verify the added EpiTextBox is updated accordinly        
   */  
-    
+    Log["Message"]("Step 76")
+
     var columnPartSales = getColumn(gridPanelSales, "Part") 
     var columnDescPart = getColumn(gridPanelSales, "Description") 
 
@@ -1422,6 +1474,7 @@ function testQuery2(){
     Step: Modify any Part Description using the customized EpiTextbox            
     Result: Verify data is entered        
   */  
+    Log["Message"]("Step 77")
 
     gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnPartSales)["Activate"]()
     var oldEpiTextBoxValue = epiTextBox["Text"]["OleValue"]
@@ -1431,6 +1484,8 @@ function testQuery2(){
     Step: Change focus
     Result: Verify the changes are applied        
   */
+    Log["Message"]("Step 78")
+
     epiTextBox["Keys"]("test1" + '[Tab]') 
   
     if(gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"] != oldEpiTextBoxValue 
@@ -1463,18 +1518,20 @@ function testQuery3(){
     Result: "> Verify the tracker panel only show Invoice and the customized field (EpiCombo)
              > The grid is populated with records for many different part numbers"       
   */  
+    Log["Message"]("Step 80")
 
     if (gridPanel["Rows"]["Count"] > 0) {
       Log["Message"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
     }else{
       Log["Error"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
     }
+
   /*
     Step No: 81
     Step: Select part 0LP3A from the customized EpiCombo        
     Result: Verify the value is set on the field        
   */  
-
+    Log["Message"]("Step 81")
     var partComboTracker = trackerMainPanel[3]["FindChild"]("FullName", "*epiCombo1", 1);
     partComboTracker["setFocus"]()
     partComboTracker["Click"]()
@@ -1492,7 +1549,7 @@ function testQuery3(){
     Step: Focus on any line from the grid       
     Result: Verify the PartNum field is not updated with the selected value on the EpiCombo               
   */  
-    
+    Log["Message"]("Step 82")
     var columnInvoice = getColumn(gridPanel, "Invoice") 
     var columnPart = getColumn(gridPanel, "Part")
 
@@ -1510,7 +1567,7 @@ function testQuery3(){
     Step: Click Refresh       
     Result: Verify the grid only shows registers related to the selected PartNum
   */  
-
+    Log["Message"]("Step 83")
     Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
     var flag = true
     for (var i = 0; i < gridPanel["Rows"]["Count"] ; i++) {
