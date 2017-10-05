@@ -2,23 +2,11 @@
 //USEUNIT Dashboards_Functions
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
+//USEUNIT ControlFunctions
+//USEUNIT Data_Dashboard_BAQParams
 
 function Dashboard_BAQ_Parameters(){
-  var DashbData = {
-    "dashboardID" : "DashBBAQ",
-    "dashboardCaption" : "DashBBAQ",
-    "dashDescription" : "DashBBAQ",
-    "generalOptions" : "",
-    "baqQuery" : "baqParams2",
-    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
-  }
 
-  var baqData = {
-    "Id" : "baqParams1",
-    "Description" : "baqParams1",
-    "Table" : "Customer",
-    "Columns" : "CustNum"
-  }
 
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
    
@@ -37,19 +25,20 @@ function Dashboard_BAQ_Parameters(){
   //--- Creates BAQs --------------------------------------------------------------------------------------------------------------------------'
     
     //Open Business Activity Query to create BAQ   
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
-    Log["Checkpoint"]("BAQ opened")
+    MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+    Log["Message"]("BAQ opened")
 
     //****** Creating BAQ1 ***************'
+    Log["Message"]("Step 2")
       //Call function to create a simple BAQ
       CreateSimpleBAQ(baqData)
-      Log["Checkpoint"]("baqParams1 created")
+      Log["Message"]("baqParams1 created")
     //****** End of BAQ1 creation ********'
 
     //****** Creating BAQ2 ***************'
         
         //Open Business Activity Query to create BAQ   
-        MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+        MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
         
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
         
@@ -64,7 +53,8 @@ function Dashboard_BAQ_Parameters(){
         AddColumnsBAQ(BAQFormDefinition, "Customer", "CustNum")
         
         //Activate Phrase Build
-        BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+        // BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+        OpenPanelTab("Phrase Build")
 
         //---------- Setting params BAQ 2 --------'
              var diagram = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel"]["pnlQueryVisual"]["windowDockingArea1"]["dockableWindow1"]["diagramPanel"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["windowDockingArea2"]["dockableWindow2"]["diagCanvas"]
@@ -74,7 +64,8 @@ function Dashboard_BAQ_Parameters(){
 
               var queryCondPanel = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel2"]["pnlQueryTabs"]
 
-              queryCondPanel["zEpiDockManagerPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("Filtering toolbar|Add Row")
+              // queryCondPanel["zEpiDockManagerPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("Filtering toolbar|Add Row")
+              ClickMenu("Add Row")
 
               var tableWhereClausePanel = queryCondPanel["windowDockingArea1"]["dockableWindow3"]["tableWhereClausePanel"]
               var epiUltraGrid = tableWhereClausePanel["grdTableWhere"]
@@ -84,10 +75,12 @@ function Dashboard_BAQ_Parameters(){
               SelectCellDropdownGrid2("Filter Value", "specified parameter", epiUltraGrid)
 
               //Select Parameter
-              Aliases["Epicor"]["ParameterForm"]["btnDefine"]["Click"]()
+              // Aliases["Epicor"]["ParameterForm"]["btnDefine"]["Click"]()
+              ClickButton("Define...")
 
               //File New Parameter
-              Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
+              // Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
+              ClickMenu("File->New")
 
               var queryParametersdialog = Aliases["Epicor"]["CtrlDesignerForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["windowDockingArea1"]
               
@@ -108,18 +101,21 @@ function Dashboard_BAQ_Parameters(){
               queryParamsValueEditor["cmbValue"]["Keys"]("Customer_CustNum")
 
               //Save//
-              Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
-              Log["Checkpoint"]("Parameters where set for the filter value.")
+              // Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&Save")
+              ClickMenu("File->Save")
+              Log["Message"]("Parameters where set for the filter value.")
               //Exit
-              Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit")
+              // Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|E&xit")
+              ClickMenu("File->Exit")
 
               //Select parameter
-              Aliases["Epicor"]["ParameterForm"]["btnOK"]["Click"]()
+              // Aliases["Epicor"]["ParameterForm"]["btnOK"]["Click"]()
+              ClickButton("Select")
 
         //---------- END Params BAQ 2 ------------'
       
         //Activate Analyze tab
-        AnalyzeSyntaxisBAQ(BAQFormDefinition)
+        AnalyzeSyntaxisBAQ()
 
         //Test Data
         TestResultsBAQ(BAQFormDefinition, "23")
@@ -131,42 +127,45 @@ function Dashboard_BAQ_Parameters(){
         ExitBAQ()
 
     //****** End of BAQ2 Creation ********'
-      Log["Checkpoint"]("baqParams2 created")
+      Log["Message"]("baqParams2 created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'  
   
   //--- Creates Dashboards --------------------------------------------------------------------------------------------------------------------'
-
+    Log["Message"]("Step 3")
     //Navigate and open Dashboard
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
-    Log["Checkpoint"]("Dashboard opened")
+    MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+    Log["Message"]("Dashboard opened")
     //Enable Dashboard Developer Mode  
     DevMode()
-    Log["Checkpoint"]("DevMode activated")
+    Log["Message"]("DevMode activated")
+
     //Creating dashboard
+    Log["Message"]("Step 4 - 9")
     CreateSimpleDashboards(DashbData)
-    Log["Checkpoint"]("Dashboard created")
+    Log["Message"]("Dashboard created")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Restart Smart Client  -----------------------------------------------------------------------------------------------------------------'
     Delay(10000)
+    Log["Message"]("Step 10")
     RestartSmartClient()
-    Log["Checkpoint"]("SmartClient Restarted")
+    Log["Message"]("SmartClient Restarted")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
   //--- Test Deployed Dashboard ---------------------------------------------------------------------------------------------------------------'
     
     //****** Favorite tab ***************'
         ActivateFavoritesMenuTab()
-        Log["Checkpoint"]("FavoritesMenuTab Activated")
-
+        Log["Message"]("FavoritesMenuTab Activated")
+        Log["Message"]("Step 11")
         OpenDashboardFavMenu(DashbData["dashDescription"])
-        Log["Checkpoint"]("Dashboard opened")
+        Log["Message"]("Dashboard opened")
 
         DashboardPanelTest()
-        Log["Checkpoint"]("Dashboard tested")
+        Log["Message"]("Dashboard tested")
 
         DeactivateFavoritesMenuTab()
-        Log["Checkpoint"]("FavoritesMenuTab deactivated")
+        Log["Message"]("FavoritesMenuTab deactivated")
     //***********************************'
 
   //-------------------------------------------------------------------------------------------------------------------------------------------'
@@ -176,44 +175,50 @@ function Dashboard_BAQ_Parameters(){
     Delay(1000)
     
     DeactivateFullTree()
-    Log["Checkpoint"]("FullTree Deactivate")
+    Log["Message"]("FullTree Deactivate")
 
     CloseSmartClient()
-    Log["Checkpoint"]("SmartClient Closed")
+    Log["Message"]("SmartClient Closed")
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 }
 
 
 function DashboardPanelTest(){
-  Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh");
+  Log["Message"]("Step 12")
+  // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh");
+  ClickMenu("Edit->Refresh")
 
   var parameterValue = "23"
 
   if (Aliases["Epicor"]["BaseForm"]["Exists"]) {
-    var pnlParametersBAQField = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpFields"]["pnlFields"]
-    var pnlParametersBAQBtn = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpButtons"]
+      Log["Message"]("Step 13")
+      ComboboxSelect("edt0", parameterValue)
+      ClickButton("OK")
+
+    // var pnlParametersBAQField = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpFields"]["pnlFields"]
+    // var pnlParametersBAQBtn = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpButtons"]
     
-    var fieldParameter = pnlParametersBAQField["FindAllChildren"]("FullName", "*edt*", 5)["toArray"]();
-    var btnParameter = pnlParametersBAQBtn["FindAllChildren"]("FullName", "*btn*", 5)["toArray"]();
+    // var fieldParameter = pnlParametersBAQField["FindAllChildren"]("FullName", "*edt*", 5)["toArray"]();
+    // var btnParameter = pnlParametersBAQBtn["FindAllChildren"]("FullName", "*btn*", 5)["toArray"]();
 
-    // fieldParameter[0]["Keys"](parameterValue)
-    fieldParameter[0]["setFocus"]()
-    fieldParameter[0]["Click"]()
+    // // fieldParameter[0]["Keys"](parameterValue)
+    // fieldParameter[0]["setFocus"]()
+    // fieldParameter[0]["Click"]()
 
-    while(true){
-      fieldParameter[0]["Keys"]("[Down]")
-      if (fieldParameter[0]["Value"] == parameterValue) {
-        fieldParameter[0]["Keys"]("[Tab]")
-        Log["Checkpoint"]("Parameter value was selected from dropdown")
-        break
-      }
-    }
-    for (var i = 0; i <= btnParameter.length -1; i++) {
-      if(btnParameter[i]["Text"] == "OK"){
-        btnParameter[i]["Click"]()
-        break
-      }
-    }
+    // while(true){
+    //   fieldParameter[0]["Keys"]("[Down]")
+    //   if (fieldParameter[0]["Value"] == parameterValue) {
+    //     fieldParameter[0]["Keys"]("[Tab]")
+    //     Log["Checkpoint"]("Parameter value was selected from dropdown")
+    //     break
+    //   }
+    // }
+    // for (var i = 0; i <= btnParameter.length -1; i++) {
+    //   if(btnParameter[i]["Text"] == "OK"){
+    //     btnParameter[i]["Click"]()
+    //     break
+    //   }
+    // }
   }
   
   var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
@@ -244,5 +249,6 @@ function DashboardPanelTest(){
   }
 
   //Closes panel
-  Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit");
+  // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit");
+  ClickMenu("File->Exit")
 }
