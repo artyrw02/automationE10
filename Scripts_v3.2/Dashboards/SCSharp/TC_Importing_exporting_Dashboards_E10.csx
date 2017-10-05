@@ -2,6 +2,7 @@
 //USEUNIT Dashboards_Functions
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
+//USEUNIT ControlFunctions
 //USEUNIT DataBase_Functions
 
 function TC_Importing_exporting_Dashboards_E10(){
@@ -42,17 +43,18 @@ function TC_Importing_exporting_Dashboards_E10(){
                              
       Result:  Verify the BAQ is created        
     */ 
+      Log["Message"]("Step 2")
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
       var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
-      CreateBAQ("baqExport", "baqExport", "Updatable")
+      CreateBAQ("baqExport", "baqExport", "chkUpdatable")
       
       AddTableBAQ(BAQFormDefinition, "Customer")
 
       AddColumnsBAQ(BAQFormDefinition, "Customer", "Company,CustID,CustNum,Name,Country")
 
-      UpdateTabBAQ("Customer_Name", "Updatable", "Multiple Row")
+      UpdateTabBAQ("Customer_Name", "Updatable", "chkSupportMDR")
 
        //Activate 'Update Processing' tab
         BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
@@ -97,7 +99,7 @@ function TC_Importing_exporting_Dashboards_E10(){
             > Save your Dashboard  
       Result: Verify the developer mode is activated        
     */
-
+      Log["Message"]("Step 3")
       //Navigate and open Dashboard
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
@@ -141,13 +143,14 @@ function TC_Importing_exporting_Dashboards_E10(){
           dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
           // Check Prompt check box on field
           dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
+          Log["Message"](cell["Text"] + " Prompt Checked")
         }
       }
 
       //Go to View Rules tab
       var gridPaneldialog = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]
       
-      DashboardPropertiesTabs(gridPaneldialog, "View Rules")
+      DashboardGridPropertiesTabs("View Rules")
 
       var viewRulesPanel = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["tabViewRules"]["viewRuleWizardPanel1"]
 
@@ -236,6 +239,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step:  Click on File>Export Dashboard and BAQs. Select an available location , write a name on File Name and click Save              
       Result: Verify the window to export your dashboard appears. The dashboard is saved in the selected location       
     */ 
+      Log["Message"]("Step 4")
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Export Dashboard and BAQs")
 
       //stores directly on C:\\ProgramData\\Epicor\\tyrell.playground.local-80\\3.2.100.0\\EPIC06\\shared\\Export
@@ -264,7 +268,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step:  Open the dashboard form again. Go to File>Import Dashboard Definition. Select the dashboard that you previously exported and click Open.
       Result: Verify that after you click Open a dialog asking you to rename the dashboard definition appears.
     */       
-      
+      Log["Message"]("Step 5")  
       // OpenDashboard("DashBDExport")
 
       Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Import Dashboard Definition")
@@ -274,7 +278,8 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step No: 6
       Step:  Write a new dashboard definition ID and click Ok.        
       Result: Verify that after clicking Ok a window named Import BAQ Options appear        
-    */         
+    */        
+      Log["Message"]("Step 6") 
       var windowExportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Import Dashboard*","*ComboBox*"], 30)
       if (windowExportDashBD["Exists"]) {
         var windowExportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
@@ -298,7 +303,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step:  On Import BAQ Options window uncheck Replace existing checkbox and on New BAQ ID write a new name for the BAQ and click Ok       
       Result: Verify the Dashboard is imported without errors       
     */  
-
+      Log["Message"]("Step 7")
       if (Aliases["Epicor"]["DashboardBAQImportDialog"]["Exists"]) {
         Log["Message"]("BAQ Import dialog is displayed")
         var importBAQGrid = Aliases["Epicor"]["DashboardBAQImportDialog"]["FindChild"](["FullName", "WndCaption"], ["*Grid*", "*Import Option*"],30)
@@ -335,6 +340,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step:  Click Save       
       Result: Verify the dashboard is saved. Verify the Caption and Description fields have the values you previously gave        
     */ 
+      Log["Message"]("Step 8")
       SaveDashboard()
 
     /*
@@ -342,7 +348,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step:  Click on Tools>Deploy Dashboard. Select Deploy Smart Client Application checkbox       
       Result: Verify the dashboard is deployed without errors       
     */ 
-
+      Log["Message"]("Step 9")
       DeployDashboard("Deploy Smart Client")
 
       ExitDashboard()
@@ -358,7 +364,7 @@ function TC_Importing_exporting_Dashboards_E10(){
              in Dashboard select the previously created one. Be sure the Enabled check box is selected. Click Save." 
       Result: Verify the dashboard is saved. Verify the Caption and Description fields have the values you previously gave        
     */ 
-
+    Log["Message"]("Step 10")
     //Open Menu maintenance   
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;Menu Maintenance")
 
@@ -373,7 +379,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step: Restart Smart Client        
       Result: E10 is restarted        
     */    
-
+    Log["Message"]("Step 11")
     Delay(1000)
     RestartSmartClient()
     Log["Checkpoint"]("SmartClient Restarted")
@@ -385,7 +391,7 @@ function TC_Importing_exporting_Dashboards_E10(){
       Step:  Click refresh        
       Result: Verify the data is retrieved on the grid, respecting the given rules       
     */ 
-
+    Log["Message"]("Step 12")
     //Open Menu created   
     MainMenuTreeViewSelect("Epicor Education;Main Plant;Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
