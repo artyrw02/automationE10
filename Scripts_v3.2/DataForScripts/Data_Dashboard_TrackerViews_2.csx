@@ -13,13 +13,6 @@ var plant1 = "Main Plant"
 //Used to navigate thru the Main tree panel
 var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 
-//Copy BAQ data
-var baq = "zCustomer01"
-var baq1copy = "zCust01"
-
-//Dashboard for testing
-var dashb1 = "DashTracker"
-
 //Menu used for Test
   var MenuData = {
     "menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",

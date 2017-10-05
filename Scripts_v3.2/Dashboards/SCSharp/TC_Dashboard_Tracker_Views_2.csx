@@ -3,6 +3,7 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 //USEUNIT ControlFunctions
+//USEUNIT Menu_Functions
 //USEUNIT Data_Dashboard_TrackerViews_2
 
 var continueTest = true
@@ -39,26 +40,32 @@ function TC_Dashboard_Tracker_Views_2(){
         //Go to Query Builder Tab and on Display Fields tab add GroupCode to Display Column(s)
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
         
-        BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
-        BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
+       // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
+        CheckboxState("chkShared", true)
+        // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
+        CheckboxState("chkUpdatable", true)
 
         AddColumnsBAQ(BAQFormDefinition, "Customer", "GroupCode")
         Log["Message"]("BAQ1 created")
 
         //Change to "Update" tab
-        BAQFormDefinition["dockableWindow3"]["Activate"]()
+        // BAQFormDefinition["dockableWindow3"]["Activate"]()
+        OpenPanelTab("Update->General Properties")
 
         //Activate 'General Properties'
         UpdateTabBAQ("Customer_PhoneNum", "Updatable")
         UpdateTabBAQ("Customer_EMailAddress", "Updatable")
 
         //Activate 'Update Processing' tab
-        BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+        // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+        OpenPanelTab("Update->Update Processing")
 
         // Select Erp.Customer business object
-        BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["updProcess1"]["epiGroupBox1"]["updBOSettings1"]["windowDockingArea1"]["dockableWindow1"]["updBOInfo1"]["btnBusObj"]["Click"]()
+        // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["updProcess1"]["epiGroupBox1"]["updBOSettings1"]["windowDockingArea1"]["dockableWindow1"]["updBOInfo1"]["btnBusObj"]["Click"]()
+        ClickButton("Business Object...")
         Aliases["Epicor"]["GuessBOForm"]["guessBOPanel"]["epiGroupBox1"]["lbBOs"]["ClickItem"]("Erp.Customer")
-        Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
+        // Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
+        ClickButton("OK")
         SaveBAQ()      
         ExitBAQ()
       // -----
@@ -76,10 +83,11 @@ function TC_Dashboard_Tracker_Views_2(){
         //Go to Query Builder Tab and on Display Fields tab add GroupCode to Display Column(s)
         var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
         
-        BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
-        BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
+        // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
+        CheckboxState("chkShared", true)
+        // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
+        CheckboxState("chkUpdatable", true)
 
-        Log["Message"]("Step 3A")
         //Change to "Update" tab
         // BAQFormDefinition["dockableWindow3"]["Activate"]()
         OpenPanelTab("Update->General Properties")
@@ -94,11 +102,88 @@ function TC_Dashboard_Tracker_Views_2(){
         OpenPanelTab("Update->Update Processing")
 
         // Select Erp.Customer business object
-        BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["updProcess1"]["epiGroupBox1"]["updBOSettings1"]["windowDockingArea1"]["dockableWindow1"]["updBOInfo1"]["btnBusObj"]["Click"]()
+        // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["updProcess1"]["epiGroupBox1"]["updBOSettings1"]["windowDockingArea1"]["dockableWindow1"]["updBOInfo1"]["btnBusObj"]["Click"]()
+        ClickButton("Business Object...")
         Aliases["Epicor"]["GuessBOForm"]["guessBOPanel"]["epiGroupBox1"]["lbBOs"]["ClickItem"]("Erp.Part")
-        Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
+        // Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
+        ClickButton("OK")
         SaveBAQ()      
         ExitBAQ()
+
+        Log["Message"]("Step 3A")
+
+        //Open Business Activity Query to create BAQ   
+        MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
+
+          var baq3 = {
+            "baq" : "BAQA",
+            "config" : "chkShared,chkUpdatable",
+            "Table" : "Customer",
+            "Columns" :  "Company,CustID,CustNum,State,City,Country,TerritoryID"
+          }
+
+        CreateBAQ(baq3["baq"], baq3["baq"], baq3["config"])
+  
+        AddTableBAQ(BAQFormDefinition, baq3["Table"])
+
+        AddColumnsBAQ(BAQFormDefinition, baq3["Table"], baq3["Columns"])
+        
+        // Go to Update Tab and in General Properties tab check on Allow Multiple Row Update. 
+        // In the grid on Updatable column check country , city and state to be updatable.
+        OpenPanelTab("Update->General Properties")
+        CheckboxState("chkSupportMDR", true)
+
+        UpdateTabBAQ("Customer_Country", "Updatable")
+        UpdateTabBAQ("Customer_City", "Updatable")
+        UpdateTabBAQ("Customer_State", "Updatable")
+
+        ClickButton("Advanced Column Editor Configuration...")
+
+        // From the tree select customer_country element
+        var treePanel = FindObject("*TreeView*", "Name",  "*treeView*")
+        treePanel["ClickItem"]("Updatable Fields|Customer_Country")
+
+        // Choose Editor Type Dropdown List
+        ComboboxSelect("cmbEditorType", "DropDown List")
+        
+        // set "Data from" field as BAQ
+        ComboboxSelect("cmbDataFrom", "BAQ")
+        
+        // set "zCustomer01"  in the QueryID field and tab out
+        EnterText("txtExportID", "zCustomer01" + "[Tab]")
+        
+        // set the "Customer_Country" value for Display column and Value Column fields
+        ComboboxSelect("cmbDisplay", "Customer_Country")
+        ComboboxSelect("cmbValue", "Customer_Country")
+
+        // Save and Close Field Editor
+        Delay(1500)
+        ClickMenu("File->Save")
+        Delay(1500)
+        ClickMenu("File->Exit")
+
+        // Go to Update Processing tab and select "BPM Update" radio button. Then Select Business Object… button and select business object Erp.Customer
+        OpenPanelTab("Update->Update Processing")
+        
+        ClickButton("Business Object...")
+        Aliases["Epicor"]["GuessBOForm"]["guessBOPanel"]["epiGroupBox1"]["lbBOs"]["ClickItem"]("Erp.Customer")
+        // Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
+        ClickButton("OK")
+
+        // Go to Analyze tab and click on Analyze… button to check the syntax and verify you get the message "Syntax is OK"
+        AnalyzeSyntaxisBAQ()
+
+        Delay(6500)
+
+        // Then click on Get List button to test the query and click Save.
+        ClickButton("Get List")
+        Delay(1500)
+        ClickButton("Yes")
+
+        SaveBAQ()
+        
+        ExitBAQ()
+
       // -----
    
   //-------------------------------------------------------------------------------------------------------------------------------------------'  
@@ -473,7 +558,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: The values are entered and the grid view is added       
     */  
         Log["Message"]("Step 24")
-          DashboardPropertiesTabs("Filter")
+          DashboardGridPropertiesTabs("Filter")
 
           var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
 
@@ -501,8 +586,9 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: A new grid view is added        
     */    
         Log["Message"]("Step 26")
-        //Right click on the query summary and click on the Query        
-        rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
+        //Right click on the query summary and click on the Query 
+
+        var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
         dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
         Log["Message"]("Right click on query")
 
@@ -531,7 +617,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: The values are entered and the grid view is added       
     */  
           Log["Message"]("Step 28")
-          DashboardPropertiesTabs("Filter")
+          DashboardGridPropertiesTabs("Filter")
 
           var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
 
@@ -590,7 +676,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: The values are entered and the grid view is added       
     */  
         Log["Message"]("Step 32")
-          DashboardPropertiesTabs("Filter")
+          DashboardGridPropertiesTabs("Filter")
 
           var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
 
@@ -961,6 +1047,7 @@ function TC_Dashboard_Tracker_Views_2(){
           }
         }
       }
+      
       var epiPropertyGrid = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgProperties"]["pnlControlProperties"]["pnlProperties"]["pgdProperties"]
 
       delay(1000)
@@ -1003,7 +1090,109 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: The query is added       
     */     
  
-     // AddQueriesDashboard("zAPInvTracker")
+      // AddQueriesDashboard("zAPInvTracker")
+
+      Log["Message"]("Step 55A")
+      
+      AddQueriesDashboard(baq3["baq"])
+
+    /*
+      Step No: 55B
+      Step: > Add a new tracker view
+            >In the Tracker view properties enter "hidden country" in Caption field
+            >click "Clear All" button
+            > Activate "Visible" and "prompt" options for Customer_Country column
+            > ClickOK button          
+    */   
+      Log["Message"]("Step 55B")
+        //Right click on the query summary and click on the Query        
+        rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](3)
+        dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
+        Log["Message"]("BAQ - right click")
+
+        // click 'New Tracker View' option from menu
+        Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("New Tracker View");
+        Log["Message"]("New Tracker View was selected from Menu")
+
+        EnterText("txtCaption", "Hidden Country")
+
+        // Select Clear All button        
+        if (Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["Exists"]) {
+          Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["btnClearAll"]["Click"]()
+        }
+
+        // select 'prompt' for Phone and EMailAddress. Click Ok
+        var dashboardTrackerView = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
+        
+        var column = getColumn(dashboardTrackerView, "Column")
+        var columnPrompt = getColumn(dashboardTrackerView, "Prompt")
+        // var columnLabel = getColumn(dashboardTrackerView, "Label Caption")
+        var columnVisible = getColumn(dashboardTrackerView, "Visible")
+        
+        var promptFields = "Customer_Country"
+ 
+        promptFields = promptFields.split(",")
+
+        for (var i = 0; i <= dashboardTrackerView["wRowCount"] - 1; i++) {
+          //Select row and check Prompt checkbox
+          var cell = dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](column)
+
+          for (var j = 0; j < promptFields["length"]; j++) {
+            if (cell["Text"] == promptFields[j]) {
+              // Makes field visible
+              dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnVisible)["Click"]()
+              dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnVisible)["EditorResolved"]["CheckState"] = "Checked"
+
+              // Check Prompt check box on field
+              dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
+              dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"              
+              break
+            }
+          }
+        }        
+
+        ClickButton("OK")
+    /*
+      Step No: 55C
+      Step: " > Right click over the tracker view and select ""Customize tracker view"" option
+              > click the country dropdown list from the tracker
+              > Change its Visible property to ""False"""       
+    */ 
+      Log["Message"]("Step 55C")
+
+      rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](3)["Nodes"]["Item"](1)
+      dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
+      Log["Message"]("BAQ - right click")
+
+      // click 'New Tracker View' option from menu
+      Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Customize Tracker View");
+      Log["Message"]("BAQ1 Summary - Customize Tracker View was selected from Menu")
+
+      var trackerNode = Aliases["Epicor"]["CustomToolsDialog"]["grpControlTree"]["utrControls"]["Nodes"]["Item"](0)
+      trackerNode["Expanded"] = true
+
+      for (var i = 0; i < trackerNode["Nodes"]["Count"]; i++) {
+        if (trackerNode["Nodes"]["Item"](i)["Text"] == "TrackerPanel") {
+          trackerNode["Nodes"]["Item"](i)["Selected"] = true
+          trackerNode["Nodes"]["Item"](i)["Expanded"] = true
+          for (var j = 0; j < trackerNode["Nodes"]["Item"](i)["Nodes"]["Count"]; j++) {
+            if(trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "cboCustomer_Country"){
+              trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Selected"] = true
+              break
+            }
+          }
+        }
+      }
+      
+      var epiPropertyGrid = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgProperties"]["pnlControlProperties"]["pnlProperties"]["pgdProperties"]
+
+      delay(1000)
+      epiPropertyGrid["wItems"]("Behavior")["ClickLabel"]("Visible");
+      epiPropertyGrid["Keys"]("^a[Del]" + "False" + "[Enter]");
+      delay(1000)
+
+      Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Save Customization")
+      Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Close")
 
     /*
       Step No: 56
@@ -1012,8 +1201,8 @@ function TC_Dashboard_Tracker_Views_2(){
     */    
     Log["Message"]("Step 56")
     SaveDashboard()
-     Delay(2500)
-    DeployDashboard("Deploy Smart Client,Generate Web Form")
+    Delay(2500)
+    DeployDashboard("Deploy Smart Client,Add Favorite Item,Generate Web Form")
     ExitDashboard()
   //-------------------------------------------------------------------------------------------------------------------------------------------'
   
@@ -1038,6 +1227,8 @@ function TC_Dashboard_Tracker_Views_2(){
       Step: Restart E10       
       Result: E10 is restarted        
     */    
+      Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|Clear Client Cache")
+
       Log["Message"]("Step 60")
       Delay(1000)
       RestartSmartClient()
@@ -1075,9 +1266,9 @@ function TC_Dashboard_Tracker_Views_2(){
 
 
 function RetrieveTrackerMainPanel(){
-  var dashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+  var dashboardMainPanel =  FindTopMostForm()
     
-  var trackerPDashboardChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*TrackerPanel", 9)["toArray"]();
+  var trackerPDashboardChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*TrackerPanel", 30)["toArray"]();
   return trackerPDashboardChildren
 }
 
@@ -1126,6 +1317,7 @@ function testQuery1(){
       gridPanel["Rows"]["Item"](i)["Cells"]["Item"](columnCustID)["Activate"]()
       if (custGroupCodeTrackerP1["Text"]["OleValue"] == custGroupCodeTrackerP2["Text"]["OleValue"]) {
         Log["Message"]("Group codes are the same. Tracker 1 = " + custGroupCodeTrackerP1["Text"]["OleValue"] + " | Tracker 2 = " + custGroupCodeTrackerP2["Text"]["OleValue"])
+        break
       }else{
         Log["Error"]("Group codes are not the same. Tracker 1 = " + custGroupCodeTrackerP1["Text"]["OleValue"] + " | Tracker 2 = " + custGroupCodeTrackerP2["Text"]["OleValue"])
       }
@@ -1587,4 +1779,13 @@ function testQuery3(){
       Log["Error"]("Grid didn't retrieve records only for part number " +  partComboTracker["Value"])
     } 
   
+    // BAQA Country combo visibility
+
+    var combo_Country = FindObject("*Combo*", "Name", "*cboCustomer_Country*", trackerMainPanel[4])
+  
+    if(!combo_Country["Exists"]){
+      Log["Message"]("Combo is not visible")
+    } else{
+      Log["Error"]("Combo is visible. Visible behavior not modified.")
+    } 
 }
