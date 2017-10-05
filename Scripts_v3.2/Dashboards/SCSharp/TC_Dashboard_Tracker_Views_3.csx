@@ -3,6 +3,8 @@
 //USEUNIT BAQs_Functions
 //USEUNIT Grid_Functions
 //USEUNIT Sys_Functions
+//USEUNIT ControlFunctions
+//USEUNIT Data_Dashboard_TrackerViews_3
 
 function TC_Dashboard_Tracker_Views_3(){
   
@@ -16,7 +18,7 @@ function TC_Dashboard_Tracker_Views_3(){
       Press Additional Settings button at the bottom of the form->Customize Format window appears
       Select Decimal Symbol=comma. 
       Save */       
-
+      Log["Message"]("Step 1")
       //opens control cmd and opens control panel
       OpenCMD("control")
       
@@ -29,6 +31,7 @@ function TC_Dashboard_Tracker_Views_3(){
   //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
     
     // Step2- Log in  
+      Log["Message"]("Step 2")
       StartSmartClient()
 
       Login(Project["Variables"]["username"], Project["Variables"]["password"])
@@ -48,7 +51,7 @@ function TC_Dashboard_Tracker_Views_3(){
           Go to System Setup-Security Maintenance-User Account Maintenance
           Select your user and check that Format Culture= Invariant Language (Invariant Country)"        
     */
-      
+      Log["Message"]("Step 3")
       MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;User Account Security Maintenance")
 
       var accountMgmtPanel = Aliases["Epicor"]["UserAccountForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]
@@ -85,13 +88,14 @@ function TC_Dashboard_Tracker_Views_3(){
   //--- Setup BAQs ----------------------------------------------------------------------------------------------------------------------------'
     
     // Step 4
+      Log["Message"]("Step 4")
       //Go to Executive Analysis-Business Activity Management-Setup-BAQ 
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;Setup;Business Activity Query")
       Log["Checkpoint"]("BAQ opened")
 
 
       //Click New-New BAQ, tick Shared , Updatableand All Companies checkboxes
-      CreateBAQ("BAQtracker3", "BAQtracker3", "Shared,Updatable,Companies")
+      CreateBAQ("BAQtracker3", "BAQtracker3", "chkShared,chkUpdatable,chkAllCompanies")
       
       var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
 
@@ -126,6 +130,7 @@ function TC_Dashboard_Tracker_Views_3(){
   //--- Creates Dashboards --------------------------------------------------------------------------------------------------------------------'
 
     //Step 5
+      Log["Message"]("Step 5")
       //Go to Executive Analysis-Business Activity Management-General Operations-Dashboard       
       MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
@@ -133,19 +138,23 @@ function TC_Dashboard_Tracker_Views_3(){
       Log["Checkpoint"]("Dashboard opened")
       
     //Step 6
+      Log["Message"]("Step 6")
       //Enable Dashboard Developer Mode
       DevMode()
       Log["Checkpoint"]("DevMode activated")
 
     // Step 7
+      Log["Message"]("Step 7")
       //Click New-New Dashboard, enter any name ID, caption and description and tick All Companies checkbox
-      NewDashboard("DashTracker3", "DashTracker3", "DashTracker3", "All Companies")
+      NewDashboard("DashTracker3", "DashTracker3", "DashTracker3", "chkAllCompanies")
       
     // Step 8
+      Log["Message"]("Step 8")
       //Click New-New Query, select your BAQ, press OK       
       AddQueriesDashboard("BAQtracker3")  
 
     // Step 9
+      Log["Message"]("Step 9")
       // Right click on BAQ name from the tree and select New Tracker View       
       var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
       dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -156,6 +165,7 @@ function TC_Dashboard_Tracker_Views_3(){
       Log["Message"]("BAQtracker3 - New Tracker View was selected from Menu")
 
     // Step 10
+      Log["Message"]("Step 10")
       // Untick Visible checkbox for PartNum. Tick checkbox Prompt for NetWeight. In Condition field select 'GreaterThanOrEqualTo'
       // Tick checkbox Input Prompts Only at the bottom of the window. Press OK"       
 
@@ -195,10 +205,12 @@ function TC_Dashboard_Tracker_Views_3(){
       Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]() 
 
     // Step 11
+      Log["Message"]("Step 11")
       // >Go to Tools- Deploy Dashboard and tick Deploy Smart Client Application, Add Favorite Item and Generate Webform and click Deploy       
       DeployDashboard("Deploy Smart Client,Add Favorite Item,Generate Web Form")
 
     // Step 12 - 13
+      Log["Message"]("Step 12, 13")
       // Close Smart Client        
       // Log in again to E10       
       RestartSmartClient()
@@ -208,6 +220,7 @@ function TC_Dashboard_Tracker_Views_3(){
   //--- Testing Dashboard / Favorites ---------------------------------------------------------------------------------------------------------'
 
     // Step 14
+      Log["Message"]("Step 14")
       // On the Home Page from Smart Client on favorites tiles look for the created dashboard under Dashboard Assembly tile and open it
       ActivateFavoritesMenuTab()
       Log["Checkpoint"]("FavoritesMenuTab Activated")
@@ -216,6 +229,7 @@ function TC_Dashboard_Tracker_Views_3(){
       Log["Checkpoint"]("Dashboard opened from Favorite Menu")
 
     // Step 15  
+      Log["Message"]("Step 15")
       // On NetWeight field enter 0,5 and click Refresh
 
       var netWeightFieldTV = Aliases["Epicor"]["MainController"]['FindChild'](["ClrClassName", "FullName"], ["*Editor*", "*numPart_NetWeight*"], 30)
@@ -246,6 +260,7 @@ function TC_Dashboard_Tracker_Views_3(){
 
 
     // Step 16
+      Log["Message"]("Step 16")
       // Close Smart Client        
       DeactivateFavoritesMenuTab()
       CloseSmartClient()
@@ -261,7 +276,8 @@ function TC_Dashboard_Tracker_Views_3(){
         Press Additional Settings button at the bottom of the form->Customize Format window appears
         Select Decimal Symbol=dot. 
         Save */       
-
+      Log["Message"]("Step 21")
+      
       //opens control cmd and opens control panel
       OpenCMD("control")
       
@@ -273,9 +289,10 @@ function TC_Dashboard_Tracker_Views_3(){
       Delay(2500)
 
     // Step 22 - Log in  
+      Log["Message"]("Step 22")
       StartSmartClient()
 
-      Login(Project["Variables"]["username"], Project["Variables"]["password"])
+      Login("manager", "manager")
       
       ActivateFullTree()
 
@@ -291,7 +308,7 @@ function TC_Dashboard_Tracker_Views_3(){
           Go to System Setup-Security Maintenance-User Account Maintenance
           Select your user and check that Format Culture= Estonian(Estonia)
     */
-      
+      Log["Message"]("Step 23")
       MainMenuTreeViewSelect("Epicor Education;Main Plant;System Setup;Security Maintenance;User Account Security Maintenance")
 
       var accountMgmtPanel = Aliases["Epicor"]["UserAccountForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]
@@ -320,11 +337,14 @@ function TC_Dashboard_Tracker_Views_3(){
 
       Aliases["Epicor"]["UserAccountForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
+      RestartSmartClient()
+
   //-------------------------------------------------------------------------------------------------------------------------------------------'
 
   //--- Testing Dashboard / Favorites ---------------------------------------------------------------------------------------------------------'
 
     // Step 24
+      Log["Message"]("Step 24")
       // On the Home Page from Smart Client on favorites tiles look for the created dashboard under Dashboard Assembly tile and open it
       ActivateFavoritesMenuTab()
       Log["Checkpoint"]("FavoritesMenuTab Activated")
@@ -333,6 +353,7 @@ function TC_Dashboard_Tracker_Views_3(){
       Log["Checkpoint"]("Dashboard opened from Favorite Menu")
 
     // Step 25  
+      Log["Message"]("Step 25")
       // On NetWeight field enter 1,5 and click Refresh
 
       var netWeightFieldTV = Aliases["Epicor"]["MainController"]['FindChild'](["ClrClassName", "FullName"], ["*Editor*", "*numPart_NetWeight*"], 30)
