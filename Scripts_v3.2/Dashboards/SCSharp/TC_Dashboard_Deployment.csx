@@ -34,7 +34,8 @@ function Dashboard_Deployment()
     
     // - Retrieve SalesPersonWorkbench dashboard       
       OpenDashboard(dashb1)
-
+      
+      Delay(5000)
       //Click OK on message dialog
       ClickButton("OK")
 
@@ -70,7 +71,8 @@ function Dashboard_Deployment()
     Log["Message"]("Step 8 - Create new Dashboard '"+ dashb2 + "'")
 
     NewDashboard(dashb2,"","")
-
+    
+    Delay(2500)
     AddQueriesDashboard(dashb2Query1)
 
     ClickMenu("Tools->Deploy Dashboard")
@@ -109,6 +111,7 @@ function Dashboard_Deployment()
    // Step 10
     Log["Message"]("Step 10 - Validation of dialog messages")
     // Fill “Caption” field with “MyCaption” text but leave the “Description” field empty
+    Delay(2500)
     ClickButton("OK")
 
     var dashboardCaption = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtCaption"]
@@ -200,28 +203,32 @@ function Dashboard_Deployment()
 
     // Search for PartOnHandStatus dashboard and retrieve it  
     EnterText("txtKeyField", dashb3 + "[Tab]", "Adding Name")   
-
+    
+    Delay(10000)
   // Step 37
     Log["Message"]("Step 37 - Click on Actions> Deploy UI Application")
     // Click on Actions> Deploy UI Application        
     ClickMenu("Actions->Deploy UI Application")
 
-    Delay(1500)
-
+    
+/*
     var statusBar = Aliases["Epicor"]["DashboardForm"]["WinFormsObject"]("baseStatusBar")["Panels"]["Item"](0)["DisplayText"]
     
     while(statusBar != "Ready"){
       Delay(1500)
       statusBar = Aliases["Epicor"]["DashboardForm"]["WinFormsObject"]("baseStatusBar")["Panels"]["Item"](0)["DisplayText"]
     }
-    Log["Message"]("Status - " + statusBar)
-
+    Log["Message"]("Status - " + statusBar)*/
+    
+    Delay(10000)
+    
+    Delay(2500)
   // Step 38
     Log["Message"]("Step 38 - Click on Actions> Modify Dashboard")
     // Click on Actions> Modify Dashboard       
     ClickMenu("Actions->Modify Dashboard")
 
-    Delay(5000)
+    Delay(10000)
 
     ClickButton("OK")
 
@@ -299,7 +306,7 @@ function Dashboard_Deployment()
 
 function DashboardPanelTest(){
   ClickMenu("Edit->Refresh")
-
+  Delay(5500)
   var gridDashboard = RetrieveGridsMainPanel()
   
   if(gridDashboard[0]["Rows"]["Count"] > 0 ){
