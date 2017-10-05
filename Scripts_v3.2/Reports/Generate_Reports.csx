@@ -36,7 +36,9 @@ function ReportARInvoice() {
 	var reportStyleCombo = Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpReportStyle"]["cboStyle"]
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	//Activates 'Filter' Tab
 	Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
@@ -121,7 +123,9 @@ function ReportJobTraveler(){
 	var reportStyleCombo = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
@@ -193,11 +197,13 @@ function ReportSalesOrder(){
 	Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Sales Order Acknowledgement")
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+	// var reportStyleCombo = Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	//Go to 'filter' tab
 	Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
@@ -266,7 +272,9 @@ function ReportProFormaInv(){
 	var reportStyleCombo = Aliases["Epicor"]["ProFormaInvcReportForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["grbSched"]["cboStyle"]
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	//Pending Validation
 	Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
@@ -317,8 +325,10 @@ function ReportPurchaseOrder(){
 	//Select Report style
 	var reportStyleCombo = Aliases["Epicor"]["POForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grp3"]["cboStyle"]
 
+	Delay(1000)
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	//Pending Validation
 	Delay(2500)
@@ -370,7 +380,9 @@ function ReportQuoteform(){
 	var reportStyleCombo = Aliases["Epicor"]["QuotFormForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["cboStyle"]
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	//Pending Validation
 	Delay(2500)
@@ -415,7 +427,9 @@ function ReportAPPaymentform(){
 	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
@@ -492,7 +506,9 @@ function ReportPrintPackingform(){
 	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
-	DropDownValue(reportStyleCombo, reportStyle)
+	// DropDownValue(reportStyleCombo, reportStyle)
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
 
 	// Activates 'Filter' tab
 	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
