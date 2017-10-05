@@ -1,6 +1,7 @@
 //Find only one object with specific parameters
 function FindObject(className, props, vals, parentWnd, depth ){
   try{
+    parentWnd = parentWnd? parentWnd : FindTopMostForm() 
     var objects =  FindObjects(className, props, vals, parentWnd, depth)
 
     if (objects["length"] > 1)
