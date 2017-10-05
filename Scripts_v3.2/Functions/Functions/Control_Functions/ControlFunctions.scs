@@ -343,7 +343,8 @@ var E10 = Sys.Process("Epicor")
         idx++;
     }        
 
-    cmbCtrl["Click"](1,1)
+    // cmbCtrl["Click"](1,1)
+    cmbCtrl["Keys"]("[Tab]")
 
     // if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
     //     Log["Warning"]("ddWnd not closed correctly")
