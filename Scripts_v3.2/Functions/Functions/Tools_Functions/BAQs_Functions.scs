@@ -1,6 +1,7 @@
 //USEUNIT ControlFunctions
 //USEUNIT General_Functions
 //USEUNIT Menu_Functions
+//USEUNIT Grid_Functions
 
 /*Create a simple BAQ with one table
 * @param: baqData - An array that contains the information of the BAQ to create
@@ -33,7 +34,7 @@ function CreateSimpleBAQ(baqData){
 * @param: baqID - String that contains the information of the BAQ 'Id'
 * @return: none*/
 function OpenBAQ(baqID){
-  var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
+  // var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
   //Change to "General" tab
   OpenPanelTab("General")
@@ -63,7 +64,7 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
   // Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|New")
   ClickMenu("File->New")
   
-  var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
+  // var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
   //Set ID and description
   // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["txtQueryID"]["Keys"](baqID)
@@ -92,7 +93,7 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
 function AddTableBAQ(BAQFormDefinition, table){
   //Change to "Query Builder" tab
   // BAQFormDefinition["dockableWindow2"]["Activate"]()
-
+  Delay(1500)
   //Activate 'Phrase Build'
   // BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
   OpenPanelTab("Query Builder->Phrase Build")
@@ -182,7 +183,7 @@ function AddColumnsBAQ(BAQFormDefinition, table, columns){
 /*Analyzes if there is no error in syntaxis of the data added to the BAQ
 * @param: BAQFormDefinition - Object that contains the definition of the form
 * @return: none*/
-function AnalyzeSyntaxisBAQ(BAQFormDefinition){
+function AnalyzeSyntaxisBAQ(){
   //-Validate if Analize is active
   // BAQFormDefinition["dockableWindow4"]["Activate"]()
   OpenPanelTab("Analyze")
@@ -196,7 +197,7 @@ function AnalyzeSyntaxisBAQ(BAQFormDefinition){
 * @param: BAQFormDefinition - Object that contains the definition of the form
 * @param: parameterValue - String. In case it's needed for testing purpose
 * @return: none*/
-function TestResultsBAQ(BAQFormDefinition, parameterValue){
+function TestResultsBAQ(parameterValue){
   //Activate Analyze tab
   // BAQFormDefinition["dockableWindow4"]["Activate"]()
   OpenPanelTab("Analyze")
@@ -205,34 +206,41 @@ function TestResultsBAQ(BAQFormDefinition, parameterValue){
   // BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["btnTest"]["Click"]()
   ClickButton("Test...")
 
+  // CREATE FUNTION TO CATCH NEW WINDOWS IN ANY CASE
+
   if (Aliases["Epicor"]["BaseForm"]["Exists"]) {
 
-    var pnlParametersBAQField = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpFields"]["pnlFields"]
-    var pnlParametersBAQBtn = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpButtons"]
-    
-    var fieldParameter = pnlParametersBAQField["FindAllChildren"]("FullName", "*edt*", 5)["toArray"]();
-    var btnParameter = pnlParametersBAQBtn["FindAllChildren"]("FullName", "*btn*", 5)["toArray"]();
+    ComboboxSelect("edt0", parameterValue)
+    ClickButton("OK")
 
-    fieldParameter[0]["setFocus"]()
-    fieldParameter[0]["Click"]()
-
-    while(true){
-      fieldParameter[0]["Keys"]("[Down]")
-      if (fieldParameter[0]["Value"] == parameterValue) {
-        fieldParameter[0]["Keys"]("[Tab]")
-        break
-      }
-    }
+    // var pnlParametersBAQField = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpFields"]["pnlFields"]
+    // var pnlParametersBAQBtn = Aliases["Epicor"]["BaseForm"]["pnlMain"]["grpButtons"]
     
-    for (var i = 0; i <= btnParameter.length -1; i++) {
-      if(btnParameter[i]["Text"] == "OK"){
-        btnParameter[i]["Click"]()
-        break
-      }
-    }
+    // var fieldParameter = pnlParametersBAQField["FindAllChildren"]("FullName", "*edt*", 5)["toArray"]();
+    // var btnParameter = pnlParametersBAQBtn["FindAllChildren"]("FullName", "*btn*", 5)["toArray"]();
+
+    // fieldParameter[0]["setFocus"]()
+    // fieldParameter[0]["Click"]()
+
+    // while(true){
+    //   fieldParameter[0]["Keys"]("[Down]")
+    //   if (fieldParameter[0]["Value"] == parameterValue) {
+    //     fieldParameter[0]["Keys"]("[Tab]")
+    //     break
+    //   }
+    // }
+    
+    // for (var i = 0; i <= btnParameter.length -1; i++) {
+    //   if(btnParameter[i]["Text"] == "OK"){
+    //     btnParameter[i]["Click"]()
+    //     break
+    //   }
+    // }
   }
 
-  if (BAQFormDefinition["dockableWindow4"]["analyzePanel1"]["queryExecPanel1"]["windowDockingArea1"]["dockableWindow1"]["queryResultsPanel1"]["grdResults"]["Rows"]["Count"] < 0)
+  var tesResultstGrid = FindObject("*Grid*", "Name", "*grdResults*") 
+  
+  if (tesResultstGrid["Rows"]["Count"] < 0)
     Log["Warning"]("Returned 0 Records")
   else
     Log["Message"]("Returned more than 0 Records on BAQ analysis")
