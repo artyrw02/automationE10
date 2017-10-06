@@ -355,3 +355,12 @@ var E10 = Sys.Process("Epicor")
   }
 
 
+
+function GetTreePanel(value){
+  var treeObj = FindObject("*Tree*", "Name", "*" + value + "*")
+
+  return treeObj
+}
+
+
+  
