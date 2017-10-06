@@ -13,6 +13,10 @@ function Dashboard_BAQ_Parameters(){
 // Steps 2
 function CreateBAQ1(){
 
+  ExpandComp(company1)
+
+  ChangePlant(plant1)
+
   //Open Business Activity Query to create BAQ   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
   Log["Message"]("Business Activity Query form called")
@@ -32,7 +36,7 @@ function CreateBAQ2(){
   
   var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
-  CreateBAQ("baqParams2", "baqParams2")
+  CreateBAQ(baqData2["Id"], baqData2["Description"])
 
   AddTableBAQ(BAQFormDefinition, "OrderDtl")
   
@@ -104,7 +108,7 @@ function CreateBAQ2(){
   AnalyzeSyntaxisBAQ()
 
   //Test Data
-  TestResultsBAQ(BAQFormDefinition, "23")
+  TestResultsBAQ("23")
 
   //Save BAQ
   SaveBAQ()
@@ -112,7 +116,7 @@ function CreateBAQ2(){
   //Exit BAQ
   ExitBAQ()
 
-  Log["Message"]("baqParams2 created")
+  Log["Message"](baqData2["Id"] + " created")
 
 }
 
@@ -181,7 +185,7 @@ function DashboardPanelTest(){
   //Gives time to load the children inside the variable
   Delay(2000)
 
-  var baqGrid = GetGrid(baqData["Id"])
+  var baqGrid = GetGrid(baqData2["Id"])
 
   if(baqGrid["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Grid retrieved " + baqGrid["Rows"]["Count"] + " records.")
