@@ -1,0 +1,44 @@
+//USEUNIT ObjectLib
+
+
+// Gets the object type checkbox
+function GetForm(FormName){
+  var wnd = FindObject("*EpiCheckBox*", "Name",  "WinFormsObject(\"" + cbName + "\")", wnd)
+  return wnd
+}
+
+function ActivateForm(FormName){
+  var wnd = GetForm(FormName)
+
+  if(wnd["Exists"]){
+    wnd["Activate"]()
+    Log["Message"]("Form '" + FormName + "' activated.")
+  }else{
+    Log["Error"]("Form '" + FormName + "' not found.")
+  }
+}
+
+function CloseForm(FormName){
+  var wnd = GetForm(FormName)
+
+  if(wnd["Exists"]){
+    wnd["Close"]()
+    Log["Message"]("Form '" + FormName + "' closed.")
+  }else{
+    Log["Error"]("Form '" + FormName + "' not found.")
+  }
+}
+
+  // CheckErrorWindow
+
+function VerifyForm(caption){
+  var wnd = FindTopMostForm()
+
+  if (aqString.Trim(wnd["WndCaption"]) == aqString.Trim(caption)){ 
+    return true
+  }else{
+    return false
+  }
+
+}
+
