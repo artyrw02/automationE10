@@ -14,6 +14,9 @@ function TC_Dashboard_All_companies(){
 
 //Step 2
 function CreateBAQ(){
+  ExpandComp(company1)
+
+  ChangePlant(plant1)
 
   Log["Message"]("Step 2")
 
@@ -44,7 +47,7 @@ function CreateDashboard(){
   // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
   var dashboardTree = GetTreePanel()
 
-  dashboardTree["ClickItem"]("Queries->" + baqData1["Id"] + ": " + baqData1["Id"])
+  dashboardTree["ClickItem"]("Queries|" + baqData1["Id"] + ": " + baqData1["Id"])
 
   // var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
   // dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -60,17 +63,20 @@ function CreateDashboard(){
  
   Log["Message"]("Step 10, 11")
   DeployDashboard("Deploy Smart Client,Generate Web Form")
+
+  ExitDashboard()
 }
 
 //Step 12
-function CreateMenu(){
-    Log["Message"]("Step 12")
-    
-    //Open Menu maintenance   
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
+function CreateMenuDashboard(){
 
-    //Creates Menu
-    CreateMenu(MenuData1)
+  Log["Message"]("Step 12")
+  
+  //Open Menu maintenance   
+  MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
+
+  //Creates Menu
+  CreateMenu(MenuData1)
 }
 
 //Step 13
@@ -113,7 +119,7 @@ function TestMenuDataDB1_EPIC07(){
 
     MainMenuTreeViewSelect(treeMainPanel2 + "Sales Management;Customer Relationship Management;Setup;" + MenuData1["menuName"])
 
-    var verifyForm = VerifyForm(caption)
+    var verifyForm = VerifyForm(MenuData1["menuName"])
 
     if(verifyForm){
       Log["Checkpoint"]("Menu is available for this company")
@@ -265,7 +271,6 @@ function DashbMaintenance(){
     ChangePlant(plant1)
     MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
-
     Log["Message"]("Step 35")
 
     EnterText("txtKeyField", dashb1 + "[Tab]", "Adding ID of dashboard")
@@ -342,6 +347,8 @@ function DashbMaintenance(){
 
     ClickMenu("Actions->Modify Dashboard")
 
+    Delay(5000)
+    
     var verifyForm = VerifyForm(dashb1)
     // if(Aliases["Epicor"]["Dashboard"]["Exists"] == true && Aliases["Epicor"]["Dashboard"]["WndCaption"] == dashb1){
     if (verifyForm) {
