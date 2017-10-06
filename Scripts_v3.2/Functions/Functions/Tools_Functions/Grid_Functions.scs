@@ -1,3 +1,5 @@
+//USEUNIT ObjectLib
+
 /* Retrieves the column index of the grid specified in the parameter
 * @param: grid - An object that contains the information of a grid
 * @param: column - String that has the name of the column that will return the index
@@ -322,10 +324,20 @@ function SelectCellDropdownGrid(column, dropValue, ultraGrid){
 //Retrieves all the grids in any Dashboard installed in the Main Panel
 //returns an array of objects with the grids
 function RetrieveGridsMainPanel(){
-  var dashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+  var dashboardMainPanel =  FindTopMostForm()
     
-  var gridDashboardPanelChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 7)["toArray"]();
+  var gridDashboardPanelChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 30)["toArray"]();
   return gridDashboardPanelChildren
+}
+
+function GetGrid(value){
+  var gridsMainPanel = RetrieveGridsMainPanel()
+
+    for (var i = 0; i < gridsMainPanel["length"]; i++) {
+      if (gridsMainPanel[i]["WndCaption"] == value +': Summary') {
+        return gridsMainPanel[i]
+      }
+    }
 }
 
 /* Finds value in cells inside a grid
