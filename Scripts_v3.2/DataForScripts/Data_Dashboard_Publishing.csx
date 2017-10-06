@@ -8,7 +8,7 @@
 
 //Companies that will be used through the test case
 var company1 = "Epicor Education"
-var plant1 = "Main Plant"
+var plant1 = "Main"
 
 //Used to navigate thru the Main tree panel
 var treeMainPanel1 = setCompanyMainTree(company1,plant1)
