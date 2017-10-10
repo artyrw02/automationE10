@@ -1,9 +1,9 @@
 //USEUNIT ObjectLib
-
+//USEUNIT ControlFunctions
 
 // Gets the object type checkbox
 function GetForm(FormName){
-  var wnd = FindObject("*EpiCheckBox*", "Name",  "WinFormsObject(\"" + cbName + "\")", wnd)
+  var wnd = FindObject("*EpiCheckBox*", "Name",  "WinFormsObject(\"" + FormName + "\")")
   return wnd
 }
 
@@ -42,3 +42,40 @@ function VerifyForm(caption){
 
 }
 
+//Used to catch a windows message 
+// Designed for System Dashboards mainly
+function CheckWindowMessage(WndCaption){
+  var count = 0
+
+  while(true){
+    Delay(2000)
+    var windowsMsg = FindObject("*", "Name",  "*" + WndCaption + "*")
+
+    if(windowsMsg["Exists"]){
+      Log["Message"]("Validating Dialog Message - " + windowsMsg["WndCaption"])
+      ClickButton("OK")
+      break
+    }
+    count++
+
+    if(count == 5){
+      break
+      Runner["Stop"]()
+      Log["Error"]("Check")
+    }
+  }
+}
+
+
+//Used to catch Exception object window
+/*function CheckExceptionWnd(){
+
+  var eDialog = FindObject("*", "WndCaption",   "WinFormsObject(\"ExceptionDialog\")")
+
+  if(eDialog["Exists"]){
+    return true
+  }else{
+    return false
+  }
+
+}*/
