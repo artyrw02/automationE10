@@ -1,5 +1,6 @@
 //USEUNIT ControlFunctions
 //USEUNIT General_Functions
+//USEUNIT Menu_Functions
 //USEUNIT Grid_Functions
 
 //Script to generate reports
@@ -87,17 +88,17 @@ function ReportARInvoice() {
 		Log["Error"]("Customer was not selected.")
 	}
 
-Delay(2500)
-	Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
-	Log["Message"]("'Generate Only' option clicked from menu")
+	Delay(2500)
+		Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+		Log["Message"]("'Generate Only' option clicked from menu")
 
-	Delay(4000)
-	//Close Form
-	Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		Delay(4000)
+		//Close Form
+		Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
 
-	if(!Aliases["Epicor"]["ARInvForm"]["Exists"]){
-		Log["Message"]("Form 'Mass Print AR Invoices' closed.")
-	}
+		if(!Aliases["Epicor"]["ARInvForm"]["Exists"]){
+			Log["Message"]("Form 'Mass Print AR Invoices' closed.")
+		}
 }
 
 /*Jobtrav: JobTraveler.
@@ -407,7 +408,7 @@ function ReportQuoteform(){
 
 // ---------------------------------------------------------------------------------------------------------
 
-// APCheck: AP Payment Entry.
+// APCheck: AP Payment Entry -- PENDING
 //                 Finantial Management/Cash Management/General Operations/Payment Entry
 //                 Group: 
 
@@ -503,7 +504,7 @@ function ReportPrintPackingform(){
 	}
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+	// var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
 	// DropDownValue(reportStyleCombo, reportStyle)
@@ -518,7 +519,9 @@ function ReportPrintPackingform(){
 	var manufacturing = "102"
 	
 	//enter 102 for customer Dalton Manufacturing
-	Aliases["Epicor"]["CustShipSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["tabSearchPacks"]["etpBasic"]["basicPanel1"]["gbSortBy"]["eneStartWith1"]["Keys"](manufacturing)
+	// Aliases["Epicor"]["CustShipSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["tabSearchPacks"]["etpBasic"]["basicPanel1"]["gbSortBy"]["eneStartWith1"]["Keys"](manufacturing)
+	EnterText("eneStartWith1", manufacturing)
+	ClickButton("Search")
 
 	var customerShipGrid = Aliases["Epicor"]["CustShipSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
 
@@ -563,3 +566,172 @@ function ReportPrintPackingform(){
 	}
 }
    
+
+/* Customer Statements
+                Financial Management/Accounts Receivable/Reports/Customer Statements
+                Go to filter tab. 
+                Click Customer... button.
+                Search - ADDISON
+                Select 102 Dalton Manufacturing.*/
+function ReportCustomerStatements(){
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
+	MainMenuTreeViewSelect("Epicor USA;Chicago;Financial Management;Accounts Receivable;Reports;Customer Statements")
+	// var reportStyle = "Standard - SSRS - PACKSLIP2"
+
+	// if (Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	//     Log["Message"]("Form 'Mass Print Packing Slips' opened.")
+	// }
+
+	//Select Report style
+	// var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+
+	//Activates combo
+	// DropDownValue(reportStyleCombo, reportStyle)
+	// Delay(1000)
+	// ComboboxSelect("cboStyle", reportStyle)
+
+	// Activates 'Filter' tab
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	OpenPanelTab("Filter")
+	
+	ClickButton("Customer...")
+
+	var customer = "ADDISON"
+	
+	EnterText("txtStartWith1", customer)
+	ClickButton("Search")
+
+	var customerShipGrid = Aliases["Epicor"]["CustomerSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+
+	var packColumn = getColumn(customerShipGrid, "Cust. ID")
+
+	for(var i = 0; i < customerShipGrid["Rows"]["Count"]; i++){
+		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumn)
+
+		if(cell["Text"]["OleValue"] == customer){
+			customerShipGrid["Rows"]["Item"](i)["Selected"] = true
+			Log["Message"]("Customer " +  customer + " was selected.")
+			break
+		}
+	}
+	
+	ClickButton("OK")
+
+	// var packListGrid = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdPackSlipList"]
+
+	// var packColumnID = getColumn(packListGrid, "Pack ID")
+
+	// for(var i = 0; i < packListGrid["wRowCount"]; i++){
+	// 	var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumnID)
+
+	// 	if(cell["Text"]["OleValue"] == customer){
+	// 		Log["Message"]("Customer pack " +  customer + " was selected and displayed on pack slips list.")
+	// 		break
+	// 	}
+	// }
+
+	//Pending Validation
+	Delay(2500)
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
+
+	Delay(4000)
+	//closes Packing Slip form (print)
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
+	
+	// if (!Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	//     Log["Message"]("Packing Slip Form closed")
+	// }
+}
+
+/* Sales Order Pick List
+                Sales Management/Order Management/Reports/Sales Order Pick List
+                Go to filter tab. 
+                Click Customer... button.
+                Search - ADDISON
+                Select 102 Dalton Manufacturing.*/
+function ReportSOPickList(){
+    ExpandComp("Epicor USA")
+
+    ChangePlant("Chicago")
+
+	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Order Management;Reports;Sales Order Pick List")
+	// var reportStyle = "Standard - SSRS - PACKSLIP2"
+
+	// if (Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	//     Log["Message"]("Form 'Mass Print Packing Slips' opened.")
+	// }
+
+	//Select Report style
+	// var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+
+	//Activates combo
+	// DropDownValue(reportStyleCombo, reportStyle)
+	// Delay(1000)
+	// ComboboxSelect("cboStyle", reportStyle)
+
+	// Activates 'Filter' tab
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	OpenPanelTab("Filter")
+	
+	ClickButton("Order...")
+
+	var order = "5482"
+	
+	EnterText("eneStartsWith1", order)
+	ClickButton("Search")
+
+	var OrderGrid = Aliases["Epicor"]["WinFormsObject"]("SalesOrderSearchForm")["WinFormsObject"]("pnlSearchGrid")["WinFormsObject"]("ugdSearchResults")
+
+	var salesOrderColumn = getColumn(OrderGrid, "Sales Order")
+
+	for(var i = 0; i < OrderGrid["Rows"]["Count"]; i++){
+		var cell = OrderGrid["Rows"]["Item"](i)["Cells"]["Item"](salesOrderColumn)
+
+		if(cell["Text"]["OleValue"] == order){
+			OrderGrid["Rows"]["Item"](i)["Selected"] = true
+			Log["Message"]("Customer " +  order + " was selected.")
+			break
+		}
+	}
+	
+	ClickButton("OK")
+
+	OpenPanelTab("Selection")
+
+	var actualDate = Aliases["Epicor"]["WinFormsObject"]("SOPickListForm")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow3")["WinFormsObject"]("mainPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow2")["WinFormsObject"]("detailPanel1")["WinFormsObject"]("groupBox1")["WinFormsObject"]("tdtFrom")["WinFormsObject"]("dteActualDate")
+	actualDate["Keys"]("10/09/2013" + "[Tab]")
+
+	// var packListGrid = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdPackSlipList"]
+
+	// var packColumnID = getColumn(packListGrid, "Pack ID")
+
+	// for(var i = 0; i < packListGrid["wRowCount"]; i++){
+	// 	var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumnID)
+
+	// 	if(cell["Text"]["OleValue"] == customer){
+	// 		Log["Message"]("Customer pack " +  customer + " was selected and displayed on pack slips list.")
+	// 		break
+	// 	}
+	// }
+
+	//Pending Validation
+	Delay(2500)
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
+
+	Delay(4000)
+	//closes Packing Slip form (print)
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
+	
+	// if (!Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
+	//     Log["Message"]("Packing Slip Form closed")
+	// }
+}
