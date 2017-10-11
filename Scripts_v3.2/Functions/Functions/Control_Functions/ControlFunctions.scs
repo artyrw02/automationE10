@@ -167,6 +167,26 @@ var E10 = Sys.Process("Epicor")
     }
   }
 
+  /** Get text from the textbox
+  * @param ctrlName \a required Name of textbox control
+  * @return If textbox found then return text value, otherwise throw exception */
+  function GetText(ctrlName, parentWnd)
+  {
+      try{
+          var ctrl = GetTextBox(ctrlName, parentWnd)
+          if (!ctrl["Exists"])
+              throw "TextBox not found '" + ctrlName + "'"
+          
+          var text = ctrl["Text"]["OleValue"] //GetObjectProperty.Value(ctrl, "Text")
+          Log["Message"]("Text found '" + text.substr(0, 120) + "'")
+          return text
+      }
+      catch(e){    
+          Log["Message"](e["message"])
+          return null
+      }    
+  }
+
 //-------------------------------
 //PANEL (TABS) FUNTIONS
 //-------------------------------
