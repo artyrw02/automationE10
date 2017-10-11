@@ -391,26 +391,7 @@ function CreateCopySysDashb(){
 
     ClickMenu("Actions->Modify Dashboard")
    
-    var count = 0
-    while(true){
-      var windowsExceptionDialogBtn = Aliases["Epicor"]["FindAllChildren"]("FullName", "*Button*", 2)["toArray"]();
-
-      if (windowsExceptionDialogBtn[0] != null && windowsExceptionDialogBtn[0] != null || windowsExceptionDialogBtn[0] != undefined && windowsExceptionDialogBtn[0] != undefined) {
-        if(windowsExceptionDialogBtn[0]["Exists"]){
-          Log["Message"]("Validating Warning - System Dashboards may not be modified. - Clicked OK on message ")
-          // windowsExceptionDialogBtn[0]["Click"]()
-           ClickButton("OK")
-          break
-        }
-      }
-      count++
-
-      if(count == 5){
-        break
-        Runner["Stop"]()
-        Log["Error"]("Check")
-      }
-    } 
+    CheckWindowMessage("System Dashboards")
     
     Log["Message"]("Step 49")
     Delay(2000)
