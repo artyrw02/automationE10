@@ -4,8 +4,11 @@
 //USEUNIT Grid_Functions
 //USEUNIT DataBase_Functions
 //USEUNIT ControlFunctions
+//USEUNIT Menu_Functions
 
-function TC_Dashboard_Updatable_Customized_Form_sys(){
+
+function TC_Dashboard_Updatable_Customized_Form_sys(){}
+
   //Test Case -UD Dashboard
 
     // Variables
@@ -15,24 +18,15 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
     //Used to navigate thru the Main tree panel
     var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 
-  //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
-   
-    StartSmartClient()
+//Steps 2 to 4
+function OpenFormDevMode(){
+    // 2- Developer mode 
+    Log["Message"]("Step 2")
+    ClickMenu("Options->Developer Mode")
 
-    Login(Project["Variables"]["username"], Project["Variables"]["password"])
-    ActivateFullTree()
-
-    Delay(1500)
     ExpandComp(company1)
 
     ChangePlant(plant1)
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
-
-  //---- Add the dashboard in a Customization --------------------------------------------------------------------------------------------------'
-
-    // 2- Developer mode 
-    Log["Message"]("Step 2")
-    Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")
 
     // 3- Go to Production Management> Job Management> Setup> Part
     Log["Message"]("Step 3")
@@ -40,95 +34,112 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
 
     // 4- Check Base Only and click Ok       
     Log["Message"]("Step 4")
-    Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["grpNoLayer"]["chkBaseOnly"]["Checked"] = true
+    CheckboxState("chkBaseOnly", true)
 
-    Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
+    ClickButton("OK")
+}
 
+// Steps 5 to 22
+function CreateCustomization() {
     // 5- click Tools > Customization
     Log["Message"]("Step 5")
-    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Customization")
+    Delay(1000)
+    ClickMenu("Tools->Customization")
 
     // 6- go to Wizards > Sheet Wizard  tab
     Log["Message"]("Step 6")
+
+    Delay(1000)
+
     var CustomToolsDialog = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]
     CustomToolsDialog["tpgCodeWizards"]["Tab"]["Selected"] = true
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["Tab"]["Selected"] = true
 
-    CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnNewCustomSheet"]["Click"]()
 
+    ClickButton("New Custom Sheet")
+    
     // 7- Select mainPanel1 from Dockable Sheets Listing
     Log["Message"]("Step 7")
-    CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["lstStandardSheets"]["ClickItem"]("mainPanel1")
+
+    var dockableSheetsList = FindObject("*ListBox*", "Name", "*lstStandardSheets*")
+    dockableSheetsList["ClickItem"]("mainPanel1")
     Log["Message"]("mainPanel1 sheet selected")
 
     // 8- Name, text, tab text = ""TEST""
     Log["Message"]("Step 8")
-    CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["txtSheetName"]["Keys"]("PartStatus")
-    CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["txtSheetText"]["Keys"]("PartStatus")
-    CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["txtSheetTextTab"]["Keys"]("PartStatus") 
+    EnterText("txtSheetName", "PartStatus")
+    EnterText("txtSheetText", "PartStatus")
+    EnterText("txtSheetTextTab", "PartStatus")
 
     // 9- Click Add Dashboard Button
     Log["Message"]("Step 9")
-    Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnAddDashboard"]["Click"]()
+    ClickButton("Add Dashboard...")
     
     // 10- Click on Dashboard ID button       
     Log["Message"]("Step 10")
-    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep1"]["txtDashboardID"]["Keys"]("PartOnHandStatus")
+    EnterText("txtDashboardID", "PartOnHandStatus")
 
     // 12- click ""Next"" button
     Log["Message"]("Step 12")
-    Aliases["Epicor"]["CustomWizardDialog"]["btnNext"]["Click"]()
+    ClickButton("Next>")
 
     // 13- Select Subscribe to UI data (include retrieve button)
     Log["Message"]("Step 13")
-    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep2"]["radRetrieveWButton"]["ultraOptionSet1"]["Click"]()
+
+    var dockableSheetsList = FindObject("*RadioButton*", "Name", "*radRetrieveWButton*")
+    dockableSheetsList["Click"]()
 
     // click ""Next"" button
-    Aliases["Epicor"]["CustomWizardDialog"]["btnNext"]["Click"]()
+    ClickButton("Next>")
 
     // 14- Choose ""Part"" data view
     Log["Message"]("Step 14")
-    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep3a"]["lstDataViews"]["ClickItem"]("Part")
+    var dataViewList = FindObject("*ListBox*", "Name", "*lstDataViews*")
+    dataViewList["ClickItem"]("Part")
 
     // 15- Choose ""PartNum"" column
     Log["Message"]("Step 15")
-    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep3a"]["lstDataColumns"]["ClickItem"]("PartNum")
+    var dataColumnList = FindObject("*ListBox*", "Name", "*lstDataColumns*")
+    dataColumnList["ClickItem"]("PartNum")
 
     // click ""Add Subscribe column"" button
-    Aliases["Epicor"]["CustomWizardDialog"]["CustomEmbeddedDashboardPanelWizardPanel"]["grpStep3a"]["btnAddSubscribeColumn"]["Click"]()
+    ClickButton("Add Subscribe Column")
     
     // 16- click "Finish" button
     Log["Message"]("Step 16")
-    Aliases["Epicor"]["CustomWizardDialog"]["WinFormsObject"]("btnFinish")["Click"]()
+    ClickButton("Finish")
     
     // 17- Press Right arrow to move tab to ""PartStatus Sheets"" panel
     Log["Message"]("Step 17")
-    Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["customSheetWizard"]["btnAddCustomSheet"]["Click"]()
+    ClickButton("", "btnAddCustomSheet")
     Log["Message"]("Sheet was added to Custom Sheets.")
+
     // 18- Click File> Save customization As  
     Log["Message"]("Step 18")
-    Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Save Customization As ...")
+    ClickMenu("File->Save Customization As ...")
 
     // 19- On Name enter EmbDash and on Description enter Embedded Dashboard and click Save        
     Log["Message"]("Step 19")
-    Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("grpNewCustInfo")["WinFormsObject"]("txtKey1a")["Keys"]("EmbDash")
-    Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("grpNewCustInfo")["WinFormsObject"]("txtDescription")["Keys"]("Embedded Dashboard")
-    Aliases["Epicor"]["WinFormsObject"]("CustomSaveDialog")["WinFormsObject"]("btnOk")["Click"]()
-    Aliases["Epicor"]["WinFormsObject"]("CustomCommentDialog")["WinFormsObject"]("btnOK")["Click"]()
+    EnterText("txtKey1a","EmbDash")
+    EnterText("txtDescription", "Embedded Dashboard")
+    ClickButton("Save")
+    ClickButton("OK")
 
     Log["Message"]("Customization saved.")
     
     // 21- close the customization 
     Log["Message"]("Step 21")
-    Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Close")
+    ClickMenu("File->Close")
     Log["Message"]("Customization closed.")   
 
     // 22- Close the form"  
     Log["Message"]("Step 22")
-    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")   
+    ClickMenu("File->Exit") 
     Log["Message"]("Part Form closed.")   
+}
 
-
+  
+function OpenCustomedForm(){
     // 23- Go to Production Management> Job Management> Setup> Part (Open again Part Maintenance (using developer mode)
     Log["Message"]("Step 23")
     ActivateMainDevMode()
@@ -139,26 +150,31 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
     /*(FUTURE REFERENCE FOR TREE LIST ITEMS)*/
     // 24- Select the created customizacion       
     Log["Message"]("Step 24")
-    Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["etvAvailableLayers"]["ClickItem"]("Base|EP|Customizations|EmbDash")
-    Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
+    var availableLayers = GetTreePanel("AvailableLayers")
+    availableLayers["ClickItem"]("Base|EP|Customizations|EmbDash")
+    ClickButton("OK")
+}    
+
+
+function TestCustomedForm(){
 
     var testPart = "00P1"
     // 25, 26 - Click on Part button - Click Search and select a Part and click Ok                              
     Log["Message"]("Step 25,26")
-    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
-    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["partDetailPanel1"]["groupBox1"]["tbPart"]["Keys"](testPart)
-    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["dockableWindow3"]["partDockPanel1"]["windowDockingArea1"]["dockableWindow1"]["partDetailPanel1"]["groupBox1"]["tbPart"]["Keys"]("[Tab]")
-
+    OpenPanelTab("Part")
+    EnterText("tbPart", testPart + "[Tab]")
     Log["Message"]("00P1 customer was retrived")
-
-    Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["WinFormsObject"]("DockableWindow", "", 7)["Activate"]()
+    
+    Delay(2500)
+    
+    OpenPanelTab("PartStatus")
+    Delay(6000)
     Log["Message"]("PartStatus tab Activated")
 
-    Delay(4500)
-    
     Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
+    // ClickMenu("Edit->Refresh")
     
-    var PartTxtfield = Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["WinFormsObject"]("DockableWindow", "", 7)["WinFormsObject"]("PartStatus")["WinFormsObject"]("PartStatusDashboardPanel")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow3")["WinFormsObject"]("dbFillPanel1")["WinFormsObject"]("WindowDockingArea", "", 5)["WinFormsObject"]("DockableWindow", "", 1)["WinFormsObject"]("a01b8010-d16b-4b6c-8e86-337ac824f218")["WinFormsObject"]("QueryFillPanel")["WinFormsObject"]("WindowDockingArea", "")["WinFormsObject"]("DockableWindow", "", 1)["WinFormsObject"]("b96666ad-9cbc-482e-8793-97d8650c6b0c")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow1")["WinFormsObject"]("TrackerPanel")["WinFormsObject"]("txtPart_PartNum")
+    var PartTxtfield = GetTextBox("txtPart_PartNum")
 
     if(PartTxtfield["Text"]["OleValue"] == testPart){
         Log["Checkpoint"]("Part " + testPart + " was retrieved and displayed on PartStatus")
@@ -167,6 +183,8 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
         Log["Error"]("Part " + testPart + " was not retrieved and displayed on PartStatus")
     }
     
+    ClickButton("Retrieve")
+
     var searchGrid = Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]
     
     var searchResultGrid = searchGrid["FindChild"](["FullName", "WndCaption"], ["*grid*","*Search Results*"], 15)
@@ -185,7 +203,7 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
        Log["Error"]("Part "+ testPart+" is not displayed on grid")
     }
 
-    //Activate Warehouse tab
+    Delay(2500)
     Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["DockableWindow"]["PartStatus"]["PartStatusDashboardPanel"]["windowDockingArea1"]["dockableWindow3"]["dbFillPanel1"]["WindowDockingArea"]["DockableWindow"]["Activate"]()
 
     var warehouseResultGrid = searchGrid["FindChild"](["FullName", "WndCaption"], ["*grid*","*All*"], 20)
@@ -196,16 +214,13 @@ function TC_Dashboard_Updatable_Customized_Form_sys(){
         Log["Error"]("There is not a part retrieved and displayed on warhouse grid")
     }
 
-    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+    ClickMenu("File->Exit")
     Log["Message"]("Part Form closed")
 
     DeactivateMainDevMode()
-  //-------------------------------------------------------------------------------------------------------------------------------------------' 
-
-   DeactivateFullTree()
-
-   CloseSmartClient()
-
 }
+
+    
+
 
 
