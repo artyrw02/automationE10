@@ -55,7 +55,6 @@ function CreateCustomization() {
     CustomToolsDialog["tpgCodeWizards"]["Tab"]["Selected"] = true
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["Tab"]["Selected"] = true
 
-
     ClickButton("New Custom Sheet")
     
     // 7- Select mainPanel1 from Dockable Sheets Listing
@@ -86,8 +85,8 @@ function CreateCustomization() {
     // 13- Select Subscribe to UI data (include retrieve button)
     Log["Message"]("Step 13")
 
-    var dockableSheetsList = GetRadioBtn("radRetrieveWButton")
-    dockableSheetsList["Click"]()
+    var radiobtn = GetRadioBtn("radRetrieveWButton")
+    radiobtn["Click"]()
 
     // click ""Next"" button
     ClickButton("Next>")
