@@ -185,7 +185,7 @@ function DashboardPanelTest(){
   //Gives time to load the children inside the variable
   Delay(2000)
 
-  var baqGrid = GetGrid(baqData2["Id"])
+  var baqGrid = GetGridMainPanelDashB(baqData2["Id"])
 
   if(baqGrid["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Grid retrieved " + baqGrid["Rows"]["Count"] + " records.")

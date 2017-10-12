@@ -61,7 +61,7 @@ function CreateCustomization() {
     // 7- Select mainPanel1 from Dockable Sheets Listing
     Log["Message"]("Step 7")
 
-    var dockableSheetsList = FindObject("*ListBox*", "Name", "*lstStandardSheets*")
+    var dockableSheetsList = GetList("lstStandardSheets")
     dockableSheetsList["ClickItem"]("mainPanel1")
     Log["Message"]("mainPanel1 sheet selected")
 
@@ -86,7 +86,7 @@ function CreateCustomization() {
     // 13- Select Subscribe to UI data (include retrieve button)
     Log["Message"]("Step 13")
 
-    var dockableSheetsList = FindObject("*RadioButton*", "Name", "*radRetrieveWButton*")
+    var dockableSheetsList = GetRadioBtn("radRetrieveWButton")
     dockableSheetsList["Click"]()
 
     // click ""Next"" button
@@ -94,12 +94,12 @@ function CreateCustomization() {
 
     // 14- Choose ""Part"" data view
     Log["Message"]("Step 14")
-    var dataViewList = FindObject("*ListBox*", "Name", "*lstDataViews*")
+    var dataViewList = GetList("lstDataViews")
     dataViewList["ClickItem"]("Part")
 
     // 15- Choose ""PartNum"" column
     Log["Message"]("Step 15")
-    var dataColumnList = FindObject("*ListBox*", "Name", "*lstDataColumns*")
+    var dataColumnList = GetList("lstDataColumns")
     dataColumnList["ClickItem"]("PartNum")
 
     // click ""Add Subscribe column"" button

@@ -98,7 +98,7 @@ function TestMenuDataDB1_EPIC06(){
 
   ClickMenu("Edit->Refresh")
 
-  var gridPanel = GetGrid(baqData1["Id"])
+  var gridPanel = GetGridMainPanelDashB(baqData1["Id"])
 
   if(gridPanel["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Data from grid was populated")
@@ -229,7 +229,7 @@ function TestMenuDataDB2_EPIC07(){
 
   ClickMenu("Edit->Refresh")
 
-  var gridPanel = GetGrid(baqData1["Id"])
+  var gridPanel = GetGridMainPanelDashB(baqData1["Id"])
 
   if(gridPanel["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Data from grid was populated")
@@ -252,7 +252,7 @@ function RetrieveMenuDataDB1_EPIC06(){
 
   ClickMenu("Edit->Refresh")
 
-  var gridPanel = GetGrid(baqData1["Id"])
+  var gridPanel = GetGridMainPanelDashB(baqData1["Id"])
 
   if(gridPanel["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Data from grid was populated")
