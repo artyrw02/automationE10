@@ -74,7 +74,18 @@ var E10 = Sys.Process("Epicor")
 
   function GetButtons(btnCaption, btnName, parentCtrl){
     var wnd = parentCtrl || FindTopMostForm()
-    return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
+    //return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
+
+    if(btnCaption != "")
+      return FindObjects("*Button", "WndCaption", ["*" + btnCaption + "*"], wnd)
+    if(btnName != "")
+      return FindObjects("*Button", "Name", ["*" + btnName], wnd)
+    if (btnCaption != "" && btnName != "")
+      return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
+      
+
+
+    //return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption + "*", "*" + (btnName || "?*")], wnd)
   }
 
   /** Clicks on button set in parameters
@@ -252,7 +263,6 @@ var E10 = Sys.Process("Epicor")
         Log["Message"](e["Message"])
       }
   }
-
   //parse each branch of ctrl tree to search for first WindowDockingArea control and return array
   function findWndDockingAreas(ctrl, depth){
       if (!depth) return []
@@ -382,5 +392,14 @@ function GetTreePanel(value){
   return treeObj
 }
 
+function GetList(cntrlName){
+  var listObj = FindObject("*ListBox*", "Name", "*" + cntrlName + "*")
 
-  
+  return listObj
+}
+
+function GetRadioBtn(cntrlName){
+  var radioBtn = FindObject("*RadioButton*", "Name", "*"+ cntrlName +"*")
+
+  return radioBtn
+}
