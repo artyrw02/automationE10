@@ -330,7 +330,8 @@ function RetrieveGridsMainPanel(){
   return gridDashboardPanelChildren
 }
 
-function GetGrid(value){
+//GetGrid MainPanel
+function GetGridMainPanel(value){
   var gridsMainPanel = RetrieveGridsMainPanel()
 
     for (var i = 0; i < gridsMainPanel["length"]; i++) {
@@ -338,6 +339,12 @@ function GetGrid(value){
         return gridsMainPanel[i]
       }
     }
+}
+
+
+function GetGrid(ctrlName){
+    var wnd = FindTopMostForm()
+    return FindObject("*Grid*", "Name", "*" + ctrlName + "*", wnd) 
 }
 
 /* Finds value in cells inside a grid
