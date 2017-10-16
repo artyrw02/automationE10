@@ -45,7 +45,7 @@ function CreateDashboard(){
 
   Log["Message"]("Step 9")
   // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-  var dashboardTree = GetTreePanel()
+  var dashboardTree = GetTreePanel("DashboardTree")
 
   dashboardTree["ClickItem"]("Queries|" + baqData1["Id"] + ": " + baqData1["Id"])
 
@@ -90,6 +90,10 @@ function RestartE10(){
 // Steps 14 to 16
 function TestMenuDataDB1_EPIC06(){
 
+  ExpandComp(company1)
+
+  ChangePlant(plant1)
+
   Log["Message"]("Step 14")
 
   MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuData1["menuName"])
@@ -98,7 +102,7 @@ function TestMenuDataDB1_EPIC06(){
 
   ClickMenu("Edit->Refresh")
 
-  var gridPanel = GetGridMainPanelDashB(baqData1["Id"])
+  var gridPanel = GetGridMainPanel(baqData1["Id"])
 
   if(gridPanel["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Data from grid was populated")
@@ -147,14 +151,9 @@ function VerifyAllCompaniesChk() {
     OpenDashboard(dashb1)
 
     //Verify dialog message
-    if(Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]){
-     Log["Message"]("message 'Dashboards created in remote company may not be modified' is displayed")
-     // Aliases["Epicor"]["dlgDashboardCompanyMismatchWarning"]["btnOK"]["Click"]()
-     ClickButton("OK")
-    }else{
-      Log["Error"]("message 'Dashboards created in remote company may not be modified' is not displayed")
-    }
+    CheckWindowMessage("Dashboard")
 
+    Delay(3500)
     OpenPanelTab("General")
 
     // Verify checkbox 'All companies' 
@@ -229,7 +228,7 @@ function TestMenuDataDB2_EPIC07(){
 
   ClickMenu("Edit->Refresh")
 
-  var gridPanel = GetGridMainPanelDashB(baqData1["Id"])
+  var gridPanel = GetGridMainPanel(baqData1["Id"])
 
   if(gridPanel["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Data from grid was populated")
@@ -252,7 +251,7 @@ function RetrieveMenuDataDB1_EPIC06(){
 
   ClickMenu("Edit->Refresh")
 
-  var gridPanel = GetGridMainPanelDashB(baqData1["Id"])
+  var gridPanel = GetGridMainPanel(baqData1["Id"])
 
   if(gridPanel["Rows"]["Count"] > 0){
     Log["Checkpoint"]("Data from grid was populated")
