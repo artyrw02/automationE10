@@ -116,7 +116,7 @@ function TestMenuDataDB1_EPIC06(){
 }
 
 //Step 17, 18
-function TestMenuDataDB1_EPIC07(){
+function Dashb1Exists_EPIC07(){
 
     Log["Message"]("Step 17, 18")
     ExpandComp(company2)
