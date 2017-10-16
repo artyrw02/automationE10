@@ -279,7 +279,6 @@ function TestDashb(){
   }else{
     Log["Error"]("Data wasn't populated")
   }
-
   var nameColumn = getColumn(grid, "Name")
   var addressColumn = getColumn(grid, "Address")
 
@@ -287,7 +286,7 @@ function TestDashb(){
   grid["Rows"]["Item"](0)["Cells"]["Item"](nameColumn)["Click"]()
 
   oldValue1 = grid["Rows"]["Item"](0)["Cells"]["Item"](nameColumn)["Text"]["OleValue"]
-  newValue1 = grid["Rows"]["Item"](0)["Cells"]["Item"](addressColumn)["EditorResolved"]["SelectedText"] = "Test1"
+  newValue1 = grid["Rows"]["Item"](0)["Cells"]["Item"](addressColumn)["EditorResolved"]["SelectedText"] = "Test2"
 
   //Activates row 1
   grid["Rows"]["Item"](1)["Cells"]["Item"](nameColumn)["Click"]()
@@ -303,6 +302,7 @@ function TestDashb(){
   }else{
     Log["Error"]("Data was not modified.")
   }
+
 
   // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Save")
   ClickMenu("File->Save")
@@ -323,7 +323,8 @@ function AddCustomizationDashb(){
 
     // Open Sales Management > Customer Relationship Management > Setup > Customer(select Base only option and click OK in the ""Select Customization"" dialog)
     MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;Customer")
-
+    
+    Delay(2500)
     // Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["grpNoLayer"]["chkBaseOnly"]["Checked"] = true
     CheckboxState("chkBaseOnly", true)
 
@@ -488,7 +489,6 @@ function TestCustomizedForm(){
   // Go to the ""TEST"" tab (where the dashboard is contained) and take a look at its content"    
   // Aliases["Epicor"]["CustomerEntryForm"]["windowDockingArea1"]["dockableWindow1"]["mainDock1"]["windowDockingArea1"]["dockableWindow1"]["customerDock1"]["windowDockingArea1"]["DockableWindow"]["Activate"]();
   OpenPanelTab("test")
-
   ClickButton("Retrieve")
 
     // var grid = Aliases["Epicor"]["CustomerEntryForm"]["FindChild"](["WndCaption", "ClrClassName"], ["*baqID: Summary*", "*Grid*"], 30)

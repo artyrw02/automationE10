@@ -1228,6 +1228,7 @@ function TC_Dashboard_Tracker_Views_2(){
       Result: E10 is restarted        
     */    
       Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|Clear Client Cache")
+      ClickButton("Yes")
 
       Log["Message"]("Step 60")
       Delay(1000)

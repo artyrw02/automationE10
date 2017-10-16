@@ -5,7 +5,7 @@
 //USEUNIT DataBase_Functions
 
 function TC_Importing_exporting_Dashboards_E9E10(){
-  var dashboardImportedE10 = "C:\\ProgramData\\Epicor\\tyrell.playground.local-80\\3.2.100.0\\EPIC06\\shared\\Export\\DashDef -Regression.dbd"  
+  var dashboardImportedE10 = "C:\\Users\\Administrator\\Documents\\DashDef -Regression.dbd"  
   var dashboardID = "DashCaro" // Dashboard ID from imported dashboard
   var baqE9 = "EPIC06-testBAQCaro" //BAQ ID from imported dashboard
 
@@ -416,7 +416,7 @@ function TC_Importing_exporting_Dashboards_E9E10(){
       for (var i = 0; i < gridsMainPanel[1]["Rows"]["Count"]; i++) {
         //Points to column Part
         var aString = gridsMainPanel[1]["Rows"]["Item"](i)["Cells"]["Item"](columnPart)["Text"]["OleValue"]
-        var aSubString = "00"
+        var aSubString = "0"
         var Res, flag = true;
 
         Res = aqString["Find"](aString, aSubString)

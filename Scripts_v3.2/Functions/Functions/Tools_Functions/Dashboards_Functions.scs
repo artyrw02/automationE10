@@ -110,6 +110,7 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
       CheckboxState(arrOptions[i], true)
     }
   }
+
 }
 
 /*funtion that adds a query on dashboard defined
