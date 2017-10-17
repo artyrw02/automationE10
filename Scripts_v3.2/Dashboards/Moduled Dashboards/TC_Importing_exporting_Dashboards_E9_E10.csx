@@ -19,92 +19,102 @@ function TC_Importing_exporting_Dashboards_E9E10(){
     "validations" : "Enable"
   }
 
-  //--- Start Smart Client and log in ---------------------------------------------------------------------------------------------------------'
+
+function ImportDashboardE9(){
+
+  // 2- Log in to E10. Go to Executive Analysis> Business Activity Management> Setup>Dashboard.  Go to Tools>Developer Mode       
+    //Navigate and open Dashboard
+    Log["Message"]("Step 2")
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+
+    // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+    Log["Message"]("Dashboard opened")
+    
+    //Enable Dashboard Developer Mode  
+    DevMode()
+    Log["Message"]("DevMode activated")
    
-    StartSmartClient()
+  // 3- Click File> Import Dashboard Definition and select the dashboard that you created. On Import BAQ Options click Ok        
+    Log["Message"]("Step 3")
 
-    Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
-    ActivateFullTree()
-
-    ExpandComp("Epicor Education")
-
-    ChangePlant("Main Plant")
-  //-------------------------------------------------------------------------------------------------------------------------------------------'
-
-  //--- Creates Dashboards --------------------------------------------------------------------------------------------------------------------'
-
-    // 2- Log in to E10. Go to Executive Analysis> Business Activity Management> Setup>Dashboard.  Go to Tools>Developer Mode       
-      //Navigate and open Dashboard
-
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
-
-      var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-      Log["Checkpoint"]("Dashboard opened")
-      
-      //Enable Dashboard Developer Mode  
-      DevMode()
-      Log["Checkpoint"]("DevMode activated")
+    // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Import Dashboard Definition")
+    ClickMenu("File->Import Dashboard Definition")
      
-    // 3- Click File> Import Dashboard Definition and select the dashboard that you created. On Import BAQ Options click Ok        
+    var windowImportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Import Dashboard*","*ComboBox*"], 30)
+    if (windowImportDashBD["Exists"]) {
+      var windowImportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
+      windowImportDashBD["Keys"](dashboardImportedE10)
+      windowImportDashBDSaveBtn["Click"]()
+      Log["Message"]("Dashboard imported correctly")
+    }else{
+      Log["Error"]("Dashboard wasn't imported correctly, Object doesn't exists")    
+    }
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Import Dashboard Definition")
-       
-      var windowImportDashBD = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*Import Dashboard*","*ComboBox*"], 30)
-      if (windowImportDashBD["Exists"]) {
-        var windowImportDashBDSaveBtn = Aliases["Epicor"]["FindChild"](["FullName", "WndClass"],["*&Open*","*Button*"], 30)
-        windowImportDashBD["Keys"](dashboardImportedE10)
-        windowImportDashBDSaveBtn["Click"]()
-        Log["Message"]("Dashboard imported correctly")
-      }else{
-        Log["Error"]("Dashboard wasn't imported correctly, Object doesn't exists")    
+    if (Aliases["Epicor"]["DashboardBAQImportDialog"]["Exists"]) {
+      Log["Message"]("BAQ Import dialog is displayed")
+      Aliases["Epicor"]["DashboardBAQImportDialog"]["btnOkay"]["Click"]()
+    }else{
+      Log["Error"]("BAQ Import dialog is not displayed")
+    }
+
+    Delay(2500)
+    // Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
+    OpenPanelTab("General")
+
+    var txtDefinitonID = GetText("txtDefinitonID")
+    if(txtDefinitonID != ""){
+      Log["Message"]("Dashboard Imported")
+    }else{
+      Log["Error"]("Dashboard wasn't imported")
+    }
+
+  // 4- Save your dashboard   
+  Log["Message"]("Step 4")    
+    SaveDashboard()
+    ExitDashboard()
+}
+
+function RegenerateImportedBAQ(){
+  // 5- Go to Updatable BAQ Maintenance (System Management> Upgrade/Mass Regeneration)        
+    MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Updatable BAQ Maintenance")
+    
+  // 6- On Query ID retrieve the created query for your dashboard that you previously imported  
+    // Aliases["Epicor"]["UBAQMaintForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["btnKeyField"]["Click"]()
+    ClickButton("Query ID...")
+    // Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["txtStartWith"]["Keys"](baqE9)
+    EnterText("txtStartWith", baqE9)
+
+    // Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["WinFormsObject"]("chkShared")["CheckState"] = "Indeterminate"
+    CheckboxState("chkShared", "Indeterminate")
+    // Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["btnSearch"]["Click"]()
+    ClickButton("Search")
+
+    // var searchGrid = Aliases["Epicor"]["BAQDesignerSearchForm"]["FindChild"](["WndCaption","ClrClassName"], ["*Search Results*", "*Grid*"],30)
+    var searchGrid = GetGrid("Search")
+    var queryID = getColumn(searchGrid, "Query ID")
+
+    for(var i = 0; i < searchGrid["Rows"]["Count"];i++){
+      if(searchGrid["Rows"]["Item"](i)["Cells"]["Item"](queryID)["Text"]["OleValue"] == baqE9){
+        searchGrid["Rows"]["Item"](i)["Activate"]()
+        // Aliases["Epicor"]["BAQDesignerSearchForm"]["ultraStatusBar2"]["btnOK"]["Click"]()
+        ClickButton("OK")
       }
+    }
 
-      if (Aliases["Epicor"]["DashboardBAQImportDialog"]["Exists"]) {
-        Log["Message"]("BAQ Import dialog is displayed")
-        Aliases["Epicor"]["DashboardBAQImportDialog"]["btnOkay"]["Click"]()
-      }else{
-        Log["Error"]("BAQ Import dialog is not displayed")
-      }
+    //Used to activate query
+    // var treeView = Aliases["Epicor"]["UBAQMaintForm"]["FindChild"]("ClrClassName", "*TreeView", 30)
+    var treeView = GetTreePanel("treeView")
+    treeView["ClickItem"]("Updatable Queries|" + baqE9)
 
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
-      if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]["Text"] != ""){
-        Log["Message"]("Dashboard Imported")
-      }else{
-        Log["Error"]("Dashboard wasn't imported")
-      }
+  // 7- Select Actions>Regenerate selected  
+  Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Regenerate Selected")
+  Delay(1500)
+  Log["Checkpoint"]("BAQ regenerated")  
+}
 
-    // 4- Save your dashboard       
-      SaveDashboard()
-      ExitDashboard()
 
-    // 5- Go to Updatable BAQ Maintenance (System Management> Upgrade/Mass Regeneration)        
-      MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Updatable BAQ Maintenance")
-      
-    // 6- On Query ID retrieve the created query for your dashboard that you previously imported  
-      Aliases["Epicor"]["UBAQMaintForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["btnKeyField"]["Click"]()
-      Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["txtStartWith"]["Keys"](baqE9)
 
-      Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["WinFormsObject"]("chkShared")["CheckState"] = "Indeterminate"
-      Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["btnSearch"]["Click"]()
-      var searchGrid = Aliases["Epicor"]["BAQDesignerSearchForm"]["FindChild"](["WndCaption","ClrClassName"], ["*Search Results*", "*Grid*"],30)
-      var queryID = getColumn(searchGrid, "Query ID")
-
-      for(var i = 0; i < searchGrid["Rows"]["Count"];i++){
-        if(searchGrid["Rows"]["Item"](i)["Cells"]["Item"](queryID)["Text"]["OleValue"] == baqE9){
-          searchGrid["Rows"]["Item"](i)["Activate"]()
-          Aliases["Epicor"]["BAQDesignerSearchForm"]["ultraStatusBar2"]["btnOK"]["Click"]()
-        }
-      }
-
-      //Used to activate query
-      var treeView = Aliases["Epicor"]["UBAQMaintForm"]["FindChild"]("ClrClassName", "*TreeView", 30)
-      treeView["ClickItem"]("Updatable Queries|"+baqE9)
-
-    // 7- Select Actions>Regenerate selected  
-    Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Regenerate Selected")
-    Delay(1500)
-    Log["Checkpoint"]("BAQ regenerated")
 
     /*
       Step No: 8 - 9
