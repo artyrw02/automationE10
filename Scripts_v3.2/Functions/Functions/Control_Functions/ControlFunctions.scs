@@ -41,6 +41,18 @@ var E10 = Sys.Process("Epicor")
       var cbState = cbCtrl.ThreeState ? cbCtrl.CheckState.OleValue : cbCtrl.get_Checked() 
       return (cbState == state)            
   }
+
+  function verifyStateCheckbox(cbName){
+    var checkbox = GetCheckbox(cmbName)
+
+    if (checkbox["CheckState"]["OleValue"] == "Checked") {
+      return true
+    }else if (checkbox["CheckState"]["OleValue"] == "Unchecked") {
+      return false
+    }else{
+      return "Indeterminate"
+    }
+  }
 //-------------------------------
 //BUTTONS FUNTIONS
 //-------------------------------
@@ -82,7 +94,7 @@ var E10 = Sys.Process("Epicor")
       return FindObjects("*Button", "Name", ["*" + btnName], wnd)
     if (btnCaption != "" && btnName != "")
       return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
-      
+
 
 
     //return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption + "*", "*" + (btnName || "?*")], wnd)
