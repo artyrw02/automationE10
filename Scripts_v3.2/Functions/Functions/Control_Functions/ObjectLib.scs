@@ -27,6 +27,8 @@ function FindObjects(className, props, vals, parentWnd, depth ){
         var aProps = [].concat(props)
         var aVals = [].concat(vals)
 
+        var parentWnd = parentWnd? parentWnd : FindTopMostForm() 
+
         var depth = 30
 
         //@TODO:  
