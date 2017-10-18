@@ -76,11 +76,13 @@ function ImportDashboardE9(){
 }
 
 function RegenerateImportedBAQ(){
-  // 5- Go to Updatable BAQ Maintenance (System Management> Upgrade/Mass Regeneration)        
+  // 5- Go to Updatable BAQ Maintenance (System Management> Upgrade/Mass Regeneration)   
+    Log["Message"]("Step 5")      
     MainMenuTreeViewSelect("Epicor Education;Main Plant;System Management;Upgrade/Mass Regeneration;Updatable BAQ Maintenance")
     
   // 6- On Query ID retrieve the created query for your dashboard that you previously imported  
     // Aliases["Epicor"]["UBAQMaintForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["btnKeyField"]["Click"]()
+    Log["Message"]("Step 6") 
     ClickButton("Query ID...")
     // Aliases["Epicor"]["BAQDesignerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["epiTabControl1"]["epiTabPage"]["basicPanel1"]["txtStartWith"]["Keys"](baqE9)
     EnterText("txtStartWith", baqE9)
@@ -108,26 +110,25 @@ function RegenerateImportedBAQ(){
     treeView["ClickItem"]("Updatable Queries|" + baqE9)
 
   // 7- Select Actions>Regenerate selected  
-  Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Regenerate Selected")
+  // Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Regenerate Selected")
+  Log["Message"]("Step 7") 
+  ClickMenu("Actions->Regenerate Selected")
   Delay(1500)
-  Log["Checkpoint"]("BAQ regenerated")  
+  Log["Message"]("BAQ regenerated")  
+
+
+  // Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+  ClickMenu("File->Exit")
 }
 
+function OpenImportedDashb(){
+  
+  MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
+  OpenDashboard(dashboardID)
+  Log["Message"]("Dashboard retrived")
 
-
-
-    /*
-      Step No: 8 - 9
-      Step:  Validate dashboard has all the configurations imported      
-    */
-
-    // 8- Go to Query properties on Dashboard designer        
-    Aliases["Epicor"]["UBAQMaintForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-    MainMenuTreeViewSelect("Epicor Education;Main Plant;Executive Analysis;Business Activity Management;General Operations;Dashboard")
-    OpenDashboard(dashboardID)
-    Log["Checkpoint"]("Dashboard retrived")
-
-    var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+    // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
+    var dashboardTree = GetTreePanel("DashboardTree")
          
     var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
     dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
@@ -153,31 +154,6 @@ function RegenerateImportedBAQ(){
     var column = getColumn(dashboardGrid, "Column")
     var columnPrompt = getColumn(dashboardGrid, "Prompt")
 
-    // for (var i = 0; i <= dashboardGrid["wRowCount"] - 1; i++) {
-    //   var cell = dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
-
-    //   if (cell["Text"] == "Customer_Address1") {
-    //     if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-    //       Log["Checkpoint"]("Prompt checkbox on Address1 is Checked")
-    //     }else{
-    //       Log["Error"]("Prompt checkbox on Address1 is not checked")
-    //     }
-    //   }
-    //   if (cell["Text"] == "Customer_City") {
-    //     if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-    //       Log["Checkpoint"]("Prompt checkbox on City is Checked")
-    //     }else{
-    //       Log["Error"]("Prompt checkbox on City is not checked")
-    //     }
-    //   }
-    //   if (cell["Text"] == "Customer_Country") {
-    //     if(dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"]){
-    //       Log["Checkpoint"]("Prompt checkbox on Country is Checked")
-    //     }else{
-    //       Log["Error"]("Prompt checkbox on Country is not checked")
-    //     }
-    //   }            
-    // }
     var fields = "Customer_Address1,Customer_City,Customer_Country"
 
     fields = fields.split(",")
@@ -248,7 +224,17 @@ function RegenerateImportedBAQ(){
     }
 
     //Click Ok to close Properties
-    Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()  
+    Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()    
+}
+
+
+    /*
+      Step No: 8 - 9
+      Step:  Validate dashboard has all the configurations imported      
+    */
+
+    // 8- Go to Query properties on Dashboard designer        
+    
 
     // 10- On Dashboard designer add the zPOLine query       
     AddQueriesDashboard("zPOLine")
