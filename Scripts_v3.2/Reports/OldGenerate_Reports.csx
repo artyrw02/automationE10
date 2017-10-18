@@ -34,19 +34,16 @@ function ReportARInvoice() {
 	}
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpReportStyle"]["cboStyle"]
-
-	//Activates combo
-	// DropDownValue(reportStyleCombo, reportStyle)
 	Delay(1000)
 	ComboboxSelect("cboStyle", reportStyle)
 
 	//Activates 'Filter' Tab
-	Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	OpenPanelTab("Filter")
 
 	ClickButton("Customers...")
 
-	Aliases["Epicor"]["CustomerSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["etcSearch"]["etpBasic"]["basicPanel1"]["gbBasic"]["txtStartWith1"]["Keys"](customer)
+	EnterText("txtStartWith1", customer)
+
 	ClickButton("Search")
 
 	var searchGrid = Aliases["Epicor"]["CustomerSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
@@ -69,9 +66,9 @@ function ReportARInvoice() {
 		Log["Error"]("Search for customer didn't retrieve records.")
 	}
 
-	var customersGrid = Aliases["Epicor"]["ARInvForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea1"]["dockableWindow1"]["listPanel1"]["grdCustomers"]
+	var customersGrid = GetGrid("grdCustomers")
 	
-	if(customersGrid["wRowCount"] > 0){
+	if(customersGrid["Rows"]["Count"] > 0){
 		var CustIDColumn = getColumn(customersGrid, "Cust. ID")
 
 		for(var i = 0; i < customersGrid["Rows"]["Count"]; i++){
@@ -79,22 +76,20 @@ function ReportARInvoice() {
 
 			if (cell["Text"]["OleValue"] == customer) {
 			    Log["Message"]("Customer " + customer + " appears on grid.")
-			    //Click on menu 'Generate only'
 			    break
 			}
 		}
-
 	}else{
 		Log["Error"]("Customer was not selected.")
 	}
 
 	Delay(2500)
-		Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+		ClickMenu("File->Generate Only")
 		Log["Message"]("'Generate Only' option clicked from menu")
 
 		Delay(4000)
 		//Close Form
-		Aliases["Epicor"]["ARInvForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		ClickMenu("File->Exit")
 
 		if(!Aliases["Epicor"]["ARInvForm"]["Exists"]){
 			Log["Message"]("Form 'Mass Print AR Invoices' closed.")
@@ -121,22 +116,18 @@ function ReportJobTraveler(){
 	}
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox2"]["cboStyle"]
-
-	//Activates combo
-	// DropDownValue(reportStyleCombo, reportStyle)
 	Delay(1000)
 	ComboboxSelect("cboStyle", reportStyle)
 
 	// Activates 'Filter' tab
-	Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
+	OpenPanelTab("Filter")
 
 	ClickButton("Job...")
 
 	//Opens 'Job search' form 
 	ClickButton("Search")	
 
-	var jobEntrySearchForm = Aliases["Epicor"]["JobEntrySearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+	var jobEntrySearchForm = GetGrid("ugdSearchResults")
 
 	//Select first three jobs
 	while(true){
@@ -147,7 +138,8 @@ function ReportJobTraveler(){
 
 	ClickButton("OK")
 
-	var gridJobs = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow3"]["filterPanel1"]["windowDockingArea1"]["dockableWindow1"]["jobPanel1"]["grdJob"]
+	// var gridJobs = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow3"]["filterPanel1"]["windowDockingArea1"]["dockableWindow1"]["jobPanel1"]["grdJob"]
+	var gridJobs = GetGrid("grdJob")
 
 	if (gridJobs["wRowCount"] == 3) {
 		Log["Message"]("Jobs were selected.")
@@ -157,12 +149,12 @@ function ReportJobTraveler(){
 
 	//Pending Generate only
 	Delay(2500)
-	Aliases["Epicor"]["JobTravForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
 	//Close Form
-	Aliases["Epicor"]["JobTravForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
 
 	if(!Aliases["Epicor"]["JobTravForm"]["Exists"]){
 		Log["Message"]("Form 'Job Traveler' closed.")
@@ -191,27 +183,21 @@ function ReportSalesOrder(){
 	}
 
 	//Select Order
-	Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"](order)
-	Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"]("[Tab]")
+	EnterText("txtKeyField", order + "[Tab]")
 
 	//Click on 'print'
-	Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Sales Order Acknowledgement")
+	ClickMenu("Actions->Print Sales Order Acknowledgement")
 
 	//Select Report style
-	// var reportStyleCombo = Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
-
-
-	//Activates combo
-	// DropDownValue(reportStyleCombo, reportStyle)
 	Delay(1000)
 	ComboboxSelect("cboStyle", reportStyle)
 
 	//Go to 'filter' tab
-	Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	OpenPanelTab("Filter")
 
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|&New")
+	ClickMenu("File->New")
 
-	var gridSalesOrder = Aliases["Epicor"]["SalesOrderAckForm"]["windowDockingArea1"]["dockableWindow1"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdOrders"]
+	var gridSalesOrder = GetGrid("grdOrders")
 
 	var orderColumn = getColumn(gridSalesOrder, "Order")
 
@@ -220,16 +206,18 @@ function ReportSalesOrder(){
 
 	//Pending Validation
 	Delay(2500)
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
+	
 	//closes OrderAck form (print)
-	Aliases["Epicor"]["SalesOrderAckForm"]["zSalesOrderAckForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
+
 	if (!Aliases["Epicor"]["SalesOrderAckForm"]["Exists"]) {
 	    Log["Message"]("Order Ack form closed")
 	    //closes PO form (entry)
-		Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	    ClickMenu("File->Exit")
 	}
 
 	if (!Aliases["Epicor"]["SalesOrderForm"]["Exists"]) {
@@ -263,14 +251,16 @@ function ReportProFormaInv(){
 	}
 
 	//Select Order
-	Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"](order)
-	Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"]("[Tab]")
+	// Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"](order)
+	// Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Keys"]("[Tab]")
+	EnterText("txtKeyField", order + "[Tab]")
 
 	// Select Actions > Print Pro-Forma Invoice.
-	Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Pro-forma Invoice")
+	// Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Pro-forma Invoice")
+	ClickMenu("Actions->Print Pro-Forma Invoice")
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["ProFormaInvcReportForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["grbSched"]["cboStyle"]
+	// var reportStyleCombo = Aliases["Epicor"]["ProFormaInvcReportForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["grbSched"]["cboStyle"]
 
 	//Activates combo
 	// DropDownValue(reportStyleCombo, reportStyle)
@@ -278,17 +268,20 @@ function ReportProFormaInv(){
 	ComboboxSelect("cboStyle", reportStyle)
 
 	//Pending Validation
-	Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	// Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
 
 	//closes OrderAck form (print)
-	Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	// Aliases["Epicor"]["ProFormaInvcReportForm"]["zProFormaInvcReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
 	if (!Aliases["Epicor"]["ProFormaInvcReportForm"]["Exists"]) {
 	    Log["Message"]("Order Ack form closed")
 	    //closes PO form (entry)
-		Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		// Aliases["Epicor"]["SalesOrderForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		ClickMenu("File->Exit")
 	}
 
 	if (!Aliases["Epicor"]["SalesOrderForm"]["Exists"]) {
@@ -317,14 +310,16 @@ function ReportPurchaseOrder(){
 	}
 
 	//Select PO number
-	Aliases["Epicor"]["POEntryForm"]["windowDockingArea2"]["dockableWindow1"]["mainDockPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["grpPO"]["txtPONumber"]["Keys"](poNum)
-	Aliases["Epicor"]["POEntryForm"]["windowDockingArea2"]["dockableWindow1"]["mainDockPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["grpPO"]["txtPONumber"]["Keys"]("[Tab]")
+	// Aliases["Epicor"]["POEntryForm"]["windowDockingArea2"]["dockableWindow1"]["mainDockPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["grpPO"]["txtPONumber"]["Keys"](poNum)
+	// Aliases["Epicor"]["POEntryForm"]["windowDockingArea2"]["dockableWindow1"]["mainDockPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["grpPO"]["txtPONumber"]["Keys"]("[Tab]")
+	EnterText("txtPONumber", poNum + "[Tab]")
 
 	//Click on 'print'
-	Aliases["Epicor"]["POEntryForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|&Print")
+	// Aliases["Epicor"]["POEntryForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|&Print")
+	ClickMenu("Actions->Print")
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["POForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grp3"]["cboStyle"]
+	// var reportStyleCombo = Aliases["Epicor"]["POForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grp3"]["cboStyle"]
 
 	Delay(1000)
 	//Activates combo
@@ -333,16 +328,19 @@ function ReportPurchaseOrder(){
 
 	//Pending Validation
 	Delay(2500)
-	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	// Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
     //closes PO form (print)
-	Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	// Aliases["Epicor"]["POForm"]["zPOForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
 	if (!Aliases["Epicor"]["POForm"]["Exists"]) {
 	    Log["Message"]("PO print form closed")
 	    //closes PO form (entry)
-		Aliases["Epicor"]["POEntryForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		// Aliases["Epicor"]["POEntryForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		ClickMenu("File->Exit")
 	}
 
 	if (!Aliases["Epicor"]["POEntryForm"]["Exists"]) {
@@ -371,14 +369,16 @@ function ReportQuoteform(){
 	}
 
 	//Select Opportunity/Quote
-	Aliases["Epicor"]["QuoteForm"]["windowDockingArea1"]["dockableWindow7"]["topLevelSheets1"]["windowDockingArea1"]["dockableWindow6"]["summaryPanel1"]["grpQuote"]["txtQuoteNumber"]["Keys"](quote)
-	Aliases["Epicor"]["QuoteForm"]["windowDockingArea1"]["dockableWindow7"]["topLevelSheets1"]["windowDockingArea1"]["dockableWindow6"]["summaryPanel1"]["grpQuote"]["txtQuoteNumber"]["Keys"]("[Tab]")
+	// Aliases["Epicor"]["QuoteForm"]["windowDockingArea1"]["dockableWindow7"]["topLevelSheets1"]["windowDockingArea1"]["dockableWindow6"]["summaryPanel1"]["grpQuote"]["txtQuoteNumber"]["Keys"](quote)
+	// Aliases["Epicor"]["QuoteForm"]["windowDockingArea1"]["dockableWindow7"]["topLevelSheets1"]["windowDockingArea1"]["dockableWindow6"]["summaryPanel1"]["grpQuote"]["txtQuoteNumber"]["Keys"]("[Tab]")
+	EnterText("txtQuoteNumber", quote + "[Tab]")
 
 	//Print Form
-	Aliases["Epicor"]["QuoteForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Form")
+	// Aliases["Epicor"]["QuoteForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|Print Form")
+	ClickMenu("Actions->Print Form")
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["QuotFormForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["cboStyle"]
+	// var reportStyleCombo = Aliases["Epicor"]["QuotFormForm"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["epiGroupBox2"]["cboStyle"]
 
 	//Activates combo
 	// DropDownValue(reportStyleCombo, reportStyle)
@@ -387,17 +387,20 @@ function ReportQuoteform(){
 
 	//Pending Validation
 	Delay(2500)
-	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	// Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
 	//closes Quote form (print)
-	Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	// Aliases["Epicor"]["QuotFormForm"]["zReportForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
 	
 	if (!Aliases["Epicor"]["QuotFormForm"]["Exists"]) {
 	    Log["Message"]("Quote print form closed")
 		//closes Quote form
-		Aliases["Epicor"]["QuoteForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		// Aliases["Epicor"]["QuoteForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+		ClickMenu("File->Exit")
 	}
 
 	if (!Aliases["Epicor"]["QuoteForm"]["Exists"]) {
@@ -425,7 +428,7 @@ function ReportAPPaymentform(){
 	}
 
 	//Select Report style
-	var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
+	// var reportStyleCombo = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["groupBox2"]["cboStyle"]
 
 	//Activates combo
 	// DropDownValue(reportStyleCombo, reportStyle)
@@ -433,14 +436,16 @@ function ReportAPPaymentform(){
 	ComboboxSelect("cboStyle", reportStyle)
 
 	// Activates 'Filter' tab
-	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	OpenPanelTab("Filter")
 	
 	ClickButton("Packing Slips...")
 
 	var manufacturing = "102"
 	
 	//enter 102 for customer Dalton Manufacturing
-	Aliases["Epicor"]["CustShipSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["tabSearchPacks"]["etpBasic"]["basicPanel1"]["gbSortBy"]["eneStartWith1"]["Keys"](manufacturing)
+	// Aliases["Epicor"]["CustShipSearchForm"]["windowDockingArea1"]["dockableWindow1"]["pnlSearchCrit"]["searchTabPanel1"]["tabSearchPacks"]["etpBasic"]["basicPanel1"]["gbSortBy"]["eneStartWith1"]["Keys"](manufacturing)
+	EnterText("eneStartWith1", manufacturing)
 
 	var customerShipGrid = Aliases["Epicor"]["CustShipSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
 
@@ -473,12 +478,14 @@ function ReportAPPaymentform(){
 
 	//Pending Validation
 	Delay(2500)
-	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
 	//closes Packing Slip form (print)
-	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
 	
 	if (!Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
 	    Log["Message"]("Packing Slip Form closed")
@@ -512,7 +519,8 @@ function ReportPrintPackingform(){
 	ComboboxSelect("cboStyle", reportStyle)
 
 	// Activates 'Filter' tab
-	Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
+	OpenPanelTab("Filter")
 	
 	ClickButton("Pack Slips...")
 
@@ -523,28 +531,32 @@ function ReportPrintPackingform(){
 	EnterText("eneStartWith1", manufacturing)
 	ClickButton("Search")
 
-	var customerShipGrid = Aliases["Epicor"]["CustShipSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+	// var customerShipGrid = Aliases["Epicor"]["CustShipSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+	var customerShipGrid = GetGrid("ugdSearchResults")
 
 	var packColumn = getColumn(customerShipGrid, "Pack")
 
-	for(var i = 0; i < customerShipGrid["wRowCount"]; i++){
+	for(var i = 0; i < customerShipGrid["Rows"]["Count"]; i++){
 		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumn)
-
+		
 		if(cell["Text"]["OleValue"] == manufacturing){
 			customerShipGrid["Rows"]["Item"](i)["Selected"] = true
 			Log["Message"]("Customer pack " +  manufacturing + " was selected.")
 			break
+		}else{
+			customerShipGrid["Rows"]["Item"](i)["Selected"] = false
 		}
 	}
 	
 	ClickButton("OK")
 
-	var packListGrid = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdPackSlipList"]
+	// var packListGrid = Aliases["Epicor"]["PackingSlipPrintForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["filter1"]["windowDockingArea2"]["dockableWindow1"]["listPanel1"]["grdPackSlipList"]
+	var packListGrid = GetGrid("grdPackSlipList")
 
 	var packColumnID = getColumn(packListGrid, "Pack ID")
 
 	for(var i = 0; i < packListGrid["wRowCount"]; i++){
-		var cell = customerShipGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumnID)
+		var cell = packListGrid["Rows"]["Item"](i)["Cells"]["Item"](packColumnID)
 
 		if(cell["Text"]["OleValue"] == manufacturing){
 			Log["Message"]("Customer pack " +  manufacturing + " was selected and displayed on pack slips list.")
@@ -554,12 +566,14 @@ function ReportPrintPackingform(){
 
 	//Pending Validation
 	Delay(2500)
-	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Generate Only")
+	ClickMenu("File->Generate Only")
 	Log["Message"]("'Generate Only' option clicked from menu")
 
 	Delay(4000)
 	//closes Packing Slip form (print)
-	Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	// Aliases["Epicor"]["PackingSlipPrintForm"]["zPackingSlipPrintForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
+	ClickMenu("File->Exit")
 	
 	if (!Aliases["Epicor"]["PackingSlipPrintForm"]["Exists"]) {
 	    Log["Message"]("Packing Slip Form closed")
