@@ -43,7 +43,7 @@ var E10 = Sys.Process("Epicor")
   }
 
   function verifyStateCheckbox(cbName){
-    var checkbox = GetCheckbox(cmbName)
+    var checkbox = GetCheckbox(cbName)
 
     if (checkbox["CheckState"]["OleValue"] == "Checked") {
       return true
@@ -399,9 +399,12 @@ var E10 = Sys.Process("Epicor")
 
 
 function GetTreePanel(value){
-  var treeObj = FindObject("*Tree*", "Name", "*" + value + "*")
-
-  return treeObj
+  var treeObj = FindObject("*TreeView", "Name", "*" + value + "*")
+  if (treeObj["Exists"]) 
+    return treeObj
+  var treeObj = FindObject("*UltraTree", "Name", "*" + value + "*")
+  if (treeObj["Exists"]) 
+    return treeObj
 }
 
 function GetList(cntrlName){
