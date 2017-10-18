@@ -3,7 +3,9 @@
 
 // Gets the object type checkbox
 function GetForm(FormName){
-  var wnd = FindObject("*EpiCheckBox*", "Name",  "WinFormsObject(\"" + FormName + "\")")
+  var E10 = Sys.Process("Epicor")
+
+  var wnd = FindObject("*Form*", "WndCaption", "*" + FormName + "*", E10 )
   return wnd
 }
 
@@ -18,19 +20,22 @@ function ActivateForm(FormName){
   }
 }
 
-function CloseForm(FormName){
-  var wnd = GetForm(FormName)
+function CloseForm(obj, FormName){
+  var wnd = obj ? obj : GetForm(FormName)
 
+  wndCaption = wnd["WndCaption"]
+  
   if(wnd["Exists"]){
     wnd["Close"]()
-    Log["Message"]("Form '" + FormName + "' closed.")
+    Log["Message"]("Form '" + (wndCaption || FormName) + "' closed.")
   }else{
-    Log["Error"]("Form '" + FormName + "' not found.")
+    Log["Error"]("Form '" + (wndCaption || FormName) + "' not found.")
   }
 }
 
   // CheckErrorWindow
 
+//Verifies if top form exists 
 function VerifyForm(caption){
   var wnd = FindTopMostForm()
 
@@ -41,6 +46,31 @@ function VerifyForm(caption){
   }
 
 }
+
+//Logs data of form on top
+function ValidatesFormOpened(caption){
+  var form = VerifyForm(caption)
+
+  if(form){
+    Log["Message"]("Form '" + caption + "' opened.")
+  }else{
+    Log["Error"]("Form '" + caption + "' not on screen or opened.")
+  }
+
+}
+
+//Logs data of form on top
+function ValidatesFormClosed(caption){
+  var form = GetForm(caption)
+
+  if(!form["Exists"]){
+    Log["Message"]("Form '" + caption + "' closed.")
+  }else{
+    CloseForm(form)
+  }
+
+}
+
 
 //Used to catch a windows message 
 // Designed for System Dashboards mainly
