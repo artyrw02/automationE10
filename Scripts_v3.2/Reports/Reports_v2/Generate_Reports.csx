@@ -507,6 +507,18 @@ function ReportCustomerStatements(){
     ExpandComp("Epicor USA")
 
     ChangePlant("Chicago")
+    
+    MainMenuTreeViewSelect("Epicor USA;Chicago;System Management;Reporting;Report Style")
+
+    EnterText("txtKeyField", "CustSt" + "[Tab]")
+
+    OpenPanelTab("Styles")
+
+    ComboboxSelect("cboOutputType", "XML")
+
+    ClickMenu("File->Save")
+    ClickMenu("File->Exit")
+
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Financial Management;Accounts Receivable;Reports;Customer Statements")
 	ValidatesFormOpened("Customer Statements Report")
@@ -559,6 +571,17 @@ function ReportSOPickList(){
     ExpandComp("Epicor USA")
 
     ChangePlant("Chicago")
+    // Modify report style
+    MainMenuTreeViewSelect("Epicor USA;Chicago;System Management;Reporting;Report Style")
+
+    EnterText("txtKeyField", "SOPick" + "[Tab]")
+
+    OpenPanelTab("Styles")
+
+    ComboboxSelect("cboOutputType", "XML")
+
+    ClickMenu("File->Save")
+    ClickMenu("File->Exit")
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Sales Management;Order Management;Reports;Sales Order Pick List")
 
