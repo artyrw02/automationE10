@@ -2,14 +2,14 @@
 //Variables are defined with the full path of its location
 //A function for each report is created and called on TC routine 
 
-var pathFileReportARInvoice = "C:\\EpicorData\\Reports\\manager\\AR Invoice Form29568.xml"
-var pathFileReportSalesOrder = "C:\\EpicorData\\Reports\\manager\\Sales Order Acknowledgment29571.xml"
-var pathFileReportQuoteform = "C:\\EpicorData\\Reports\\manager\\Quote Form29572.xml"
-var pathFileReportPurchaseOrder = "C:\\EpicorData\\Reports\\manager\\Purchase Order29570.xml"
-var pathFileReportProFormaInv = "C:\\EpicorData\\Reports\\manager\\Pro-Forma Invoice29569.xml"
-var pathFileReportJobTraveler = "C:\\EpicorData\\Reports\\manager\\Job Traveler29567.xml"
-var pathFileReportCustomerStatements = "C:\\EpicorData\\Reports\\manager\\Customer Statement29573.xml"
-var pathFileReportSOPickList = "C:\\EpicorData\\Reports\\manager\\SO Pick list29574.xml"
+var pathFileReportARInvoice = "C:\\EpicorData\\Reports\\epicor\\AR Invoice Form29650.xml"
+var pathFileReportSalesOrder = "C:\\EpicorData\\Reports\\epicor\\Sales Order Acknowledgment29653.xml"
+var pathFileReportQuoteform = "C:\\EpicorData\\Reports\\epicor\\Quote Form29654.xml"
+var pathFileReportPurchaseOrder = "C:\\EpicorData\\Reports\\epicor\\Purchase Order29652.xml"
+var pathFileReportProFormaInv = "C:\\EpicorData\\Reports\\epicor\\Pro-Forma Invoice29651.xml"
+var pathFileReportJobTraveler = "C:\\EpicorData\\Reports\\epicor\\Job Traveler29649.xml"
+var pathFileReportCustomerStatements = "C:\\EpicorData\\Reports\\epicor\\Customer Statement29656.xml"
+var pathFileReportSOPickList = "C:\\EpicorData\\Reports\\epicor\\SO Pick list29659.xml"
 
 // var pathFileReportARInvoice = "C:\\EpicorData\\TenOne\\Reports\\epicor\\AR Invoice Form29561.xml"
 // var pathFileReportSalesOrder = "C:\\EpicorData\\TenOne\\Reports\\epicor\\Sales Order Acknowledgment00892.xml"
@@ -65,6 +65,6 @@ function ReportCustomerStatements(){
 }
 
 function ReportSOPickList(){
-	XML["XmlARInvoice"]["Check"](pathFileReportSOPickList)
+	XML["XmlSOPickList"]["Check"](pathFileReportSOPickList)
 }
 
