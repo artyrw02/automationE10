@@ -124,7 +124,12 @@ function RestartSmartClient() {
   //log in
   Login(Project["Variables"]["username"], Project["Variables"]["password"])
 
+
+  Delay(2500)
   ActivateFullTree()
+  ActivateFavoritesMenuTab()
+  
+  OpenPanelTab("Menu Groups")
 }
 
 /*Finds for the company and activates it
