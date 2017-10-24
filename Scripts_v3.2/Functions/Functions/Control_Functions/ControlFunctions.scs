@@ -408,9 +408,12 @@ function GetTreePanel(value){
 }
 
 function GetList(cntrlName){
-  var listObj = FindObject("*ListBox*", "Name", "*" + cntrlName + "*")
-
-  return listObj
+  var obj = FindObject("*ListBox*", "Name", "*" + cntrlName + "*")   
+  if (obj["Exists"]) 
+      return obj
+  var obj = FindObject("*ListView*", "Name", "*" + cntrlName + "*")   
+  if (obj["Exists"]) 
+      return obj
 }
 
 function GetRadioBtn(cntrlName){
@@ -418,3 +421,4 @@ function GetRadioBtn(cntrlName){
 
   return radioBtn
 }
+
