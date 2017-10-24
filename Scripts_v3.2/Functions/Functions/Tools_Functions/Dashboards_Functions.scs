@@ -563,4 +563,10 @@ function DeleteDashboard(dashboardIDs) {
   }
 }
 
+//Searched TrackerViews from dashboards
+function RetrieveTrackerMainPanel(){
+  var trackerPDashboardChildren = FindObjects("*EpiBasePanel*","Name", "*TrackerPanel")
+
+  return trackerPDashboardChildren
+}
 
