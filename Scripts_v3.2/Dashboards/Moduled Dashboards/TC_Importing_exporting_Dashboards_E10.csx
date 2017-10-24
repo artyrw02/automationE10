@@ -301,7 +301,7 @@ function ImportDashb(){
 }
 
 function ImportBAQs(){
- 
+ Delay(2500)
   Log["Message"]("Step 7")
   if (Aliases["Epicor"]["DashboardBAQImportDialog"]["Exists"]) {
     Log["Message"]("BAQ Import dialog is displayed")
@@ -329,16 +329,20 @@ function ImportBAQs(){
   }
 
   // Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
-  Delay(3500)
-  OpenPanelTab("General")
+  //OpenPanelTab("General")
 
-  var defIDDashb = GetText("txtDefinitonID")
+  /*var defIDDashb = GetText("txtDefinitonID")
   if(defIDDashb == "DashBDExport2"){
     Log["Message"]("Dashboard Imported")
   }else{
     Log["Error"]("Dashboard wasn't imported")
-  }
+  }*/
 
+} 
+
+function DeployDashb(){
+  Delay(5000)
+  
   Log["Message"]("Step 8")
   SaveDashboard()
 
@@ -367,22 +371,20 @@ function RestartE10(){
 function TestMenu(){
     Log["Message"]("Step 12")
     //Open Menu created   
-    MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
+    MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
-    ClickMenu("Edit->Refresh")
+    Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
 
 
-    var gridsMainPanel = GetGridMainPanel("baqID")
+    var gridsMainPanel = RetrieveGridsMainPanel()
 
-     if (gridsMainPanel["Rows"]["Count"] > 0) {
-      Log["Message"]("Grid displays " + gridsMainPanel["Rows"]["Count"] + " records")
+     if (gridsMainPanel[0]["Rows"]["Count"] > 0) {
+      Log["Message"]("Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
      }else{
-      Log["Error"]("There was a problem. Grid displays " + gridsMainPanel["Rows"]["Count"] + " records")
+      Log["Error"]("There was a problem. Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
      }
     
-    ClickMenu("Edit->Refresh")
-
-    ClickMenu("File->Exit") 
+    Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")  
 }
 
 
