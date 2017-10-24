@@ -1,4 +1,5 @@
 //USEUNIT ObjectLib
+//USEUNIT FormLib
 
 var E10 = Sys.Process("Epicor")
 
@@ -39,9 +40,15 @@ function ClickMenu(menuName, pnlPath){
        
         //expand menu from ToolbarManager using DropDown method and get array of item's indexes
         var aItemIndex = expandPopupMenu(menuItems, aMenuName)
-        
+                
         //navigate to the last menu item from UltraToolbarsDockArea extended collection and Click last item
-        menuItems = tbDockArea["wItems"]["Item"](aItemIndex[0])
+        
+        if(aItemIndex["length"] > 2){
+          menuItems = tbDockArea["wItems"]["Item"](aItemIndex[0])
+        }else{
+          menuItems = tbDockArea["wItems"]["Item"](1)
+        } 
+        
         for (var i = 1; i < aItemIndex["length"]; i++)        
             menuItems = menuItems["Items"]["Item"](aItemIndex[i])
         
