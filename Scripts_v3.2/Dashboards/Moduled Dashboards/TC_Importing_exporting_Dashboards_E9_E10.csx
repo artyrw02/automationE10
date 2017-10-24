@@ -461,14 +461,3 @@ function TestMenu(){
     ClickButton("No")
   }
 }
-
-
-function RetrieveTrackerMainPanel(){
-  // var dashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
-    
-  // var trackerPDashboardChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*TrackerPanel", 9)["toArray"]();
-
-  var trackerPDashboardChildren = FindObjects("*EpiBasePanel*","Name", "*TrackerPanel")
-
-  return trackerPDashboardChildren
-}
