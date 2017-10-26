@@ -65,7 +65,7 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
   // ClickMenu("File->New...->New Dashboard")
 
   //Type Definition, Caption and Description
-  var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
+  // var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
   // dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
   // dashboardPanel["txtDefinitonID"]["Keys"]("[Tab]")
   EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
@@ -120,15 +120,11 @@ function AddQueriesDashboard(baqQuery){
   var arrBaqQueries = baqQuery.split(",")
 
   for( var i = 0; i <= arrBaqQueries.length - 1 ; i++){
-    //Add BAQ
-    //Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&New...|New Query")
     ClickMenu("File->New...->New Query")
 
     EnterText("txtQueryID", arrBaqQueries[i] + "[Tab]", "Adding Query text")  
-    // Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["WinFormsObject"]("PropertiesPanel_Fill_Panel")["WinFormsObject"]("txtQueryID")["Keys"](arrBaqQueries[i])
     
     ClickButton("OK")
-    // Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
   }
   
   if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
@@ -140,24 +136,18 @@ function AddQueriesDashboard(baqQuery){
 
 //Saves Dashboard
 function SaveDashboard(){
-  //Activate 'General' tab
   OpenPanelTab("General")
-  // Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
 
   Delay(1500)
 
-  //Save the Dashboard
   ClickMenu("File->Save")
-  // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
 }
 
 /*Reads the deployment options in order to deploy the dashboard
 * @param: deploymentOptions - String that contains the deployment options separated by ',' separator
 * @return: none*/
 function DeployDashboard(deploymentOptions){
-  //Deploy Dashboard
   ClickMenu("Tools->Deploy Dashboard")
-  // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
   Delay(2500)
   //Selection the option for the Actions listed 
   var arrdeploymentOptions = deploymentOptions.split(",")
@@ -183,9 +173,7 @@ function DeployDashboard(deploymentOptions){
     }
   }
 
-  //Click to deploy
   ClickButton("Deploy")
-  // Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["btnOk"]["Click"]()
   Log["Message"]("Clicked deploy button")
   Delay(5000)
 
@@ -199,7 +187,6 @@ function DeployDashboard(deploymentOptions){
  
   Delay(1500)
   if(deploymentStatus) {
-    //Click to close 'Deploy Dashboard' window
     ClickButton("OK")
     Log["Message"]("Dashboard was deployed correctly. Clicked OK button to close Deploy Dashboard window.")
   }else{
@@ -218,7 +205,6 @@ function ExitDashboard(){
    if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
     Log["Error"]("There is a dialog message active.")
   }else{
-    // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
     ClickMenu("File->Exit")
     Log["Checkpoint"]("Exit Dashboard Form")
   }
@@ -227,9 +213,7 @@ function ExitDashboard(){
 //Closes only the dashboard not the form
 function CloseDashboard(){
   ClickMenu("File->Close All")
-  // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Close All")
   ClickButton("OK")
-  // Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()
 }
 
 // function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations)
@@ -242,7 +226,6 @@ function CloseDashboard(){
 * @param: MenuData[dll] - String that contains the information of the menu 'dll'
 * @param: MenuData[validations] - String that contains the information of the menu 'validations'
 * @return: none*/
-
 function CreateMenu(MenuData){  
   Delay(1000)
   var MenuMFormTree = Aliases["Epicor"]["MenuMForm"]["windowDockingArea2"]["dockableWindow2"]["jobTreeViewPanel"]["methodTree"]  
@@ -262,32 +245,18 @@ function CreateMenu(MenuData){
     }
 
   //Add New Item
-  // Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|New...|New Menu")
   ClickMenu("File->New...->New Menu")
-
-  //Fill the information
-  // var MenuFormObject = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]
 
   EnterText("txtMenuID", MenuData["menuID"] + "[Tab]", "Adding Menu ID text")  
   EnterText("txtName", MenuData["menuName"] + "[Tab]", "Adding Menu Name text")  
   EnterText("nedSeq", MenuData["orderSequence"] + "[Tab]", "Adding Order Sequence text")  
   ComboboxSelect("cboType", MenuData["menuType"])
-  // MenuFormObject["dbxDetail"]["txtMenuID"]["Keys"](MenuData["menuID"])
-  // MenuFormObject["dbxDetail"]["txtName"]["Keys"](MenuData["menuName"])
-  // MenuFormObject["epiGroupBox2"]["nedSeq"]["Keys"](MenuData["orderSequence"])
-  // MenuFormObject["grpProgramMain"]["cboType"]["Keys"]("[BS][BS][BS][BS][BS][BS][BS][BS][BS]")
-  // MenuFormObject["grpProgramMain"]["cboType"]["Keys"](MenuData["menuType"])
-
   
   //Menu type
   if (MenuData["menuType"] == "Dashboard-Assembly") {
     EnterText("cboDashboard", MenuData["dll"] + "[Tab]", "Adding dll text") 
-    // MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"](MenuData["dll"])
-    // MenuFormObject["grpProgramMain"]["cboDashboard"]["Keys"]("[Tab]")
   }else if (MenuData["menuType"] == "Menu item") {
     EnterText("txtProgram", MenuData["dll"] + "[Tab]", "Adding dll text") 
-    // MenuFormObject["grpProgramMain"]["txtProgram"]["Keys"](MenuData["dll"])
-    // MenuFormObject["grpProgramMain"]["txtProgram"]["Keys"]("[Tab]")
   }
    
   var flag = true
@@ -298,8 +267,6 @@ function CreateMenu(MenuData){
 
     for(var i = 0; i < validations["length"]; i++){
       if(validations[i] != "Web Access"){
-        // var checkbox = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["FindAllChildren"]("FullName", "*chk"+"*"+validations[i]+"*", 30)["toArray"]()
-        // checkbox[0]["Checked"] = true
         CheckboxState("*chk"+"*"+validations[i]+"*", true)
         Log["Checkpoint"]("Checkbox from menu was selected - " + validations[i])
       }else{
@@ -317,10 +284,8 @@ function CreateMenu(MenuData){
   }
   
   if(flag){
-    // Aliases["Epicor"]["MenuMForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("Main Menu|&File|&Save")
     ClickMenu("File->Save")
     Delay(1000)
-    // Aliases["Epicor"]["MenuMForm"]["Close"]()
     ClickMenu("File->Close")
     Log["Message"]("Menu created correctly")
   }else{
@@ -328,79 +293,19 @@ function CreateMenu(MenuData){
   }
 }
 
-//deploy from Dashboard maintenance
-/*function DashboardMaintenance(dashboardID, actions){
-
-  Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"](dashboardID)
-  Aliases["Epicor"]["DashboardForm"]["windowDockingArea2"]["dockableWindow4"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["groupBox1"]["txtKeyField"]["Keys"]("[Tab]")
-
-  //Selection the option for the Actions listed
-  var arrActions = actions.split(",")
-
-  for (var i = 0; i <= arrActions.length - 1; i++) {
-    
-    Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Actions|" + arrActions[i])
-    Log["Message"]("Action " + arrActions[i] + " was selected.")
-
-    if (arrActions[i] == "Modify Dashboard") {
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Copy Dashboard") 
-      Aliases["Epicor"]["CopyDashboardForm"]["txtDefinitionId"]["Keys"](dashboardID + "Copy")
-      Aliases["Epicor"]["CopyDashboardForm"]["btnOkay"]["Click"]()
-      Log["Checkpoint"]("Dashboard was copied correctly.")
-
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()
-
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]["chkMobile"]["CheckState"] = "Checked"
-
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Save")
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Deploy Dashboard")
-
-      Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["grpMobile"]["chkGenMobile"]["Checked"] = true
-      Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["grpMobile"]["chkMobileMenuAvail"]["Checked"] = true
-      Aliases["Epicor"]["AppBuilderDeployDialog"]["deployOptionsPanel1"]["btnOk"]["Click"]()
-      Log["Checkpoint"]("Copied Dashboard was deployed correctly.")
-
-      Delay(5000)
-      Aliases["Epicor"]["AppBuilderDeployDialog"]["Close"]()
-      Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")
-    }
-    else {
-      if( arrActions[i] == "Deploy UI Application" ){
-        Log["Message"]("Action Deploy UI Application")
-      }
-    }
-  }
-    Aliases["Epicor"]["DashboardForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit")  
-}*/
-
 /*Opens dashboard installed in Favorite menu
 * @param: DashboardID - An String that contains the id of the dashboard to open
 * @return: none*/  
 function OpenDashboardFavMenu(DashboardID) {
   OpenPanelTab("Favorites")
-  // var DashboardID = "DashBBAQ"
   Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["shortcutBar"]["ClickItem"]("Dashboard Assemblies", DashboardID);
 }
-
-//MODIFY-remove
-/*function DashboardQueryProperties(tab){
-    var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-
-    for (var i = 0; i <= queryProperties["Tabs"]["VisibleTabsCount"] -1; i++) {
-      if (queryProperties["Tabs"]["Item_2"](i)["Text"] == tab) {
-          queryProperties["ActiveTab"] = queryProperties["Tabs"]["Item_2"](i)
-          queryProperties["Focus"]()
-          queryProperties["Keys"]("[Enter]")
-      }
-    }
-}*/
 
 /*Activates the tab specified in the parameter inside de grid of the properties panel of dahsboards
 * @param: dashboardPropsPanel - An object that contains the information of the panel of the dashboard Query properties  
 * @param: tab - An String that contains the tab name that needs to be activated
 * @return: none*/  
 function DashboardPropertiesTabs(tab){
-  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
   var dashboardPropsPanel = FindObject("*TabControl", "Name", "*Query*")
 
   for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
@@ -417,7 +322,6 @@ function DashboardPropertiesTabs(tab){
 * @param: tab - An String that contains the tab name that needs to be activated
 * @return: none*/  
 function DashboardGridPropertiesTabs(tab){
-  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
   var dashboardPropsPanel = FindObject("*TabControl", "Name", "*PropsTab*")
 
   for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
