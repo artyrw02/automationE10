@@ -31,6 +31,7 @@ function DeactivateMainDevMode(){
 * @return: none*/
 function MainMenuTreeViewSelect(Path){ 
   Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
+  OpenPanelTab("Menu Groups")
   
   if(Path != undefined){
     var MenuTree = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]
@@ -59,26 +60,11 @@ function StartSmartClient(){
 * @return: none*/
 function Login(username,password){
 
-  // var epicor = Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["WPFObject"]("AvalonAdapter", "", 1)["WPFObject"]("Shell", "", 1)["WPFObject"]("Grid", "", 1)["WPFObject"]("ShellGrid")["WPFObject"]("ContentPanel")["WPFObject"]("userControl")["WPFObject"]("MainGrid")["WPFObject"]("logon")["WPFObject"]("LogonPopup")["WPFObject"]("Grid", "", 1)
-
-  // //Activates Shell menu
-  // if  ( epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["IsChecked"] == false ){
-  //   epicor["WPFObject"]("LoginGrid")["WPFObject"]("chkClassic")["Keys"](" ")
-  // }
-  
-
-  //Enters the text 'epicor' in the 'txtUserID' text editor.
-  // Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtUserID"]["Keys"](username)
-
-
   userField = GetTextBox("txtUserID")
   userField["Keys"](username + "[Tab]")
 
   passwordField = GetTextBox("txtPassword")
   passwordField["Keys"](password + "[Enter]")
-
-  //Enters 'Epicor123[Enter]' in the 'txtPassword' object.
-  // Aliases["Epicor"]["ShellMenuForm"]["shellControlHost"]["HwndSource_AdornerDecorator"]["AdornerDecorator"]["txtPassword"]["Keys"](password+"[Enter]")
 
   //Activates Shell menu
   var menuSCType = Aliases["Epicor"]["MenuForm"]
@@ -136,17 +122,17 @@ function RestartSmartClient() {
 * @param: Company - String Name of the Company that needs to be activated
 * @return: none*/
 function ExpandComp(Company){
-  var ElemCountI
   
+  var treeView = GetTreePanel("treeView")
   //Expand Company
-  ElemCountI = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Count"]-1
+  var ElemCountI = treeView["Nodes"]["Count"]-1
 
   for (var i = 0; i < ElemCountI; i++) {
-    var rect = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Nodes"]["Item"](i)
+    var rect = treeView["Nodes"]["Item"](i)
     if( rect["Text"] == Company ){
       rect["Selected"]= true
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["ActiveNode"] = rect
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Click"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)   
+      treeView["ActiveNode"] = rect
+      treeView["Click"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)   
       break
     }
   }  
@@ -157,15 +143,17 @@ function ExpandComp(Company){
 * @return: none*/
 function ChangePlant(Plant){
   var CountPlant, ActPlant
+
+  var treeView = GetTreePanel("treeView")
   
-  CountPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Count"] -1
+  CountPlant = treeView["SelectedNodes"]["Item"](0)["Nodes"]["Count"] -1
 
   for (var i = 0; i < CountPlant; i++) {    
-    ActPlant = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["SelectedNodes"]["Item"](0)["Nodes"]["Item"](i)
+    ActPlant = treeView["SelectedNodes"]["Item"](0)["Nodes"]["Item"](i)
     if( ActPlant["Text"]["OleValue"] == Plant ){
       ActPlant["Selected"] = true
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["ActiveNode"] = ActPlant
-      Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]["Click"]((ActPlant["Bounds"]["Left"]+ ActPlant["Bounds"]["Right"])/2, (ActPlant["Bounds"]["Top"]+ ActPlant["Bounds"]["Bottom"])/2)   
+      treeView["ActiveNode"] = ActPlant
+      treeView["Click"]((ActPlant["Bounds"]["Left"]+ ActPlant["Bounds"]["Right"])/2, (ActPlant["Bounds"]["Top"]+ ActPlant["Bounds"]["Bottom"])/2)   
       break
     }
   }
