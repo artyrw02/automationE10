@@ -337,39 +337,42 @@ function DashboardGridPropertiesTabs(tab){
 * @param: dashboardIDs - An String that contains one or more dashboard separated by ',' 
 * @return: none*/  
 function DeleteDashboard(dashboardIDs) {
-  var DashboardFormDefinition = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]
+  // var DashboardFormDefinition = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]
 
-  // DashboardFormDefinition["dockableWindow1"]["Activate"]()
   OpenPanelTab("General")
 
-  var dashboardIDtext = DashboardFormDefinition["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]
-
+  // var dashboardIDtext = DashboardFormDefinition["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]
   //Split string dashboardIDs into an array  
   var arrDashboards
 
   arrDashboards = dashboardIDs.split(",")
   
+  var dashboardIDtext = GetText("txtDefinitonID")
+
   for (var i = 0; i < arrDashboards["length"] ; i++) {
-    if (dashboardIDtext["Text"]["OleValue"] != arrDashboards[i] && dashboardIDtext["Text"]["OleValue"] != "") {
-      // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Clear") 
+    if (dashboardIDtext != arrDashboards[i] && dashboardIDtext != "") {
       ClickMenu("Clear")
       if(Aliases["Epicor"]["dlgWarning"]["Exists"]){
         //Click 'Yes' to confirm 
-        Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()  
+        // Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()
+        ClickButton("OK")  
       }
       Log["Message"](dashboardIDtext["Text"] + " was cleared.")
     }
 
-    if (dashboardIDtext["Text"]["OleValue"] == "") {
+    if (dashboardIDtext == "") {
       //Retrieve dashboard
-      dashboardIDtext["Keys"](arrDashboards[i])
-      dashboardIDtext["Keys"]("[Tab]")
+      // dashboardIDtext["Keys"](arrDashboards[i])
+      // dashboardIDtext["Keys"]("[Tab]")
+      EnterText("txtDefinitonID", arrDashboards[i] + "[Tab]")
 
-      DashboardFormDefinition["dockableWindow1"]["Activate"]()
+      // DashboardFormDefinition["dockableWindow1"]["Activate"]()
+      OpenPanelTab("General")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
-          Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
+          // Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
+          ClickButton("No")
           Log["Message"]("Dashboard not found.")
         }      
       }else{
@@ -377,27 +380,25 @@ function DeleteDashboard(dashboardIDs) {
       }
     }
 
-    if (dashboardIDtext["Text"]["OleValue"] == arrDashboards[i]) {
-      // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Delete Dashboard Definition") 
+    if (dashboardIDtext == arrDashboards[i]) {
       ClickMenu("File->Delete Dashboard Definition")
 
-
       if(Aliases["Epicor"]["dlgWarning"]["Exists"]){
-        //Click 'Yes' to confirm 
-        // Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]() 
         ClickButton("OK") 
       }
 
       Log["Message"](arrDashboards[i] + " was deleted.")
 
       //Retrieve dashboard for validation
-      dashboardIDtext["Keys"](arrDashboards[i])
-      dashboardIDtext["Keys"]("[Tab]")
+      // dashboardIDtext["Keys"](arrDashboards[i])
+      // dashboardIDtext["Keys"]("[Tab]")
+      EnterText("txtDefinitonID", arrDashboards[i] + "[Tab]")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
           Log["Checkpoint"](arrDashboards[i] + " was deleted correctly.")
-          Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
+          // Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
+          ClickButton("No")
         }      
       }else{
         Log["Message"](arrDashboards[i] + " was not deleted.")
