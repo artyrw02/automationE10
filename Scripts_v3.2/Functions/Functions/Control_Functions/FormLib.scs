@@ -96,15 +96,56 @@ function CheckWindowMessage(WndCaption){
 }
 
 
-//Used to catch Exception object window
-/*function CheckExceptionWnd(){
+function CheckWindowMessageModals(){
+  var count = 0 
+  var name = "Static"
+  while(true){
+    Delay(2000)
+    var windowsMsg = FindObject("*", ["Name","WndCaption"],  ["*" + name + "*", "*Dashboard*"])
 
-  var eDialog = FindObject("*", "WndCaption",   "WinFormsObject(\"ExceptionDialog\")")
+    if(windowsMsg["Exists"]){
+      Log["Message"]("Validating Dialog Message - " + windowsMsg["WndCaption"])
+      return true
+    }
+    count++
 
-  if(eDialog["Exists"]){
-    return true
-  }else{
-    return false
+    if(count == 5){
+      return false
+      Log["Message"]("No dialog Message displayed")
+      Runner["Stop"]()
+    }
   }
+}
 
-}*/
+
+function CheckExceptionWnd(){
+  var wnd = FindObject("*", ["Name","WndCaption"],  ["*Exception*", "*Error*"])
+
+  // var errMessageBoxes = getChildControls("*Box*", "Name", "*tbMessage*", wnd)
+  try{
+    var tbMessage = GetText("tbMessage")
+    if (wnd["Exists"]) {
+      Log["Message"]("Exception message displayed: " + tbMessage)
+      return tbMessage
+    }else{
+      return false
+    }
+  }catch(e){
+    Log["Error"](e["message"])
+  }finally{
+    ClickButton("OK")
+  }
+}
+
+/*Checks if there is any Epic dialog on screen
+@Wnd: Window caption of the form displayed
+@action: action that will be performed for the dialog displayed (Yes/No)
+*/
+function CheckEpicMsgdialog(Wnd, action){
+    var wnd = GetForm(Wnd)
+
+    if (wnd["Exists"]) {
+      ClickButton(action)
+    }
+}
+
