@@ -163,10 +163,6 @@ function TestDeployedDbFavMenu(){
   // Step 15
   Log["Message"]("Step 15 - Activate Favorites Tab")
 
-  // On the Home Page from Smart Client on favorites tiles look for the created dashboard under Dashboard Assembly tile and open it
-  ActivateFavoritesMenuTab()
-  Log["Message"]("FavoritesMenuTab Activated")
-
   // Step 16
   Log["Message"]("Step 15 - Opening Dashboard from Favorites Tab")
   OpenDashboardFavMenu(dashb2)
@@ -176,9 +172,6 @@ function TestDeployedDbFavMenu(){
   Log["Message"]("Step 17 - Refresh Dashboard and test data")
   DashboardPanelTest()
   Log["Message"]("Dashboard tested")
-
-  DeactivateFavoritesMenuTab()
-  Log["Message"]("Favorites MenuTab deactivated")  
 }
 
 // Steps 18,19
