@@ -1,0 +1,292 @@
+//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT Grid_Functions
+
+/*Create a simple BAQ with one table
+* @param: baqData - An array that contains the information of the BAQ to create
+* @param: baqData[Id] - String that contains the information of the BAQ 'Id'
+* @param: baqData[Description] - String that contains the information of the BAQ 'Description'
+* @param: baqData[GeneralConfig] - String that contains the information of the BAQ 'Order GeneralConfig'
+* @param: baqData[Table] - String that contains the information of the BAQ 'Table'
+* @param: baqData[Columns] - String that contains the information of the BAQ 'Columns'
+* @return: none*/
+// function CreateSimpleBAQ(baqID, baqDescription, table, columns, generalConfig){
+function CreateSimpleBAQ(baqData){
+  
+  CreateBAQ(baqData["Id"], baqData["Description"], baqData["GeneralConfig"])
+  
+  AddTableBAQ(baqData["Table"], baqData["Alias"])
+
+  AddColumnsBAQ(baqData["Alias"], baqData["Columns"])
+
+  AnalyzeSyntaxisBAQ()
+
+  TestResultsBAQ()
+  
+  SaveBAQ()
+  
+  ExitBAQ()
+}
+
+/*Opens an existing BAQ
+* @param: baqID - String that contains the information of the BAQ 'Id'
+* @return: none*/
+function OpenBAQ(baqID){
+  //Change to "General" tab
+  OpenPanelTab("General")
+  
+  //Set ID and description
+  EnterText("txtQueryID", baqID + "[Tab]")
+
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("BAQ " + baqID +" opened.")
+  }
+}
+
+/*Defines a BAQ and sets the basic information
+* @param: baqID - String that contains the information of the BAQ 'Id'
+* @param: baqDescription - String that contains the information of the BAQ 'Description'
+* @param: generalConfig - String that contains the information of the BAQ 'Order GeneralConfig'
+* @return: none*/
+function CreateBAQ(baqID, baqDescription, generalConfig){
+  Delay(1500)
+  
+  //click New BAQ
+  ClickMenu("File->New")
+  
+  //Set ID and description
+  EnterText("txtQueryID", baqID + "[Tab]")
+  EnterText("txtDescription", baqDescription + "[Tab]")
+
+  if(generalConfig != undefined){
+    generalConfig = generalConfig.split(",")
+
+    for(var i = 0; i < generalConfig["length"]; i++){
+      CheckboxState(generalConfig[i], true)
+    }
+  }
+}
+
+/*Adds a table on the BAQ
+* @param: tblName - String that contains the name table that will be added to the BAQ
+* @param: filter - optional used to filter the data of the list of tables 
+* @return: none*/
+function AddTableBAQ(tblName, filter){
+  var pnlPath = OpenPanelTab("Query Builder->Phrase Build->PalettePanel")
+
+  if (filter)
+    SetToolButtonText("palettePanel", "", filter || "")
+  E10.Refresh()
+  Delay(900)
+
+  if (!ListViewSelect("lbTables", tblName, true))
+  throw "Table not found"
+}
+
+/*Adds a table on the BAQ
+* @param: table - String that contains the name table that was be added to the BAQ in order to retrieve the columns
+* @param: columns - String that contains the name columns that will be added to the BAQ separated by ','
+* @return: none*/
+function AddColumnsBAQ(table, columns){
+  //Activate Display Fields
+  OpenPanelTab("Query Builder->Display Fields")
+
+  //Select columns'
+  var fieldsAvailable = GetTreePanel("treeAvailCol")
+
+  //Split string columns into an array  
+  var arrColumns, countColumnsTreeList
+
+  arrColumns = columns.split(",")
+  
+  //count number of tables in the tree
+  var countTablesTreeList = fieldsAvailable["Nodes"]["Count"]
+
+  for (var i = 0; i < countTablesTreeList ; i++) {
+    if(fieldsAvailable.Nodes.Item(i).Text == table){
+      //Expand table's items for selection
+      fieldsAvailable.Nodes.Item(i).expanded = true
+      
+      //Count number of items in table
+      countColumnsTreeList = fieldsAvailable.Nodes.Item(i).Nodes.Count -1
+
+      for (var j = 0; j <= arrColumns.length; j++) {
+        for (var k = 0; k <= countColumnsTreeList; k++) {
+           if (arrColumns[j] == fieldsAvailable.Nodes.Item(i).Nodes.Item(k).Text)
+            fieldsAvailable.Nodes.Item(i).Nodes.Item(k).Selected = true 
+        }
+      }
+    }
+  }
+
+  //Move selected columns to right panel
+  ClickButton("","btnMoveRight")
+  Log["Message"]("Columns where added to the BAQ")
+}
+
+/*Analyzes if there is no error in syntaxis of the data added to the BAQ
+* @param: BAQFormDefinition - Object that contains the definition of the form
+* @return: none*/
+function AnalyzeSyntaxisBAQ(){
+  //-Validate if Analize is active
+  OpenPanelTab("Analyze")
+
+  //Analyze and run test for BAQ
+  ClickButton("Analyze...")
+}
+
+/*Tests the data added to the BAQ
+* @param: BAQFormDefinition - Object that contains the definition of the form
+* @param: parameterValue - String. In case it's needed for testing purpose
+* @return: none*/
+function TestResultsBAQ(parameterValue){
+  //Activate Analyze tab
+  OpenPanelTab("Analyze")
+
+  //Analyze and run test for BAQ
+  ClickButton("Test...")
+
+  // CREATE FUNTION TO CATCH NEW WINDOWS IN ANY CASE
+
+  if (parameterValue != undefined) {
+    ComboboxSelect("edt0", parameterValue)
+    ClickButton("OK")
+  }
+
+  var tesResultstGrid = FindObject("*Grid*", "Name", "*grdResults*") 
+  
+  if (tesResultstGrid["Rows"]["Count"] < 0)
+    Log["Warning"]("Returned 0 Records")
+  else
+    Log["Message"]("Returned more than 0 Records on BAQ analysis")
+}
+
+//Saves BAQ
+function SaveBAQ(){
+  Delay(1500)
+  ClickMenu("File->Save")
+}
+
+// Closes BAQ form
+function ExitBAQ(){
+  Delay(1500)
+  ClickMenu("File->Exit")
+}
+
+/*Deletes BAQ
+* @param: baqIDs - String that contains one or more BAQs separated by ','
+* @return: none*/
+function DeleteBAQ(baqIDs){
+
+  OpenPanelTab("General")
+  // var baqID = "baq1"
+  var queryIDtext = GetTextBox("txtQueryID")
+
+  //Split string baqIDs into an array  
+  var arrBaqs
+
+  arrBaqs = baqIDs.split(",")
+  
+  for (var i = 0; i < arrBaqs["length"] ; i++) {
+    if (queryIDtext["Text"]["OleValue"] != arrBaqs[i] && queryIDtext["Text"]["OleValue"] != "") {
+      ClickMenu("Edit->Clear")
+      Log["Message"](queryIDtext["Text"] + " was cleared.")
+    }
+
+    if (queryIDtext["Text"]["OleValue"] == "") {
+      //Retrieve BAQ
+      EnterText("txtQueryID", arrBaqs[i] + "[Tab]")
+
+      if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+        if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
+          ClickButton("No")
+          Log["Message"]("BAQ not found.")
+        }      
+      }else{
+        Log["Message"](arrBaqs[i] + " was loaded.")
+      }
+    }
+
+    if (queryIDtext["Text"]["OleValue"] == arrBaqs[i]) {
+      ClickMenu("File->Delete")
+
+      //Click 'Yes' to confirm 
+      ClickButton("Yes")
+
+      Log["Message"](arrBaqs[i] + " was deleted.")
+
+      //Retrieve BAQ for validation
+      EnterText("txtQueryID", arrBaqs[i] + "[Tab]")
+      // queryIDtext["Keys"](arrBaqs[i])
+      // queryIDtext["Keys"]("[Tab]")
+
+      if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+        if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
+          Log["Checkpoint"](arrBaqs[i] + " was deleted correctly.")
+          ClickButton("No")
+        }      
+      }else{
+        Log["Message"](arrBaqs[i] + " was not deleted.")
+      }
+    }
+  }
+}
+
+/*Creates a copy of any existing BAQ
+* @param: baqIDs - String that contains the id of an existing BAQ
+* @param: newID - String that contains the new id for the copy of the existing BAQ
+* @return: none*/
+function CopyBAQ(baqID, newID){
+
+  E10.Refresh()
+  Delay(2500)
+  //Set ID and description
+  EnterText("txtQueryID", baqID + "[Tab]")
+
+  ClickMenu("Actions->Copy Query")
+  EnterText("txtToID", newID + "[Tab]")
+  Delay(2000)
+  ClickButton("OK")
+
+  Delay(5000)
+  if(Aliases["Epicor"]["dlgInformation"]["Exists"]) {
+    ClickButton("OK")
+  }
+}
+
+//Grid 'Updatable Columns' only General Tab
+function UpdateTabBAQ(field, fieldAction, querySettings){
+
+  //Change to "Update" tab
+  OpenPanelTab("Update->General Properties")
+
+  if (querySettings != undefined) {
+    //querySettings = "AllowNew,Multiple Row"
+    querySettings = querySettings.split(",")
+
+    for (var i = 0; i < querySettings.length; i++) {      
+      // checkbox[0]["Checked"] = true
+      // THIS FUNCTIONS ACCEPTS ONLY IDS, MODIFY SCRIPTS TO GET THE ID
+      CheckboxState(querySettings[i], true)
+    }
+  }
+
+  var grid = GetGrid("grdUpdatable")
+  var columnAlias = getColumn(grid, "Alias") 
+  var columnParameter = getColumn(grid, fieldAction)
+
+  //find the row where field is located
+  for (var i = 0; i <= grid["wRowCount"] - 1; i++) {
+    var cellAlias = grid["Rows"]["Item"](i)["Cells"]["Item"](columnAlias)
+
+    if (cellAlias["Text"] == field) {
+      grid["Rows"]["Item"](i)["Cells"]["Item"](columnParameter)["Click"]()
+      // Check Updatable check box on for the specified field
+      grid["Rows"]["Item"](i)["Cells"]["Item"](columnParameter)["EditorResolved"]["CheckState"] = "Checked"
+      Log["Message"](field + " was set to " + fieldAction)
+    }
+  }
+}
