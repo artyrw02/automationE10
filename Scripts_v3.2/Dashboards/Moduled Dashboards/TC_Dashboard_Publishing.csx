@@ -61,11 +61,11 @@ function CreateDashboard(){
 // step 4, 5
 function PublishView(){
   // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-  var dashboardTree = GetTreePanel("DashboardTree")
   
   //4- Right click on the query summary and click on Publish View        
   Log["Message"]("Step 4")
   
+  var dashboardTree = GetTreePanel("DashboardTree")  
   var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
   dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
   Log["Message"]("Right click on " + baqData1["Id"])
@@ -177,9 +177,11 @@ function AddQuery2Dashb(){
   DashboardPropertiesTabs("Filter")
   Log["Message"](baqData2["Id"] + " - filter tab was selected")
 
-  var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
+  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
 
-  var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
+  // var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
+
+  var ultraGrid = GetGrid("ultraGrid1")
 
   SelectCellDropdownGrid("ColumnName", "OrderHed_CustNum", ultraGrid)
   SelectCellDropdownGrid("Condition", "=", ultraGrid)
@@ -214,20 +216,22 @@ function TestBeforeDeploy1(){
   Log["Message"]("Step 9")
   Log["Message"]("Ready to test data")
 
-  var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+  // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
 
-  var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
-  
+  // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
+  var gridDashboardPanelChildren = RetrieveGridsMainPanel()
+
   //Gives time to load the children inside the variable
   Delay(2000)
 
   var baq1Grid = gridDashboardPanelChildren[1]
   var baq2Grid = gridDashboardPanelChildren[2]
 
-  baq1Grid["Click"]()
-  ClickMenu("Edit->Refresh")
-  baq2Grid["Click"]()
-  ClickMenu("Edit->Refresh")
+  ClickMenu("Refresh All", "", true)
+  // baq1Grid["Click"]()
+  // ClickMenu("Edit->Refresh")
+  // baq2Grid["Click"]()
+  // ClickMenu("Edit->Refresh")
    Log["Message"]("Dashboard refreshed")
 
 
@@ -270,9 +274,10 @@ function TestBeforeDeploy1(){
 // Step 10
 function TestBeforeDeploy2(){
 
-    var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+    // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
 
-    var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
+    // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
+    var gridDashboardPanelChildren = RetrieveGridsMainPanel()
     
     //Gives time to load the children inside the variable
     Delay(2000)
@@ -306,9 +311,10 @@ function TestBeforeDeploy2(){
 // Step 11, 12
 function TestBeforeDeploy3(){
 
-    var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+    // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
 
-    var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
+    // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
+    var gridDashboardPanelChildren = RetrieveGridsMainPanel()
 
     //Gives time to load the children inside the variable
     Delay(2000)
@@ -332,7 +338,8 @@ function TestBeforeDeploy3(){
     //Activate Sales Order Window
     Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
     Delay(1500)
-    var salesOrderValue = Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Value"]
+    // var salesOrderValue = Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Value"]
+    var salesOrderValue = GetText("txtKeyField")
     
     // cell["Value"] is numeric and salesOrderValue is string
     if( aqConvert["IntToStr"](cell["Value"]) == salesOrderValue){
@@ -354,7 +361,8 @@ function TestBeforeDeploy3(){
     //Activate Sales Order Window
     Aliases["Epicor"]["SalesOrderForm"]["Activate"]()        
     
-    var salesOrderValue = Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Value"]
+    // var salesOrderValue = Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Value"]   
+    var salesOrderValue = GetText("txtKeyField")
     
     // cell["Value"] is numeric and salesOrderValue is string
     if( aqConvert["IntToStr"](cell["Value"]) == salesOrderValue){
