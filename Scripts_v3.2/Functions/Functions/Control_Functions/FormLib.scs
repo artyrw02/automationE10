@@ -1,5 +1,4 @@
 //USEUNIT ObjectLib
-//USEUNIT ControlFunctions
 
 // Gets the object type checkbox
 function GetForm(FormName){
