@@ -24,14 +24,13 @@ function CreateBAQ1(){
   Log["Message"]("BAQ 'zCustomer01' copied to 'zCustomer01Copy'")
   
   //Go to Query Builder Tab and on Display Fields tab add GroupCode to Display Column(s)
-  var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
  // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkShared"]["Checked"] = true
   CheckboxState("chkShared", true)
   // BAQFormDefinition["dockableWindow1"]["optionsPanel1"]["gbID"]["chkUpdatable"]["Checked"] = true
   CheckboxState("chkUpdatable", true)
 
-  AddColumnsBAQ(BAQFormDefinition, "Customer", "GroupCode")
+  AddColumnsBAQ("Customer", "GroupCode")
   Log["Message"]("BAQ1 created")
 
   //Change to "Update" tab
@@ -111,7 +110,7 @@ function CreateBAQ3(){
 
   CreateBAQ(baq3["baq"], baq3["baq"], baq3["config"])
 
-  AddTableBAQ(baq3["Table"])
+  AddTableBAQ(baq3["Table"], baq3["Alias"])
 
   AddColumnsBAQ(baq3["Table"], baq3["Columns"])
   
