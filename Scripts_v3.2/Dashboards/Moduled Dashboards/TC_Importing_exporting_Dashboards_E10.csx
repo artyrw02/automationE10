@@ -29,13 +29,11 @@ function CreateBAQ1(){
     Log["Message"]("Step 2")
     MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
-    var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
-
     CreateBAQ(baqID, baqID, "chkUpdatable")
     
-    AddTableBAQ(BAQFormDefinition, "Customer")
+    AddTableBAQ("Erp.Customer", "Customer")
 
-    AddColumnsBAQ(BAQFormDefinition, "Customer", "Company,CustID,CustNum,Name,Country")
+    AddColumnsBAQ("Customer", "Company,CustID,CustNum,Name,Country")
 
     UpdateTabBAQ("Customer_Name", "Updatable", "chkSupportMDR")
 
@@ -86,7 +84,7 @@ function CreateDashboard(){
 }  
 
 function AddQueryDashb(){
- AddQueriesDashboard(baqID)
+  AddQueriesDashboard(baqID)
       var dashboardTree =  GetTreePanel("DashboardTree")
 
       // var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
@@ -365,26 +363,27 @@ function RestartE10(){
   Log["Message"]("Step 11")
   Delay(1000)
   RestartSmartClient()
-  Log["Checkpoint"]("SmartClient Restarted")
+  Log["Message"]("SmartClient Restarted")
 }
 
 function TestMenu(){
-    Log["Message"]("Step 12")
-    //Open Menu created   
-    MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
+  Log["Message"]("Step 12")
+  //Open Menu created   
+  MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;"+MenuData["menuName"])
 
-    Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
+  // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
+  ClickMenu("Edit->Refresh")
 
+  var gridsMainPanel = RetrieveGridsMainPanel()
 
-    var gridsMainPanel = RetrieveGridsMainPanel()
-
-     if (gridsMainPanel[0]["Rows"]["Count"] > 0) {
-      Log["Message"]("Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
-     }else{
-      Log["Error"]("There was a problem. Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
-     }
-    
-    Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")  
+   if (gridsMainPanel[0]["Rows"]["Count"] > 0) {
+    Log["Message"]("Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
+   }else{
+    Log["Error"]("There was a problem. Grid displays " + gridsMainPanel[0]["Rows"]["Count"] + " records")
+   }
+  
+  // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")  
+  ClickMenu("Edit->Refresh")
 }
 
 
