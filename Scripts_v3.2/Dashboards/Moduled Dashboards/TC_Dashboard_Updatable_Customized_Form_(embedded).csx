@@ -34,16 +34,15 @@ function CreateBAQ1(){
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
   // Enter the following in the "General" tab
-  var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   
   // QueryID: baqID
   // Description: baqID
   // Shared: Checked | Updatable: Checked
   CreateBAQ(baqID, baqID, "chkShared,chkUpdatable")
   // drag and drop the "Customer" table design area in "Phrase Build" tab
-  AddTableBAQ(BAQFormDefinition, "Customer")
+  AddTableBAQ("Erp.Customer", "Customer")
   // In the Display Fields> Column Select tab for the "Customer" table select the Company, CustID, CustNum, Name and Address1 columns and add them to "Display Columns" area
-  AddColumnsBAQ(BAQFormDefinition, "Customer", "Company,CustID,CustNum,Name,Address1")
+  AddColumnsBAQ("Customer", "Company,CustID,CustNum,Name,Address1")
 
   // Move to Update> General Properties tab and check "Customer_Name" and "Customer_Address1" column as updatable
   UpdateTabBAQ("Customer_Name", "Updatable")
