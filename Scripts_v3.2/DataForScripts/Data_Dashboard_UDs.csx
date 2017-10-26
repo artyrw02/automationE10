@@ -27,14 +27,16 @@ var MenuDataEntry = {
 var baqData1 = {
   "Id" : "baqUD1",
   "Description" : "baqUD1",
-  "Table" : "UD100",
+  "Table" : "Ice.UD100",
+  "Alias" : "UD100",
   "Columns" : "Company,Key1,Key2,Key3,Key4,Key5,Character01"
 }
 
 var baqData2 = {
   "Id" : "baqUD2",
   "Description" : "baqUD2",
-  "Table" : "UD100A",
+  "Table" : "Ice.UD100A",
+  "Alias" : "UD100A",
   "Columns" : "Company,Key1,Key2,Key3,Key4,Key5,ChildKey1,ChildKey2,ChildKey3,ChildKey4,ChildKey5,Character01"
 }
 

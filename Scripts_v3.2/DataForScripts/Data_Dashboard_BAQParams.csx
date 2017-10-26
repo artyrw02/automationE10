@@ -17,7 +17,8 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
   var baqData = {
     "Id" : "baqParams1",
     "Description" : "baqParams1",
-    "Table" : "Customer",
+    "Table" : "Erp.Customer",
+    "Alias" : "Customer",
     "Columns" : "CustNum"
   }
   var baqData2 = {

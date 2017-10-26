@@ -20,7 +20,8 @@ var treeMainPanel2 = setCompanyMainTree(company2)
 var baqData1 = {
 	"Id" : "baqAllcomp",
 	"Description" : "baqAllcomp",
-	"Table" : "Customer",
+	"Table" : "Erp.Customer",
+	"Alias" : "Customer",
 	"Columns" : "Company,CustID,CustNum,Name,Address1",
 	"GeneralConfig" : "chkShared,chkAllCompanies"
 }

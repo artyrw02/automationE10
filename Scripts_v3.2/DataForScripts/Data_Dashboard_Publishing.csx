@@ -17,14 +17,16 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
   var baqData1 = {
     "Id" : "baqPublishing",
     "Description" : "baqPublishing",
-    "Table" : "Customer",
+    "Table" : "Erp.Customer",
+    "Alias" : "Customer",
     "Columns" : "CustID,CustNum,Name,State,Country"
   }
 
   var baqData2 = {
     "Id" : "baqPublishing2",
     "Description" : "baqPublishing2",
-    "Table" : "OrderHed",
+    "Table" : "Erp.OrderHed",
+    "Alias" : "OrderHed",
     "Columns" : "OrderNum,CustNum,PONum"
   }
 

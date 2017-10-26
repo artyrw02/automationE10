@@ -23,3 +23,19 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
     "dll" : "DashTracker2"
   }
 
+
+//BAQs
+
+var baq1Copy = "zCustomer01Copy"
+var baq2Copy = "zPartTracker01Copy"
+
+var baq3 = {
+  "baq" : "BAQA",
+  "config" : "chkShared,chkUpdatable",
+  "Table" : "Erp.Customer",
+  "Alias" : "Customer",
+  "Columns" :  "Company,CustID,CustNum,State,City,Country,TerritoryID"
+}
+
+//Dashboard
+var dashbID = "DashTracker2"
