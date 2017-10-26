@@ -1,4 +1,5 @@
 //USEUNIT ObjectLib
+//USEUNIT FormLib
 
 var E10 = Sys.Process("Epicor")
 
@@ -67,7 +68,6 @@ var E10 = Sys.Process("Epicor")
       Log["Error"]("Button " + (btnCaption || btnName) + " not found.")
     }
 
-
     if (objBtn["length"] > 1) {
       for(var i = 0; i < objBtn["length"]; i++){
         if (objBtn[i]["WndCaption"] == btnCaption) {
@@ -77,11 +77,6 @@ var E10 = Sys.Process("Epicor")
     }
 
     return objBtn[0]
-    // if(objBtn["Exists"]){
-    //   return objBtn
-    // }else{
-    //   return  ActiveWindow["FindChild"](["ClrClassName","WndCaption"], ["*Button*", btnName], 30)
-    // }
   }
 
   function GetButtons(btnCaption, btnName, parentCtrl){
@@ -94,9 +89,6 @@ var E10 = Sys.Process("Epicor")
       return FindObjects("*Button", "Name", ["*" + btnName], wnd)
     if (btnCaption != "" && btnName != "")
       return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
-
-
-
     //return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption + "*", "*" + (btnName || "?*")], wnd)
   }
 
@@ -104,7 +96,6 @@ var E10 = Sys.Process("Epicor")
   * @param btnCaption \a required Name of button control
   * @param btnName \a optional text or number of button
   * @param parentCtrl \a optional object of the current form 
-  * EXAMPLE - > EnterText("txtDefinitonID", "dashboardName" + "[Tab]", "Adding Dashboard name")
   */
   function ClickButton(btnCaption, btnName, parentCtrl) {
     var button = GetButton(btnCaption, btnName, parentCtrl)
@@ -112,6 +103,7 @@ var E10 = Sys.Process("Epicor")
     try{
       if (button["Exists"]) {
         button["Click"]()
+        Log["Message"]("Button " + btnName + " clicked.")
       }else{
         Log["Error"]("Button " + btnName + " was not found.")
       }
@@ -224,27 +216,31 @@ var E10 = Sys.Process("Epicor")
     var panels = panelPath["split"]("->")
 
     if(!formName){
-      var pnlCtrl = FindTopMostForm()
+      var pnlCtrl = formName ? GetForm(formName) : FindTopMostForm()
     }
 
     if (!pnlCtrl["Exists"]) 
       throw "Parent form not found. Verify the path is correct: '" + formName + "'" 
 
 
-      for (var i = 0; i < panels["length"]; i++ ) {            
-          var dockPanel = findDockingPanel(pnlCtrl, panels[i])
-          if (!dockPanel)
-            throw "Unable to find panel '" + panels[i] + "'"
-          
-          var paneCtrl = dockPanel["pane"]
+    for (var i = 0; i < panels["length"]; i++ ) {            
+      var dockPanel = findDockingPanel(pnlCtrl, panels[i])
+      if (!dockPanel)
+        throw "Unable to find panel '" + panels[i] + "'"
+      
+      var paneCtrl = dockPanel["pane"]
 
-          pnlCtrl = dockPanel["wda"]
-          //  if (!pnlCtrl.Parent.Pane.IsSelectedTab)
-          //      pnlCtrl.Parent.WaitProperty("Enabled", "True", 10000) && pnlCtrl.Parent.Activate()
-          if (!paneCtrl["IsSelectedTab"]){
-              paneCtrl["Activate"]()    
-          }
+      pnlCtrl = dockPanel["wda"]
+      //  if (!pnlCtrl.Parent.Pane.IsSelectedTab)
+      //      pnlCtrl.Parent.WaitProperty("Enabled", "True", 10000) && pnlCtrl.Parent.Activate()
+      if (!paneCtrl["IsSelectedTab"]){
+          paneCtrl["Activate"]()    
       }
+    }
+      //testing purpose
+      var pnlPath = GetObjectPath(pnlCtrl)
+      Log["Message"]("Panel '" + panelPath + "' is opened", "Path: " + pnlPath)
+      return pnlPath 
   }
 
   //search ctrl branches for panel with text 
@@ -396,29 +392,89 @@ var E10 = Sys.Process("Epicor")
     return true
   }
 
+//-------------------------------
+//RADIO FUNTIONS
+//-------------------------------
+  function GetRadioBtn(cntrlName){
+    var radioBtn = FindObject("*RadioButton*", "Name", "*"+ cntrlName +"*")
 
+    return radioBtn
+  }
 
-function GetTreePanel(value){
-  var treeObj = FindObject("*TreeView", "Name", "*" + value + "*")
-  if (treeObj["Exists"]) 
-    return treeObj
-  var treeObj = FindObject("*UltraTree", "Name", "*" + value + "*")
-  if (treeObj["Exists"]) 
-    return treeObj
-}
+//-------------------------------
+//TREEPANEL FUNTIONS
+//-------------------------------
+  function GetTreePanel(value){
+    var treeObj = FindObject("*TreeView", "Name", "*" + value + "*")
+    if (treeObj["Exists"]) 
+      return treeObj
+    var treeObj = FindObject("*UltraTree", "Name", "*" + value + "*")
+    if (treeObj["Exists"]) 
+      return treeObj
+  }
 
-function GetList(cntrlName){
-  var obj = FindObject("*ListBox*", "Name", "*" + cntrlName + "*")   
-  if (obj["Exists"]) 
-      return obj
-  var obj = FindObject("*ListView*", "Name", "*" + cntrlName + "*")   
-  if (obj["Exists"]) 
-      return obj
-}
+//-------------------------------
+//LISTS FUNTIONS
+//-------------------------------
+  function GetList(cntrlName){
+    var obj = FindObject("*ListBox*", "Name", "*" + cntrlName + "*")   
+    if (obj["Exists"]) 
+        return obj
+    var obj = FindObject("*ListView*", "Name", "*" + cntrlName + "*")   
+    if (obj["Exists"]) 
+        return obj
+  }
 
-function GetRadioBtn(cntrlName){
-  var radioBtn = FindObject("*RadioButton*", "Name", "*"+ cntrlName +"*")
+  // testing
+  function listViewSelect(ctrlName, itemName, isCase){    
+      try{
+      //overridden - if tree name not defined
+          if (typeof(itemName) != "string"){
+              itemName = ctrlName
+              ctrlName = null
+          }
+          
+          var list = GetList(ctrlName)
+          if (!list["Exists"])
+              throw "ListView not found '" + ctrlName + "'"
+              
+          //find <itemName> Item in the ListView
+          var item = findListItem(itemName, list, isCase)
+          //if Item not found throw error.
+          if (!item) {            
+              Log["Error"]("unable to find list item '" + itemName + "'")
+              throw "ListViewSelect failed" 
+          }        
+          //Select found item to get focus(autoscroll) for EpicListBox control only
+          var ctrlClass = list["ClrClassName"]
+          if (ctrlClass == "EpiListBox")
+              list["set_SelectedIndex"](item["Index"])
+          //Item found. DblClict on Item.
+          //        RectCenterDo( "DblClick", item, control )
+          list.Refresh()
+          list.DblClick( item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
+          Log.Message("ListViewSelect applied for '" + itemName + "'", "controlPath: " + ctrlName + "\r\nClrClassName:" + ctrlClass)
+          
+          return true        
 
-  return radioBtn
-}
-
+          //find item with Name starting with <text> in the <control> listView
+          //<control> - ListView object
+          function findListItem(text, control, isCase) {            
+              //for each Item in the <control> ListView
+              for (var i = 0; i < control.Items.Count; i++ ){                
+                  //get current Item object
+                  var item = control.Items.Item_2(i)
+                  //if Item name starts with <test> - target item found. Return it.
+                  //        if( item.Text.StartsWith(text) )            
+                  if (aqString.Compare(aqString.Trim(item.Text.OleValue), aqString.Trim(text), isCase) == 0)            
+                      return item
+              }            
+              //All items checked. No Item with <Text> found. 
+              return null
+          }
+      }    
+      catch(e){        
+          Log.Error(e, e.message)
+          return false
+      }    
+  }
