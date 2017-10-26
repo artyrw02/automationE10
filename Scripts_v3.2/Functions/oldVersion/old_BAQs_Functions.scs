@@ -21,9 +21,9 @@ function CreateSimpleBAQ(baqData){
 
   AddColumnsBAQ(BAQFormDefinition, baqData["Table"], baqData["Columns"])
 
-  AnalyzeSyntaxisBAQ(BAQFormDefinition)
+  AnalyzeSyntaxisBAQ()
 
-  TestResultsBAQ(BAQFormDefinition)
+  TestResultsBAQ()
   
   SaveBAQ()
   
@@ -90,11 +90,12 @@ function CreateBAQ(baqID, baqDescription, generalConfig){
 * @param: BAQFormDefinition - Object that contains the definition of the form
 * @param: table - String that contains the name table that will be added to the BAQ
 * @return: none*/
-function AddTableBAQ(BAQFormDefinition, table){
+function AddTableBAQ(table){
   //Change to "Query Builder" tab
   // BAQFormDefinition["dockableWindow2"]["Activate"]()
   Delay(1500)
   //Activate 'Phrase Build'
+  var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   // BAQFormDefinition["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
   OpenPanelTab("Query Builder->Phrase Build")
 
@@ -139,7 +140,8 @@ function AddTableBAQ(BAQFormDefinition, table){
 * @param: table - String that contains the name table that was be added to the BAQ in order to retrieve the columns
 * @param: columns - String that contains the name columns that will be added to the BAQ separated by ','
 * @return: none*/
-function AddColumnsBAQ(BAQFormDefinition, table, columns){
+function AddColumnsBAQ(table, columns){
+  var BAQFormDefinition = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]
   //Change to "Query Builder" tab
   // BAQFormDefinition["dockableWindow2"]["Activate"]()
 
