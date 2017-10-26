@@ -8,7 +8,8 @@ function GetMenus(pnlPath){
     
     //DEBUG
     fullNamePath = fullNamePath.replace(/\//g, "*")
-    var wnd = pnlPath? E10 : FindTopMostForm() 
+//    var wnd = pnlPath? E10 : FindTopMostForm()
+    var wnd = FindTopMostForm() 
 
     obj = FindObjects("*UltraToolbarsDockArea", ["Name", "FullName"], ["*_Toolbars_Dock_Area_Top*", fullNamePath], wnd)
     if (obj != undefined && obj["length"] != 0) 
@@ -19,7 +20,7 @@ function GetMenus(pnlPath){
         return obj
 }
 
-function ClickMenu(menuName, pnlPath){    
+function ClickMenu(menuName, pnlPath, opt){    
     try{        
         var aMenuName = menuName["split"]("->")
 
@@ -42,12 +43,16 @@ function ClickMenu(menuName, pnlPath){
         var aItemIndex = expandPopupMenu(menuItems, aMenuName)
                 
         //navigate to the last menu item from UltraToolbarsDockArea extended collection and Click last item
-        
-        if(aItemIndex["length"] > 2){
-          menuItems = tbDockArea["wItems"]["Item"](aItemIndex[0])
+        // <opt> used only in case a menu item was enabled from other location (e.p dashboards Refresh All)
+        if(opt){
+          if(aItemIndex["length"] > 2){
+            menuItems = tbDockArea["wItems"]["Item"](aItemIndex[0])
+          }else{
+            menuItems = tbDockArea["wItems"]["Item"](1)
+          } 
         }else{
-          menuItems = tbDockArea["wItems"]["Item"](1)
-        } 
+            menuItems = tbDockArea["wItems"]["Item"](aItemIndex[0])
+        }
         
         for (var i = 1; i < aItemIndex["length"]; i++)        
             menuItems = menuItems["Items"]["Item"](aItemIndex[i])
@@ -103,5 +108,35 @@ function expandPopupMenu(menuItems, aMenuName)
       BuiltIn.Delay(100)   //Wait for popup window appears
   }    
   return aItemIndex         
+}
+
+//Used for menu textboxes
+function SetToolButtonText(areaPath, Name, txt)
+{
+  // find toolbar
+  var area = GetMenus(areaPath)
+  
+  //find button with <Name> tooltip    
+  var menuItem = findToolInArea(Name, area[0]);
+  //enter text
+  menuItem["Set_Text"](txt);
+}
+
+//find tool with <toolText> in the <dockArea> toolBars
+function findToolInArea(toolText, dockArea)
+{    
+    //for each toolBar in the <dockArea>
+    for ( var b = 0; b < dockArea.ToolbarsManager.Toolbars.Count; b++)  {        
+        //get current toolbar object
+        var bar = dockArea.ToolbarsManager.Toolbars.Item(b)
+        //trying to find tool with <toolText> ToolTip in the current toolBar
+        for ( var t = 0; t < bar.Tools.Count; t++ ) {            
+            var tool = bar.Tools.Item(t)
+            if (tool.CaptionAsToolTip == toolText)
+                return tool
+        }        
+    }    
+    //all toolBars checked. No tool with <toolText> ToolTip found.
+    return null
 }
 
