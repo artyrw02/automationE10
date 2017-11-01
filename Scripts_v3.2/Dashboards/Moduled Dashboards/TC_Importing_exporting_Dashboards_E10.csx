@@ -53,7 +53,7 @@ function CreateBAQ1(){
     // Aliases["Epicor"]["GuessBOForm"]["guessBOPanel"]["epiGroupBox1"]["lbBOs"]["ClickItem"]("Erp.Customer")
     // Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
 
-    AnalyzeSyntaxisBAQ(BAQFormDefinition)
+    AnalyzeSyntaxisBAQ()
 
     //Get List button
     // Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow4"]["analyzePanel1"]["pnlButtons"]["grpUpd"]["btnGetList"]["Click"]()

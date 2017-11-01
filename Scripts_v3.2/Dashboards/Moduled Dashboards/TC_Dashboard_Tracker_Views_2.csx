@@ -112,7 +112,7 @@ function CreateBAQ3(){
 
   AddTableBAQ(baq3["Table"], baq3["Alias"])
 
-  AddColumnsBAQ(baq3["Table"], baq3["Columns"])
+  AddColumnsBAQ(baq3["Alias"], baq3["Columns"])
   
   // Go to Update Tab and in General Properties tab check on Allow Multiple Row Update. 
   // In the grid on Updatable column check country , city and state to be updatable.
@@ -890,8 +890,10 @@ function CustomizeTrackerViewQuery3(){
 
   // Aliases["Epicor"]["CustomToolsDialog"]["UltraMainMenu"]["Click"]("Tools|ToolBox");
   // Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|ToolBox")
+  Delay(2500)
   ClickMenu("Tools->ToolBox")
-
+  Delay(2500)
+  
   var toolboxList = GetList("lvwItems")
   toolboxList["ClickItemXY"]("EpiCombo", -1, 63, 8)
 

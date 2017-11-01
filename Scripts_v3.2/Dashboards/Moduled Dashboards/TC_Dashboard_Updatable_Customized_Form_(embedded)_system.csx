@@ -33,6 +33,7 @@ function OpenFormDevMode(){
     Log["Message"]("Step 3")
     MainMenuTreeViewSelect(treeMainPanel1 + "Production Management;Job Management;Setup;Part")
 
+    DElay(2500)
     // 4- Check Base Only and click Ok       
     Log["Message"]("Step 4")
     // Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["grpNoLayer"]["chkBaseOnly"]["Checked"] = true
@@ -41,7 +42,8 @@ function OpenFormDevMode(){
     // Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
     ClickButton("OK")
     Delay(10000)
-      
+    
+    E10["Refresh"]()
     // 5- click Tools > Customization
     Log["Message"]("Step 5")
     
@@ -172,7 +174,7 @@ function OpenCustomedForm(){
     MainMenuTreeViewSelect(treeMainPanel1 + "Production Management;Job Management;Setup;Part")
 
     Delay(2500)
-
+    E10["Refresh"]()
     /*(FUTURE REFERENCE FOR TREE LIST ITEMS)*/
     // 24- Select the created customizacion       
     Log["Message"]("Step 24")
@@ -188,7 +190,7 @@ function OpenCustomedForm(){
 
 
 function TestCustomedForm(){
-
+    E10["Refresh"]()
     var testPart = "00P1"
     // 25, 26 - Click on Part button - Click Search and select a Part and click Ok                              
     Log["Message"]("Step 25,26")

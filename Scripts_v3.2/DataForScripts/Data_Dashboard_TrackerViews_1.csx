@@ -16,7 +16,7 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 
 //Copy BAQ data
 var baq = "zCustomer01"
-var baq1copy = "zCust01"
+var baq1Copy = "zCust01"
 
 //Dashboard for testing
 var dashb1 = "DashTracker"

@@ -11,7 +11,6 @@ function TC_Dashboard_All_companies(){
   
 }
 
-
 //Step 2
 function CreateBAQ(){
   ExpandComp(company1)
@@ -151,7 +150,10 @@ function VerifyAllCompaniesChk() {
     OpenDashboard(dashb1)
 
     //Verify dialog message
-    CheckWindowMessage("Dashboard")
+    // CheckWindowMessage("Dashboard")
+    CheckWindowMessageModals()
+    Delay(2500)
+    ClickButton("OK")
 
     Delay(3500)
     OpenPanelTab("General")
@@ -390,7 +392,10 @@ function CreateCopySysDashb(){
 
     ClickMenu("Actions->Modify Dashboard")
    
-    CheckWindowMessage("System Dashboards")
+    // CheckWindowMessage("System Dashboards")
+    CheckWindowMessageModals()
+    Delay(2500)
+    ClickButton("OK")
     
     Log["Message"]("Step 49")
     Delay(2000)

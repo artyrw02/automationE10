@@ -23,7 +23,6 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
     "dll" : "DashTracker2"
   }
 
-
 //BAQs
 
 var baq1Copy = "zCustomer01Copy"

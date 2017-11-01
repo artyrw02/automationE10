@@ -180,10 +180,6 @@ function DashboardPanelTest(){
       ClickButton("OK")
   }
   
-  // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
-
-  // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
-  
   //Gives time to load the children inside the variable
   Delay(2000)
 

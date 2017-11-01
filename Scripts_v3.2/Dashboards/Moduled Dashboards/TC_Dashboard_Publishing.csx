@@ -209,15 +209,15 @@ function TestBeforeDeploy1(){
   
   //9- Click 'Test Application'
   ClickButton("Test Application")
-  Delay(1500)
-  ClickButton("Cancel")
+  // Delay(1500)
+  // ClickButton("Cancel")
 
   /*9- Test data before deployment */
   Log["Message"]("Step 9")
   Log["Message"]("Ready to test data")
 
   // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
-
+  Aliases["Epicor"]["MainController"]["Activate"]()
   // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
   var gridDashboardPanelChildren = RetrieveGridsMainPanel()
 
@@ -233,7 +233,6 @@ function TestBeforeDeploy1(){
   // baq2Grid["Click"]()
   // ClickMenu("Edit->Refresh")
    Log["Message"]("Dashboard refreshed")
-
 
   //Select first record on BAQ1 results to notice change of data on BAQ2
   baq1Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Activate"]()
@@ -273,8 +272,9 @@ function TestBeforeDeploy1(){
 
 // Step 10
 function TestBeforeDeploy2(){
-
+    E10["Refresh"]()
     // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+    Aliases["Epicor"]["MainController"]["Activate"]()
 
     // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
     var gridDashboardPanelChildren = RetrieveGridsMainPanel()
@@ -298,13 +298,21 @@ function TestBeforeDeploy2(){
     // click 'Properties' option
     baq2Grid["UltraPopupMenu"]["Click"]("Open With...|Sales Order Entry");
 
-    Delay(2500)
-    if(Aliases["Epicor"]["SalesOrderForm"]["Exists"]){
-      Log["Message"]("|Sales Order Entry opened")
-    }else{
-      Log["Error"]("There was a problem opening Sales Order Entry")
+    var count
+    while(true){
+      Delay(2500)
+      if(Aliases["Epicor"]["SalesOrderForm"]["Exists"]){
+        Log["Message"]("|Sales Order Entry opened")
+        break
+      }else{
+        count++
+        Log["Message"]("Trying to open: " + count)
+      }
+
+      if (count == 10 && Aliases["Epicor"]["SalesOrderForm"]["Exists"] == false) {
+        Log["Error"]("There was a problem opening Sales Order Entry")
+      }
     }
-    Delay(2500)
   /* end Open Sales order */
 }
 
@@ -312,6 +320,9 @@ function TestBeforeDeploy2(){
 function TestBeforeDeploy3(){
 
     // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
+    Aliases["Epicor"]["MainController"]["Activate"]()
+
+    E10["Refresh"]()
 
     // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
     var gridDashboardPanelChildren = RetrieveGridsMainPanel()
@@ -322,7 +333,7 @@ function TestBeforeDeploy3(){
     var baq1Grid = gridDashboardPanelChildren[1]
     var baq2Grid = gridDashboardPanelChildren[2]
     
-  /* 11- change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
+    /* 11- change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
     Log["Message"]("Step 11")
     //Activate Dash window
     Aliases["Epicor"]["MainController"]["Activate"]()
@@ -371,25 +382,31 @@ function TestBeforeDeploy3(){
       Log["Warning"]("Order " + cell["Value"] + " from grid 3 is not loaded in Sales Order " + salesOrderValue)
     }
 
+    Delay(2500)
     //Close Sales Order
     ClickMenu("File->Exit")
 
     //Close Dashboard Panel
+    Aliases["Epicor"]["MainController"]["Activate"]()
     ClickMenu("File->Exit")      
 
-    Log["Checkpoint"]("Data was validated, no errors found")
-
-    DeployDashboard(DashbData["deploymentOptions"])
-    Log["Message"]("Dashboard was deployed")
-
-    Log["Message"]("Step 12") 
-    
-    //Exit dashboard
-    ExitDashboard()
-    Log["Message"]("Dashboard was created correctly.")
-
+    Log["Message"]("Data was validated, no errors found")
 }
 
+function DeployDashb(){
+  E10["Refresh"]()
+  Delay(2500)
+  ClickButton("Cancel")
+  
+  DeployDashboard(DashbData["deploymentOptions"])
+  Log["Message"]("Dashboard was deployed")
+
+  Log["Message"]("Step 12") 
+  
+  //Exit dashboard
+  ExitDashboard()
+  Log["Message"]("Dashboard was created correctly.")
+}
 // Step 13,14
 function CreateDashboard2(){
   //Open Dashboard   
@@ -430,6 +447,7 @@ function CreateDashboard2(){
   //Deactivate Published Views
   ClickMenu("View->Published Views")
 
+  Delay(2500)
   DeployDashboard(DashbData2["deploymentOptions"])
   Log["Checkpoint"]("Dashboard was deployed")
 

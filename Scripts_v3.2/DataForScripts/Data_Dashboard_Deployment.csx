@@ -8,13 +8,13 @@
 
 //Companies that will be used through the test case
 var company1 = "Epicor Education"
-var plant1 = "Main Plant"
+var plant1 = "Main"
 
 //Used to navigate thru the Main tree panel
 var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 
 //Dashboards used for Test
-var dashb1 = "SalesPersonWorkbench"
+var dashb1 = "EstimateTrims"
 var dashb2 = "Dash2Deploy"
 var dashb3 = "PartOnHandStatus"
 

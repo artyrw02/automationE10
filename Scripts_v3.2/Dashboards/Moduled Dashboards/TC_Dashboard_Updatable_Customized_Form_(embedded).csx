@@ -94,6 +94,7 @@ function AddQueryDashboard(){
     SaveDashboard()
     Log["Message"]("Dashboard with " + baqID +" created")
 
+    E10["Refresh"]()
     var dashboardTree =  GetTreePanel("DashboardTree")
 
     Log["Message"]("Step 6")
@@ -323,6 +324,8 @@ function AddCustomizationDashb(){
     // Open Sales Management > Customer Relationship Management > Setup > Customer(select Base only option and click OK in the ""Select Customization"" dialog)
     MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;Customer")
     
+    E10["Refresh"]()
+
     Delay(2500)
     // Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["grpNoLayer"]["chkBaseOnly"]["Checked"] = true
     CheckboxState("chkBaseOnly", true)
@@ -331,6 +334,7 @@ function AddCustomizationDashb(){
     // Aliases["Epicor"]["CustomSelectCustTransDialog"]["btnOK"]["Click"]()
 
     Delay(2500)
+    E10["Refresh"]()
     // click Tools > Customization
     // Aliases["Epicor"]["CustomerEntryForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Customization")
     ClickMenu("Tools->Customization")
@@ -440,6 +444,7 @@ function OpenCustomizedForm() {
   Log["Message"]("Step 18")
   // Go to Sales Management> Customer Relationship Management> Setup> Customer and select the customization from previous step
   MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;Customer")
+  E10["Refresh"]()
   /*(FUTURE REFERENCE FOR TREE LIST ITEMS)*/
   // Aliases["Epicor"]["CustomSelectCustTransDialog"]["grpCustomization"]["etvAvailableLayers"]["ClickItem"]("Base|EP|Customizations|Automation_test")
   var availableLayers = GetTreePanel("AvailableLayers")
@@ -449,7 +454,7 @@ function OpenCustomizedForm() {
 }
 
 function TestCustomizedForm(){
-  Delay(1500)
+  Delay(2500)
   OpenPanelTab("Detail")
 
   // In the Customer> Detail tab retrieve ""Addison""
@@ -499,6 +504,7 @@ function TestCustomizedForm(){
     Log["Error"]("Dashboard didn't retrive data for Dalton Customer")
   }
 
+  ClickMenu("File->Exit")
   // deactivate dev mode
   // Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")  
   ClickMenu("Options->Developer Mode")  

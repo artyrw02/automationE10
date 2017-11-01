@@ -37,7 +37,7 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
     "dashDescription" : "Publishing",
     "generalOptions" : "",
     "baqQuery" : "",
-    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item"
+    "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
   }
 
   var DashbData2 = {
