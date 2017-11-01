@@ -147,6 +147,9 @@ function SaveDashboard(){
 * @param: deploymentOptions - String that contains the deployment options separated by ',' separator
 * @return: none*/
 function DeployDashboard(deploymentOptions){
+  Delay(2500)
+  E10["Refresh"]()
+  
   ClickMenu("Tools->Deploy Dashboard")
   Delay(2500)
   //Selection the option for the Actions listed 
@@ -173,20 +176,25 @@ function DeployDashboard(deploymentOptions){
     }
   }
 
+  Delay(2500)
+
   ClickButton("Deploy")
   Log["Message"]("Clicked deploy button")
   Delay(5000)
 
-  var ActiveWindow = Sys.Desktop.ActiveWindow()
+  // var ActiveWindow = FindTopMostForm()
 
   Delay(1500)
-  var textStatus = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["*TextBox*", "*txtStatus*"], 30)
+  // var textStatus = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["*TextBox*", "*txtStatus*"], 30)
+  var textStatus = GetText("txtStatus")
 
   Delay(1500)
-  var deploymentStatus = findValueInString(textStatus["Text"]["OleValue"], "successfully compiled")
+  // var deploymentStatus = findValueInString(textStatus["Text"]["OleValue"], "successfully compiled")
+  var deploymentStatus = findValueInString(textStatus, "successfully compiled")
  
   Delay(1500)
   if(deploymentStatus) {
+    E10["Refresh"]()
     ClickButton("OK")
     Log["Message"]("Dashboard was deployed correctly. Clicked OK button to close Deploy Dashboard window.")
   }else{
@@ -354,8 +362,7 @@ function DeleteDashboard(dashboardIDs) {
       ClickMenu("Clear")
       if(Aliases["Epicor"]["dlgWarning"]["Exists"]){
         //Click 'Yes' to confirm 
-        // Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()
-        ClickButton("OK")  
+        Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()  
       }
       Log["Message"](dashboardIDtext["Text"] + " was cleared.")
     }

@@ -159,13 +159,20 @@ function ChangePlant(Plant){
   }
 }
 
+// function ActivateFavoritesMenuTab() {
+//   if(Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
+//      Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false)   
+//   }
+//   Delay(1000)
+//    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
+//    Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()  
+// }
+
 function ActivateFavoritesMenuTab() {
-  if(Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
-     Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false)   
+  if(!Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
+     Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)   
   }
-  Delay(1000)
-   Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
-   Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()  
+  OpenPanelTab("Favorites") 
 }
 
 // Deactivates menu tab
