@@ -116,14 +116,17 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
 /*funtion that adds a query on dashboard defined
 * @param: baqQuery - String that contains the information of the query (ID)
 * @return: none*/
-function AddQueriesDashboard(baqQuery){
+function AddQueriesDashboard(baqQuery, baqCaption){
   var arrBaqQueries = baqQuery.split(",")
 
   for( var i = 0; i <= arrBaqQueries.length - 1 ; i++){
     ClickMenu("File->New...->New Query")
 
     EnterText("txtQueryID", arrBaqQueries[i] + "[Tab]", "Adding Query text")  
-    
+
+    if(baqCaption != undefined)
+      EnterText("txtCaption", baqCaption + "[Tab]")  
+      
     ClickButton("OK")
   }
   
