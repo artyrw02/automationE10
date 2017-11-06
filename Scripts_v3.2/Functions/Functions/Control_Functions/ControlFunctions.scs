@@ -2,6 +2,7 @@
 //USEUNIT FormLib
 
 var E10 = Sys.Process("Epicor")
+E10["Refresh"]()
 
 //-------------------------------
 //CHECKBOX FUNTIONS
@@ -215,10 +216,8 @@ var E10 = Sys.Process("Epicor")
 
     var panels = panelPath["split"]("->")
 
-    if(!formName){
-      var pnlCtrl = formName ? GetForm(formName) : FindTopMostForm()
-    }
-
+    var pnlCtrl = formName ? GetForm(formName) : FindTopMostForm()
+    
     if (!pnlCtrl["Exists"]) 
       throw "Parent form not found. Verify the path is correct: '" + formName + "'" 
 
