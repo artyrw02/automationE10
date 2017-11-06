@@ -1,7 +1,10 @@
 //USEUNIT ObjectLib
 //USEUNIT FormLib
+//USEUNIT ControlFunctions
 
 var E10 = Sys.Process("Epicor")
+
+E10["Refresh"]
 
 function GetMenus(pnlPath){
     var fullNamePath = "*" + (pnlPath || "?") + "*"
@@ -140,3 +143,22 @@ function findToolInArea(toolText, dockArea)
     return null
 }
 
+// Purpose: Right click on Scpecidic item on Tree view control. Works only for Dashboard Forms
+// Parameters
+//    treeElement: element - string of the item of the tree
+//    menuOption: Right click context menu Option to Perform. E.g. Add Operation, Add Subcontract Operation
+// Output: n/a
+
+function ClickPopupMenu(treeElement, menuOption){
+  var dashboardTree = GetTreePanel("DashboardTree")
+  var popupMenu = FindObject("*DashboardPanel*", "Name", "*dbPanel*")
+
+  if(popupMenu["Exists"]){
+    // dashboardTree["ClickItemR"]("Queries|BAQA: BAQA test|BAQA: Summary")
+    dashboardTree["ClickItemR"](treeElement)
+    popupMenu["UltraPopupMenu"]["Click"](menuOption)
+    Log["Message"]("Option: " + menuOption + " selected from UltraPopupMenu")
+  } else{
+    Log["Error"]("No object found")
+  }
+} 
