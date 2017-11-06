@@ -182,15 +182,15 @@ function DeployDashboard(deploymentOptions){
   Log["Message"]("Clicked deploy button")
   Delay(5000)
 
-  // var ActiveWindow = FindTopMostForm()
+  var ActiveWindow = FindTopMostForm()
 
   Delay(1500)
-  // var textStatus = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["*TextBox*", "*txtStatus*"], 30)
-  var textStatus = GetText("txtStatus")
+  var textStatus = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["*TextBox*", "*txtStatus*"], 30)
+  // var textStatus = GetText("txtStatus")
 
   Delay(1500)
-  // var deploymentStatus = findValueInString(textStatus["Text"]["OleValue"], "successfully compiled")
-  var deploymentStatus = findValueInString(textStatus, "successfully compiled")
+  var deploymentStatus = findValueInString(textStatus["Text"]["OleValue"], "successfully compiled")
+  // var deploymentStatus = findValueInString(textStatus, "successfully compiled")
  
   Delay(1500)
   if(deploymentStatus) {
@@ -210,14 +210,13 @@ function DeployDashboard(deploymentOptions){
 
 //Closes the dashboard form
 function ExitDashboard(){
-   if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
-    Log["Error"]("There is a dialog message active.")
-  }else{
+    E10["Refresh"]()
+
+    Delay(2500)
     ClickMenu("File->Exit")
     Log["Checkpoint"]("Exit Dashboard Form")
-  }
 }
-
+  
 //Closes only the dashboard not the form
 function CloseDashboard(){
   ClickMenu("File->Close All")
@@ -259,25 +258,37 @@ function CreateMenu(MenuData){
   EnterText("txtName", MenuData["menuName"] + "[Tab]", "Adding Menu Name text")  
   EnterText("nedSeq", MenuData["orderSequence"] + "[Tab]", "Adding Order Sequence text")  
   ComboboxSelect("cboType", MenuData["menuType"])
-  
+   
+  var flag = true
+
   //Menu type
   if (MenuData["menuType"] == "Dashboard-Assembly") {
     EnterText("cboDashboard", MenuData["dll"] + "[Tab]", "Adding dll text") 
   }else if (MenuData["menuType"] == "Menu item") {
     EnterText("txtProgram", MenuData["dll"] + "[Tab]", "Adding dll text") 
   }
-   
-  var flag = true
 
   //Validations on the form
   if(MenuData["validations"] != undefined && MenuData["validations"] != "" && MenuData["validations"] != null){
     var validations = MenuData["validations"].split(",")
 
     for(var i = 0; i < validations["length"]; i++){
-      if(validations[i] != "Web Access"){
-        CheckboxState("*chk"+"*"+validations[i]+"*", true)
-        Log["Checkpoint"]("Checkbox from menu was selected - " + validations[i])
-      }else{
+      if(validations[i] == "All Companies"){
+        CheckboxState("chkAllCompanies", true)
+        Log["Message"]("Checkbox from menu was selected - " + validations[i])
+      }
+
+      if(validations[i] == "Enable"){
+        var enabled = verifyStateCheckbox("chkEnable")
+
+        if(enabled){
+          Log["Message"]("Checkbox Enabled is checked")
+        }else{
+          Log["Error"]("Checkbox Enabled is not checked")
+        }
+      }
+
+      if(validations[i] == "Web Access"){
         var webAccess = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpProgramMain"]["eshWebAccess"]["EnabledCaption"]
         if(webAccess == "Available"){
           Log["Checkpoint"]("Web Access  " + validations[i] + " is Available.")
@@ -290,12 +301,15 @@ function CreateMenu(MenuData){
       }
     }
   }
-  
+
   if(flag){
+    E10["Refresh"]()
+
     ClickMenu("File->Save")
     Delay(1000)
-    ClickMenu("File->Close")
+    ClickMenu("File->Exit")
     Log["Message"]("Menu created correctly")
+    Delay(1000)
   }else{
     Log["Error"]("There was a problem while creating the menu")
   }
