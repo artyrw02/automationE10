@@ -405,6 +405,7 @@ var E10 = Sys.Process("Epicor")
 //TREEPANEL FUNTIONS
 //-------------------------------
   function GetTreePanel(value){
+    E10["Refresh"]()
     var treeObj = FindObject("*TreeView", "Name", "*" + value + "*")
     if (treeObj["Exists"]) 
       return treeObj
@@ -426,7 +427,7 @@ var E10 = Sys.Process("Epicor")
   }
 
   // testing
-  function listViewSelect(ctrlName, itemName, isCase){    
+  function ListViewSelect(ctrlName, itemName, isCase){    
       try{
       //overridden - if tree name not defined
           if (typeof(itemName) != "string"){
