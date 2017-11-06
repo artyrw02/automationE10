@@ -114,6 +114,7 @@ function RestartSmartClient() {
   Delay(2500)
   ActivateFullTree()
   ActivateFavoritesMenuTab()
+  DeactivateMainDevMode()
   
   OpenPanelTab("Menu Groups")
 }
