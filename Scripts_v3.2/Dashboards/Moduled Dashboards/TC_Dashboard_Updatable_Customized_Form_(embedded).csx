@@ -319,7 +319,8 @@ function AddCustomizationDashb(){
 
     //Developer mode 
     // Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")
-    ClickMenu("Options->Developer Mode")
+    // ClickMenu("Options->Developer Mode")
+    ActivateMainDevMode()
 
     // Open Sales Management > Customer Relationship Management > Setup > Customer(select Base only option and click OK in the ""Select Customization"" dialog)
     MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;Customer")
@@ -504,10 +505,12 @@ function TestCustomizedForm(){
     Log["Error"]("Dashboard didn't retrive data for Dalton Customer")
   }
 
+  Delay(2500)
+
   ClickMenu("File->Exit")
   // deactivate dev mode
   // Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Options|&Developer Mode")  
-  ClickMenu("Options->Developer Mode")  
+  DeactivateMainDevMode()
 
 }
  
