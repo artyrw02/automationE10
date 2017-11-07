@@ -198,6 +198,9 @@ function DeployDashboard(deploymentOptions){
   Delay(1500)
   if(deploymentStatus) {
     E10["Refresh"]()
+
+    CheckEpicMsgdialog()
+    
     ClickButton("OK")
     Log["Message"]("Dashboard was deployed correctly. Clicked OK button to close Deploy Dashboard window.")
   }else{
