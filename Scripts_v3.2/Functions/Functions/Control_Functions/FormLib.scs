@@ -1,10 +1,12 @@
 //USEUNIT ObjectLib
+//USEUNIT ControlFunctions
 
 // Gets the object type checkbox
 function GetForm(FormName){
   var E10 = Sys.Process("Epicor")
 
   var wnd = FindObject("*Form*", "WndCaption", "*" + FormName + "*", E10 )
+
   return wnd
 }
 
@@ -141,11 +143,12 @@ function CheckExceptionWnd(){
 @Wnd: Window caption of the form displayed
 @action: action that will be performed for the dialog displayed (Yes/No)
 */
-function CheckEpicMsgdialog(Wnd, action){
-    var wnd = GetForm(Wnd)
+function CheckEpicMsgdialog(){
+    var name = "Static"
+    var windowsMsg = FindObject("*", ["Name","WndCaption"],  ["*" + name + "*", "*Exception*"])
 
-    if (wnd["Exists"]) {
-      ClickButton(action)
+    if (windowsMsg["Exists"]) {
+      // ClickButton("OK")
+      Log["Message"]("Message dialog displayed. '" + windowsMsg["WndCaption"]+ "'")
     }
 }
-
