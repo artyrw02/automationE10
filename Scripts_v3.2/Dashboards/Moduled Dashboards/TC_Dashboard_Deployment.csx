@@ -44,7 +44,6 @@ function RetrieveSysDashb(){
   DeployDashboard("Deploy Smart Client")
   Log["message"]("Dashboard " + dashb1Copy + " deployed")
 
-
   Log["Message"]("Step 7 - Close Dashboard")
 
   CloseDashboard()
@@ -115,12 +114,16 @@ function CreateDashb(){
     
     Delay(2500)
     Log["Message"]("Step 12 - Deploy Dashboard. Validation of dialog messages")
-    DeployDashboard("Deploy Smart Client,Add Favorite Item")  
+    DeployDashboard("Deploy Smart Client,Add Favorite Item")
+    ExitDashboard()
+
 }
  
 function CreateMenu1(){
   Log["Message"]("Step 13 - Creating menu")
-  
+  Delay(1500)
+  E10["Refresh"]()
+
   MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
 
   CreateMenu(MenuData)
@@ -133,7 +136,6 @@ function RestartE10(){
 }
 
 function TestDeployedDbFavMenu(){
-  Log["Message"]("Step 15 - Activate Favorites Tab")
 
   Log["Message"]("Step 15 - Opening Dashboard from Favorites Tab")
   OpenDashboardFavMenu(dashb2)
@@ -178,13 +180,15 @@ function SysDashbMaintenanceDeploy(){
 }
 
 function SysDashbMaintenanceModify(){
-  Log["Message"]("Step 38 - Click on Actions> Modify Dashboard")
 
   E10["Refresh"]()
 
   Delay(2500)
   
+  Log["Message"]("Step 38 - Click on Actions> Modify Dashboard")
   ClickMenu("Actions->Modify Dashboard")
+  
+  Delay(2500)
 
   CheckWindowMessageModals()
   Delay(2500)
