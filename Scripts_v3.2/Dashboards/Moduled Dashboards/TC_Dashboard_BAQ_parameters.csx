@@ -48,20 +48,14 @@ function CreateBAQ2(){
   OpenPanelTab("Phrase Build")
 
   //---------- Setting params BAQ 2 --------'
-    // var diagram = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel"]["pnlQueryVisual"]["windowDockingArea1"]["dockableWindow1"]["diagramPanel"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["windowDockingArea2"]["dockableWindow2"]["diagCanvas"]
     var diagram = FindObject("*Diagram*", "Name", "*diagCanvas*")
     diagram.HScroll.Pos = 0
     diagram.VScroll.Pos = 0
     diagram.Click(258, 55)
 
-    // var queryCondPanel = Aliases["Epicor"]["BAQDiagramForm"]["windowDockingArea1"]["dockableWindow2"]["allPanels1"]["windowDockingArea1"]["dockableWindow2"]["subQueryPanel1"]["windowDockingArea1"]["dockableWindow1"]["diagramQueryPanel"]["splitMain"]["SplitterPanel"]["splitDiagramWhere"]["SplitterPanel2"]["pnlQueryTabs"]
-
-    // queryCondPanel["zEpiDockManagerPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("Filtering toolbar|Add Row")
     OpenPanelTab("Table Criteria")
     ClickMenu("Add Row")
 
-    // var tableWhereClausePanel = queryCondPanel["windowDockingArea1"]["dockableWindow3"]["tableWhereClausePanel"]
-    // var epiUltraGrid = tableWhereClausePanel["grdTableWhere"]
     var epiUltraGrid = GetGrid("grdTableWhere")
     
     SelectCellDropdownGrid2("Field", "CustNum", epiUltraGrid)
@@ -69,41 +63,27 @@ function CreateBAQ2(){
     SelectCellDropdownGrid2("Filter Value", "specified parameter", epiUltraGrid)
 
     //Select Parameter
-    // Aliases["Epicor"]["ParameterForm"]["btnDefine"]["Click"]()
     ClickButton("Define...")
 
     //File New Parameter
-    // Aliases["Epicor"]["CtrlDesignerForm"]["sonomaFormToolbarsDockAreaTop"]["ClickItem"]("[0]|&File|&New")
     ClickMenu("File->New")
 
-    // var queryParametersdialog = Aliases["Epicor"]["CtrlDesignerForm"]["windowDockingArea2"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow2"]["detailPanel1"]["windowDockingArea1"]
-    
     //Parameter name dialog
-    // queryParametersdialog["dockableWindow1"]["ctrlDescrPanel1"]["txtFldName"]["Keys"]("CustNum")
     EnterText("txtFldName" , "CustNum" + "[Tab]")
-    // queryParametersdialog["dockableWindow1"]["ctrlDescrPanel1"]["cmbDataType"]["Keys"]("int")
     EnterText("cmbDataType" , "int" + "[Tab]")
-    // queryParametersdialog["dockableWindow1"]["ctrlDescrPanel1"]["cmbDataType"]["Keys"]("[Tab]")
-    // queryParametersdialog["dockableWindow1"]["ctrlDescrPanel1"]["cmbEditorType"]["Keys"]("DropDown List")
     EnterText("cmbEditorType" , "DropDown List" + "[Tab]")
-    // queryParametersdialog["dockableWindow1"]["ctrlDescrPanel1"]["cmbDataFrom"]["Keys"]("BAQ")
     ComboboxSelect("cmbDataFrom" , "BAQ")
 
-    // var queryParamsValueEditor = queryParametersdialog["dockableWindow2"]["ctrlCustomEditor1"]["windowDockingArea1"]["dockableWindow2"]["ctrlBAQList1"]
-
     //Query ID
-    // queryParamsValueEditor["txtExportID"]["Keys"](baqData["Id"])
     EnterText("txtExportID", baqData["Id"] + "[Tab]")
     //Display Column
-    // queryParamsValueEditor["cmbDisplay"]["Keys"]("Customer_CustNum")
     EnterText("cmbDisplay", "Customer_CustNum" + "[Tab]")
     //DisplayValue
-    // queryParamsValueEditor["cmbValue"]["Keys"]("Customer_CustNum")
     EnterText("cmbValue", "Customer_CustNum" + "[Tab]")
 
     ClickMenu("File->Save")
     Log["Message"]("Parameters where set for the filter value.")
-    //Exit
+
     ClickMenu("File->Exit")
 
     //Select parameter
@@ -203,6 +183,5 @@ function DashboardPanelTest(){
     }
   }
 
-  //Closes panel
   ClickMenu("File->Exit")
 }
