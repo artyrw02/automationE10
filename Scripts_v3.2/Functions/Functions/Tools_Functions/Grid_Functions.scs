@@ -335,7 +335,7 @@ function GetGridMainPanel(value){
   var gridsMainPanel = RetrieveGridsMainPanel()
 
     for (var i = 0; i < gridsMainPanel["length"]; i++) {
-      if (gridsMainPanel[i]["WndCaption"] == value +': Summary') {
+      if (gridsMainPanel[i]["WndCaption"] == value +': Summary' || gridsMainPanel[i]["WndCaption"] == value) {
         return gridsMainPanel[i]
       }
     }
