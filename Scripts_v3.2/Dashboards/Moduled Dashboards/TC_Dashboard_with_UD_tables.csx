@@ -8,13 +8,10 @@
 function Dashboard_with_UD_tables(){
 }
 
-// Steps 2
 function CreateMenuUDEntry(){
-  //Open Menu maintenance   
   Log["Message"]("Step 2")
   MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
   
-  //Creates Menu
   CreateMenu(MenuDataEntry)
   Log["Message"]("MenuA created")  
 }
@@ -28,12 +25,11 @@ function RestartE10(){
 
 // Steps 5
 function CreateUDRegisters(){
-  //Open Menu created
+
   Log["Message"]("Step 4")
   MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuDataEntry["menuName"])
   Log["Message"]("MenuA opened")
 
-  //Create new parent register
   Log["Message"]("Step 5")
 
   ClickMenu("File->New...->New Parent")
@@ -48,8 +44,8 @@ function CreateUDRegisters(){
   EnterText("txtDesc","Char01" + "[Tab]" )
 
   Log["Message"]("Parent 1 created")
+  
   //Switch to Child tab
-
   OpenPanelTab("Child")
   Log["Message"]("Tab Child Activated")
 
@@ -79,7 +75,6 @@ function CreateUDRegisters(){
   Log["Message"]("Parent 2 created")
 
   //Switch to Child tab
-
   OpenPanelTab("Child")
   Log["Message"]("Tab Child Activated")
 
@@ -106,7 +101,6 @@ function CreateUDRegisters(){
 // Step 6
 function CreateBAQUD100(){
   Log["Message"]("Step 6")
-  //Open Business Activity Query to create BAQ   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
   Log["Message"]("Business Activity Query opened")
 
@@ -149,7 +143,7 @@ function AddQuery1Dashb(){
   Log["Message"]("BAQ1 added")
 
   // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-  var dashboardTree = GetTreePanel("DashboardTree")
+/*  var dashboardTree = GetTreePanel("DashboardTree")
 
   //Right click on the query and click on Properties        
   var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
@@ -159,7 +153,8 @@ function AddQuery1Dashb(){
   // click 'Properties' option
   Log["Message"]("Step 11")
   Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-  Log["Message"]("BAQ1 - Properties was selected")
+  Log["Message"]("BAQ1 - Properties was selected")*/
+  ClickPopupMenu("Queries|" + baqData1["Id"] + ": " + baqData1["Id"], "Properties")
 
   Delay(1000)
 
@@ -168,9 +163,9 @@ function AddQuery1Dashb(){
   DashboardPropertiesTabs("Publish")
   Log["Message"]("BAQ1 - publish tab was selected")
 
-  var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-  var publishColumns = queryProperties["tabPublish"]["eclpPublishedColumns"]["myCLB"]
-
+  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
+  // var publishColumns = queryProperties["tabPublish"]["eclpPublishedColumns"]["myCLB"]
+  var publishColumns = GetList("myCLB")
   //Select all columns to publish
   for (var i = 0; i <= publishColumns["Items"]["Count"] -1; i++) {
     publishColumns["ClickItem"](i)
@@ -188,7 +183,7 @@ function AddQuery2Dashb(){
     Log["Message"]("BAQ2 added")
 
     // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-    var dashboardTree = GetTreePanel("DashboardTree")
+/*    var dashboardTree = GetTreePanel("DashboardTree")
 
     //Right click on the query and click on Properties        
     var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
@@ -197,16 +192,17 @@ function AddQuery2Dashb(){
 
     // click 'Properties' option
     Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-    Log["Message"]("BAQ2 - Properties was selected")
+    Log["Message"]("BAQ2 - Properties was selected")*/
+    ClickPopupMenu("Queries|" + baqData2["Id"] + ": " + baqData2["Id"], "Properties")
 
     //active to 'Filter' tab
-    // DashboardQueryProperties("Filter")
     Log["Message"]("Step 14")
     DashboardPropertiesTabs("Filter")
     Log["Message"]("BAQ1 - filter tab was selected")
 
-    var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-    var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
+    // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
+    // var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
+    var ultraGrid = GetGrid("ultraGrid1")
 
     //GRID 
     SelectCellDropdownGrid("ColumnName", "UD100A_Company", ultraGrid)
@@ -241,19 +237,15 @@ function AddQuery2Dashb(){
     Log["Message"]("Cells were filled and 'ok' button was clicked")
 
     Log["Message"]("Step 15")
-    //Save dashboard
     SaveDashboard()
     Log["Message"]("Dashboard was saved")
 
     Log["Message"]("Step 16")
-    //Deploy dashboard 
     DeployDashboard("Deploy Smart Client,Add Favorite Item")
     Log["Message"]("Dashboard was deployed")
 
     ExitDashboard()
     Log["Message"]("Dashboard Closed")
-
-    Log["Message"]("Dashboard Created")
 }
 
 // Step 17
@@ -274,11 +266,9 @@ function ConfigureUserForTracing(){
   EnterText("txtKeyField", Project["Variables"]["username"] + "[Tab]")
   Log["Message"]("epicor user was retrieved")
 
-  //Go to Tracing tab
   OpenPanelTab("Tracing")
   Log["Message"]("Tracing tab activated")
 
-  //Check Enable Trace Logging  
   CheckboxState("chkTraceLoging", true)
   Log["Message"]("Enable Trace Checked")
 
@@ -295,25 +285,19 @@ function ConfigureUserForTracing(){
   CheckboxState("chkReturnData", true)
   Log["Message"](" Write Response Data Checked")
   
-  //Save 
   ClickMenu("File->Save")
   Log["Checkpoint"]("User Account Form saved")
 
-  //Take note of the Current Log Directory
-
-  //Close
   ClickMenu("File->Exit")
   Log["Message"]("User Account Form closed")
 }
  
 // Step 19
 function EnableTracingOp(){
-  // On Smart Client Main Menu select Tracing Options
   Log["Message"]("Step 19")
   ClickMenu("Options->Tracing Options...")
   Log["Message"]("Tracing Options menu option selected")
 
-  //Click Clear Log
   ClickButton("Clear Log")
   Log["Message"]("button ClearLog clicked")
 
@@ -335,11 +319,7 @@ function TestingDashb(){
 
 function DashboardPanelTest(){
   Log["Message"]("Step 21")
-  // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh All");
 
-  // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
-
-  // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
   var gridDashboardPanelChildren = RetrieveGridsMainPanel()
   
   //Gives time to load the children inside the variable
@@ -387,7 +367,5 @@ function DashboardPanelTest(){
     Log["Warning"]("Grid 1 has 0 records")
   }
 
-  //Closes panel
   ClickMenu("File->Exit")
-  // Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["zMyForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|E&xit");
 }
