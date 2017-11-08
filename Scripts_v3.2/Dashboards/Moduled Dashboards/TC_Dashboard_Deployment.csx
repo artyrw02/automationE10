@@ -51,72 +51,71 @@ function RetrieveSysDashb(){
     
 // Steps 8 to 12
 function CreateDashb(){
-    Log["Message"]("Step 8 - Create new Dashboard '"+ dashb2 + "'")
+  Log["Message"]("Step 8 - Create new Dashboard '"+ dashb2 + "'")
 
-    NewDashboard(dashb2,"","")
-    
-    Delay(2500)
-    AddQueriesDashboard(dashb2Query1)
-    
-    Delay(2500)
-    ClickMenu("Tools->Deploy Dashboard")
+  NewDashboard(dashb2,"","")
+  
+  Delay(2500)
+  AddQueriesDashboard(dashb2Query1)
+  
+  Delay(2500)
+  ClickMenu("Tools->Deploy Dashboard")
 
-    Delay(1500)
-    if (Aliases["Epicor"]["ExceptionDialog"]){
-      var eDialog = findValueInString(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"], "Cancelling AppBuilder operation: Dashboard Description and Caption is required.")  
-      if (eDialog) {
-        Log["Message"]("Validated correctly: Cancelling AppBuilder operation: Dashboard Description and Caption is required.")
-      }else{
-        Log["Error"]("There is another message on dialog - '" + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"] + "'")
-      }
+  Delay(1500)
+  if (Aliases["Epicor"]["ExceptionDialog"]){
+    var eDialog = findValueInString(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"], "Cancelling AppBuilder operation: Dashboard Description and Caption is required.")  
+    if (eDialog) {
+      Log["Message"]("Validated correctly: Cancelling AppBuilder operation: Dashboard Description and Caption is required.")
     }else{
-      Log["Error"]("The Application Error dialog didn't appear.")
+      Log["Error"]("There is another message on dialog - '" + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"] + "'")
     }
+  }else{
+    Log["Error"]("The Application Error dialog didn't appear.")
+  }
 
-    Log["Message"]("Step 9 - Validation of dialog messages")
-    ClickButton("OK")
-    
-    SaveDashboard()
+  Log["Message"]("Step 9 - Validation of dialog messages")
+  ClickButton("OK")
+  
+  SaveDashboard()
 
-    if (Aliases["Epicor"]["ExceptionDialog"]){
-      var eDialog = findValueInString(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"], "Cancelling Save operation: Dashboard Description and Caption is required.")
-        
-      if (eDialog) {
-        Log['Message']("Validated correctly: Cancelling Save operation: Dashboard Description and Caption is required.")
-      }else{
-        Log["Error"]("There is another message on dialog - '" + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"] + "'")
-      }
+  if (Aliases["Epicor"]["ExceptionDialog"]){
+    var eDialog = findValueInString(Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"], "Cancelling Save operation: Dashboard Description and Caption is required.")
+      
+    if (eDialog) {
+      Log['Message']("Validated correctly: Cancelling Save operation: Dashboard Description and Caption is required.")
     }else{
-      Log["Error"]("The Application Error dialog didn't appear.")
+      Log["Error"]("There is another message on dialog - '" + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"] + "'")
     }
+  }else{
+    Log["Error"]("The Application Error dialog didn't appear.")
+  }
 
-    Log["Message"]("Step 10 - Validation of dialog messages")
-    Delay(2500)
-    ClickButton("OK")
+  Log["Message"]("Step 10 - Validation of dialog messages")
+  Delay(2500)
+  ClickButton("OK")
 
-    var dashboardCaption = GetTextBox("txtCaption")
-    
-    EnterText("txtCaption", dashb2 + "[Tab]", "Adding Dashboard Name")
+  var dashboardCaption = GetTextBox("txtCaption")
+  
+  EnterText("txtCaption", dashb2 + "[Tab]", "Adding Dashboard Name")
 
-    SaveDashboard()
+  SaveDashboard()
 
-    var dashDescription = GetTextBox("txtDescription")
+  var dashDescription = GetTextBox("txtDescription")
 
-    if(dashDescription["Text"]["OleValue"] == dashboardCaption["Text"]["OleValue"]){
-      Log["Checkpoint"]("Dashboard Description was filled with Caption data")
-    }else{
-      Log["Error"]("Dashboard Description wasn't filled with Caption data")
-    }
+  if(dashDescription["Text"]["OleValue"] == dashboardCaption["Text"]["OleValue"]){
+    Log["Checkpoint"]("Dashboard Description was filled with Caption data")
+  }else{
+    Log["Error"]("Dashboard Description wasn't filled with Caption data")
+  }
 
-    Log["Message"]("Step 11 - Clear 'Description' field Validation of dialog messages")
-    
-    dashDescription["Keys"]("^a[Del]")
-    
-    Delay(2500)
-    Log["Message"]("Step 12 - Deploy Dashboard. Validation of dialog messages")
-    DeployDashboard("Deploy Smart Client,Add Favorite Item")
-    ExitDashboard()
-
+  Log["Message"]("Step 11 - Clear 'Description' field Validation of dialog messages")
+  
+  dashDescription["Keys"]("^a[Del]")
+  
+  Delay(2500)
+  Log["Message"]("Step 12 - Deploy Dashboard. Validation of dialog messages")
+  DeployDashboard("Deploy Smart Client,Add Favorite Item")
+  ExitDashboard()
 }
  
 function CreateMenu1(){
@@ -136,7 +135,6 @@ function RestartE10(){
 }
 
 function TestDeployedDbFavMenu(){
-
   Log["Message"]("Step 15 - Opening Dashboard from Favorites Tab")
   OpenDashboardFavMenu(dashb2)
   Log["Message"]("Dashboard opened from Favorite Menu")

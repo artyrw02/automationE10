@@ -10,10 +10,12 @@
 var company1 = "Epicor Education"
 var plant1 = "Main Plant"
 var company2 = "Epicor Mexico"
+var company3 = "Epicor Europe"
 
 //Used to navigate thru the Main tree panel
 var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 var treeMainPanel2 = setCompanyMainTree(company2)
+var treeMainPanel3 = setCompanyMainTree(company3)
 
 //BAQ definition
 
@@ -48,7 +50,7 @@ var MenuData1 = {
 	"orderSequence" : 3,
 	"menuType" : "Dashboard-Assembly",
 	"dll" : dashb1,
-	"validations" : "Companies,Enable,Web Access"
+	"validations" : "All Companies,Enable,Web Access"
 }    
 var MenuData2 = {
 	"menuLocation" : "Main Menu>Sales Management>Customer Relationship Management>Setup",

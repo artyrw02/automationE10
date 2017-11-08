@@ -28,10 +28,8 @@ function CreateBAQ(){
 function CreateDashboard(){
   Log["Message"]("Step 3")
 
-  //Navigate and open Dashboard
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-  //Enable Dashboard Developer Mode  
   DevMode()
 
   Log["Message"]("Step 4")
@@ -43,19 +41,8 @@ function CreateDashboard(){
   SaveDashboard()
 
   Log["Message"]("Step 9")
-  // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-  var dashboardTree = GetTreePanel("DashboardTree")
 
-  dashboardTree["ClickItem"]("Queries|" + baqData1["Id"] + ": " + baqData1["Id"])
-
-  // var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
-  // dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-
-
-  // click 'Properties' option from menu
-  // Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("New Tracker View");
-  // Log["Message"]("'New Tracker View' was selected from Menu")
-  ClickMenu("File->New...->New Tracker View")
+  ClickPopupMenu("Queries|" + baqData1["Id"] + ": " + baqData1["Id"], "New Tracker View")
   Log["Message"]("BAQ - right click")
 
   ClickButton("OK")
@@ -68,13 +55,10 @@ function CreateDashboard(){
 
 //Step 12
 function CreateMenuDashboard(){
-
   Log["Message"]("Step 12")
   
-  //Open Menu maintenance   
   MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
 
-  //Creates Menu
   CreateMenu(MenuData1)
 }
 
@@ -122,7 +106,27 @@ function Dashb1Exists_EPIC07(){
 
     MainMenuTreeViewSelect(treeMainPanel2 + "Sales Management;Customer Relationship Management;Setup;" + MenuData1["menuName"])
 
-    var verifyForm = VerifyForm(MenuData1["menuName"])
+    var verifyForm = VerifyForm(dashb1)
+
+    if(verifyForm){
+      Log["Checkpoint"]("Menu is available for this company")
+    }else{
+      Log["Message"]("Menu is not available for " + company2 + " company")
+      Dashb1Exists_EPIC05()
+    }
+
+    ClickMenu("File->Exit")
+}
+
+//Used to verify all companies dahsboard
+function Dashb1Exists_EPIC05(){
+
+    Log["Message"]("Step 17, 18")
+    ExpandComp(company3)
+
+    MainMenuTreeViewSelect(treeMainPanel3 + "Sales Management;Customer Relationship Management;Setup;" + MenuData1["menuName"])
+
+    var verifyForm = VerifyForm(dashb1)
 
     if(verifyForm){
       Log["Checkpoint"]("Menu is available for this company")
@@ -139,10 +143,8 @@ function VerifyAllCompaniesChk() {
     Log["Message"]("Step 19")
     MainMenuTreeViewSelect(treeMainPanel2 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-    // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
     Log["Message"]("Dashboard opened")
 
-    //Enable Dashboard Developer Mode  
     DevMode()
     Log["Message"]("DevMode activated")
 
@@ -150,7 +152,6 @@ function VerifyAllCompaniesChk() {
     OpenDashboard(dashb1)
 
     //Verify dialog message
-    // CheckWindowMessage("Dashboard")
     CheckWindowMessageModals()
     Delay(2500)
     ClickButton("OK")
@@ -266,97 +267,94 @@ function RetrieveMenuDataDB1_EPIC06(){
 
 //Steps 34 to 42
 function DashbMaintenance(){
+  Log["Message"]("Step 34")
+  ExpandComp(company1)
+  ChangePlant(plant1)
+  MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
 
-    Log["Message"]("Step 34")
-    ExpandComp(company1)
-    ChangePlant(plant1)
-    MainMenuTreeViewSelect(treeMainPanel1 + "System Management;Upgrade/Mass Regeneration;Dashboard Maintenance")
+  Log["Message"]("Step 35")
 
-    Log["Message"]("Step 35")
-
-    EnterText("txtKeyField", dashb1 + "[Tab]", "Adding ID of dashboard")
-      
-    //Description field used to validate
-    var descrField = GetTextBox("epiTextBox1")
-
-    if(descrField["Text"]["OleValue"] != ""){
-      Log["Checkpoint"]("Data from dashboard " + dashb1 + " was loaded correctly")
-    }else {
-      Log["Error"]("Data from dashboard " + dashb1 + " was not loaded correctly")
-    }
-
-    ClickMenu("Edit->Clear")
-    ClickButton("Yes")
-   
-    Log["Message"]("Step 36")
-    ClickButton("Dashboard ID...")
-
-    Log["Message"]("Step 37")
-
-    ClickButton("Options")
-
-    Log["Message"]("Step 38")           
-
-    EnterText("neRecordCnt", 20, "Record count for search parameters")
-    ClickButton("OK")
- 
-    Log["Message"]("Step 39")
-
-    CheckboxState("chkInUse", "Indeterminate")
-    CheckboxState("chkSystem", "Indeterminate")
-
-    Delay(2000)
- 
-    Log["Message"]("Step 40")
-
-    ClickButton("Search")
-
-    var gridSearchResults = Aliases["Epicor"]["DashboardSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
-
-    if(gridSearchResults["Rows"]["Count"] <= 20){
-      Log["Checkpoint"]("Search results returned " + gridSearchResults["Rows"]["Count"] + " records")
-    }else{
-      Log["Error"]("Search results returned " + gridSearchResults["Rows"]["Count"] + " records")
-    }
-
-    Log["Message"]("Step 41")
-
-    EnterText("txtStartWith1", dashb1, "Adding dashboard to search")
-    ClickButton("Search")
-
-    var idColumnGrid = getColumn(gridSearchResults, "ID")
-
-    for (var i = 0; i < gridSearchResults["Rows"]["Count"]; i++) {
-      if(gridSearchResults["Rows"]["Item"](i)["Cells"]["Item"](idColumnGrid)["Text"]["OleValue"] == dashb1){
-          // Aliases["Epicor"]["DashboardSearchForm"]["ultraStatusBar2"]["btnOK"]["Click"]()
-          ClickButton("OK")
-          break
-      }else{
-        Log["Error"]("Dashboard " + dashb1 + " not found")
-      }
-    }
+  EnterText("txtKeyField", dashb1 + "[Tab]", "Adding ID of dashboard")
     
-    var descrField = GetTextBox("txtKeyField")
+  //Description field used to validate
+  var descrField = GetTextBox("epiTextBox1")
 
-    if(descrField["Text"] != ""){
-      Log["Message"]("Dashboard " + dashb1 + " loaded")
+  if(descrField["Text"]["OleValue"] != ""){
+    Log["Checkpoint"]("Data from dashboard " + dashb1 + " was loaded correctly")
+  }else {
+    Log["Error"]("Data from dashboard " + dashb1 + " was not loaded correctly")
+  }
+
+  ClickMenu("Edit->Clear")
+  ClickButton("Yes")
+ 
+  Log["Message"]("Step 36")
+  ClickButton("Dashboard ID...")
+
+  Log["Message"]("Step 37")
+
+  ClickButton("Options")
+
+  Log["Message"]("Step 38")           
+
+  EnterText("neRecordCnt", 20, "Record count for search parameters")
+  ClickButton("OK")
+
+  Log["Message"]("Step 39")
+
+  CheckboxState("chkInUse", "Indeterminate")
+  CheckboxState("chkSystem", "Indeterminate")
+
+  Delay(2000)
+
+  Log["Message"]("Step 40")
+
+  ClickButton("Search")
+
+  var gridSearchResults = Aliases["Epicor"]["DashboardSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+
+  if(gridSearchResults["Rows"]["Count"] <= 20){
+    Log["Checkpoint"]("Search results returned " + gridSearchResults["Rows"]["Count"] + " records")
+  }else{
+    Log["Error"]("Search results returned " + gridSearchResults["Rows"]["Count"] + " records")
+  }
+
+  Log["Message"]("Step 41")
+
+  EnterText("txtStartWith1", dashb1, "Adding dashboard to search")
+  ClickButton("Search")
+
+  var idColumnGrid = getColumn(gridSearchResults, "ID")
+
+  for (var i = 0; i < gridSearchResults["Rows"]["Count"]; i++) {
+    if(gridSearchResults["Rows"]["Item"](i)["Cells"]["Item"](idColumnGrid)["Text"]["OleValue"] == dashb1){
+        ClickButton("OK")
+        break
     }else{
-      Log["Error"]("Dashboard " + dashb1 + " was not loaded")
+      Log["Error"]("Dashboard " + dashb1 + " not found")
     }
+  }
+  
+  var descrField = GetTextBox("txtKeyField")
 
-    Log["Message"]("Step 42")
+  if(descrField["Text"] != ""){
+    Log["Message"]("Dashboard " + dashb1 + " loaded")
+  }else{
+    Log["Error"]("Dashboard " + dashb1 + " was not loaded")
+  }
 
-    ClickMenu("Actions->Modify Dashboard")
+  Log["Message"]("Step 42")
 
-    Delay(5000)
-    
-    var verifyForm = VerifyForm(dashb1)
-    // if(Aliases["Epicor"]["Dashboard"]["Exists"] == true && Aliases["Epicor"]["Dashboard"]["WndCaption"] == dashb1){
-    if (verifyForm) {
-      Log["Checkpoint"]("dashboard designer is opened")
-    }else{
-      Log["Error"]("dashboard designer was not opened")
-    }  
+  ClickMenu("Actions->Modify Dashboard")
+
+  Delay(5000)
+  
+  var verifyForm = VerifyForm(dashb1)
+  if (verifyForm) {
+    Log["Checkpoint"]("dashboard designer is opened")
+  }else{
+    Log["Error"]("dashboard designer was not opened")
+  }  
 }
     
 //Steps 43 to 45
@@ -379,36 +377,33 @@ function CopyDashb1() {
 
 // Steps 47 to 51
 function CreateCopySysDashb(){
-    // var test2 = QueryDatabaseDashboards("TestDashBD-2")
+  Log["Message"]("Step 47")
 
-    Log["Message"]("Step 47")
+  ClickMenu("Edit->Clear")
+  ClickButton("Yes")
 
-    ClickMenu("Edit->Clear")
-    ClickButton("Yes")
+  EnterText("txtKeyField", dashb2 + "[Tab]", "Adding text of dashboard") 
 
-    EnterText("txtKeyField", dashb2 + "[Tab]", "Adding text of dashboard") 
+  Log["Message"]("Step 48")
 
-    Log["Message"]("Step 48")
+  ClickMenu("Actions->Modify Dashboard")
+ 
+  CheckWindowMessageModals()
+  Delay(2500)
+  ClickButton("OK")
+  
+  Log["Message"]("Step 49")
+  Delay(2000)
 
-    ClickMenu("Actions->Modify Dashboard")
-   
-    // CheckWindowMessage("System Dashboards")
-    CheckWindowMessageModals()
-    Delay(2500)
-    ClickButton("OK")
-    
-    Log["Message"]("Step 49")
-    Delay(2000)
+  ClickMenu("File->Copy Dashboard")
 
-    ClickMenu("File->Copy Dashboard")
+  Log["Message"]("Step 50")
+  Delay(2000)
 
-    Log["Message"]("Step 50")
-    Delay(2000)
-
-    EnterText("txtDefinitionId", dashb2Copy + "[Tab]", "Adding text of dashboard") 
-    ClickButton("OK")
-         
-    Log["Message"]("Step 51")
+  EnterText("txtDefinitionId", dashb2Copy + "[Tab]", "Adding text of dashboard") 
+  ClickButton("OK")
+       
+  Log["Message"]("Step 51")
     SaveDashboard()
 }   
    
@@ -416,21 +411,21 @@ function CreateCopySysDashb(){
 function TestSQLDashbs(){
   // Step No: 52
  
-  //Query on SQL the dashboards
-    Log["Message"]("Step 52")
-    var test1 = QueryDatabaseDashboards(dashb1)
-    Log["Message"]("Query with Dashboard ID " + dashb1 + " retrieved " + test1["RecordCount"] + " records.")
+//Query on SQL the dashboards
+  Log["Message"]("Step 52")
+  var test1 = QueryDatabaseDashboards(dashb1)
+  Log["Message"]("Query with Dashboard ID " + dashb1 + " retrieved " + test1["RecordCount"] + " records.")
 
-    var test2 = QueryDatabaseDashboards(dashb1Copy)
-    Log["Message"]("Query with Dashboard ID " + dashb1Copy + " retrieved " + test2["RecordCount"] + " records.")
-    
-    Log["Message"]("Step 53,54,55")
-    DeleteDashboard(dashb2Copy)
-    
-    var test3 = QueryDatabaseDashboards(dashb2Copy)
-    Log["Message"]("Query with Dashboard ID " + dashb2Copy + " retrieved " + test3["RecordCount"] + " records.")
+  var test2 = QueryDatabaseDashboards(dashb1Copy)
+  Log["Message"]("Query with Dashboard ID " + dashb1Copy + " retrieved " + test2["RecordCount"] + " records.")
+  
+  Log["Message"]("Step 53,54,55")
+  DeleteDashboard(dashb2Copy)
+  
+  var test3 = QueryDatabaseDashboards(dashb2Copy)
+  Log["Message"]("Query with Dashboard ID " + dashb2Copy + " retrieved " + test3["RecordCount"] + " records.")
 
-    ExitDashboard()
+  ExitDashboard()
 }   
 
   
