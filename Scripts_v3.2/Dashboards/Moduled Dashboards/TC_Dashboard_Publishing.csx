@@ -16,22 +16,17 @@ function CreateBAQ1(){
 
   ChangePlant(plant1)
   
-  //Open Business Activity Query to create BAQ   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
-  //1- Call function to create a simple BAQ
   Log["Message"]("Step 1")
   CreateSimpleBAQ(baqData1)
   Log["Message"]("BAQ " + baqData1["Id"] + " created correctly.")
-
 }
 
 //Step 2
 function CreateBAQ2(){
-  //Open Business Activity Query to create BAQ   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
-  //2- Call function to create a simple BAQ
   Log["Message"]("Step 2")
   CreateSimpleBAQ(baqData2)
   Log["Message"]("BAQ " + baqData2["Id"] + " created correctly.")
@@ -39,106 +34,101 @@ function CreateBAQ2(){
 
 // Steps 3
 function CreateDashboard(){
-  //Open Dashboard   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-  //Enable Dashboard Developer Mode  
   DevMode()
 
   Log["Message"]("Devmode activated on Dashboard")
 
-  //3- Call function to create and deploy a dashboard
   Log["Message"]("Step 3")
 
   NewDashboard(DashbData["dashboardID"],DashbData["dashboardCaption"],DashbData["dashDescription"])
   Log["Message"]("General data for data filled")
 
-  // Adding query
-  AddQueriesDashboard(baqData1["Id"])
+  AddQueriesDashboard(baqData1["Id"], baqData1["Id"] + "0")
   Log["Message"](baqData1["Id"] + " added to the dashboard")
 }    
 
 // step 4, 5
 function PublishView(){
-  // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
   
-  //4- Right click on the query summary and click on Publish View        
   Log["Message"]("Step 4")
-  
-  var dashboardTree = GetTreePanel("DashboardTree")  
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)["Nodes"]["Item"](0)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("Right click on " + baqData1["Id"])
 
-  // click 'Publish View' option from menu
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Publish View");
-  Log["Message"]("Publish View was selected from Menu")
+  var publishedViewsGrid = GetGrid("grdPubViews")
+  //checks if the 'Available Views' panel is available
+  if(!publishedViewsGrid["Exists"]){
+    ClickMenu("View->Published Views")
+    
+    var publishedViewsGrid = GetGrid("grdPubViews")
+    //Checks if there is any published view available on the 'Available Views' panel
+    if(publishedViewsGrid["Rows"]["Count"] > 0){
+      Log["Message"]("BAQs " + publishedViewsGrid["Rows"]["Count"] +  " count of published views")
+      var countPublishView = publishedViewsGrid["Rows"]["Count"] - 1 + "_"
+    }else{
+      var countPublishView = "0_"
+    }
+  }
+
+  ClickPopupMenu("Queries|" + baqData1["Id"] + ": " + baqData1["Id"] + "0" + "|" + baqData1["Id"] + ": Summary", "Publish View")
 
   Delay(1000)
 
   //Enter Published caption, Group and Description, and take note of the description
-  EnterText("cmbGroup", publishDetails["group"])
-  EnterText("txtDescription", publishDetails["description"])
+  EnterText("txtCaption", countPublishView + publishDetails["group"])
+  EnterText("cmbGroup", countPublishView + publishDetails["group"])
+  EnterText("txtDescription", countPublishView + publishDetails["description"])
 
   ClickButton("OK")
   Log["Message"]("Published view added.")
 
-  //Save dashboard
   SaveDashboard()
   Log["Message"]("Dashboard was saved")
 
-  //5- Clear/Close the dashboard 
   Log["Message"]("Step 5")
   ExitDashboard()
 }
 
 // Steps 6, 7
 function RetrieveDashbForPublish(){
-  //Open Dashboard   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-  //retrieve the dashboard created
   OpenDashboard(DashbData["dashboardID"])
   Log["Message"]("Dashboard " + DashbData["dashboardID"] + " loaded")
 
+  var publishedViewsGrid = GetGrid("grdPubViews")
   //checks if the 'Available Views' panel is available
-  if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["Exists"]){
+  if(!publishedViewsGrid["Exists"]){
     ClickMenu("View->Published Views")
   }
 
   //Checks if there is any published view available on the 'Available Views' panel
-  if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Rows"]["Count"] > 0){
+  if(publishedViewsGrid["Rows"]["Count"] > 0){
     Log["Message"]("There are BAQs on published views")
   }
 
   /*MODIFY TO ADAPT DRAG FUNCTION*/
   //6- Drags the published view created
   Log["Message"]("Step 6")
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Drag"](77, 30, 11, -127);
+  SetToolButtonText("pnlPubViews", "Filtering", "0_")
+
+  E10["Refresh"]()
+
+  publishedViewsGrid["Drag"](77, 30, 11, -127);
   Log["Message"]("BAQ from published views was dragged to the queries area")
 
   //7- Right click on the query summary and click on Properties        
   Log["Message"]("Step 7")
 
-  var dashboardTree = GetTreePanel("DashboardTree")
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("Right click on " + baqData1["Id"] + "dragged from published views")
-
-  // click 'Properties' option
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-  Log["Message"]("Properties was selected from " + baqData1["Id"] + " dragged - published views")
+  ClickPopupMenu("Queries|" + baqData1["Id"] + ": " + baqData1["Id"], "Properties")
 
   Delay(1000)
 
   // Active Publish tab and select all columns to be published
-  var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-  // DashboardPropertiesTabs(queryProperties, "Publish")
   DashboardPropertiesTabs("Publish")
 
   Log["Message"]("Publish tab was selected from "+ baqData1["Id"] + " dragged - published views")
 
-  var publishColumns = queryProperties["tabPublish"]["eclpPublishedColumns"]["myCLB"]
+  var publishColumns = GetList("myCLB")
   
   //Select Customer_CustNum column to publish
   for (var i = 0; i <= publishColumns["Items"]["Count"] -1; i++) {
@@ -157,29 +147,16 @@ function RetrieveDashbForPublish(){
 
 // Step 8
 function AddQuery2Dashb(){
-  //8- Add second BAQ created 
   Log["Message"]("Step 8")
   AddQueriesDashboard(baqData2["Id"])
   Log["Message"](baqData2["Id"] + " added")
 
-  //Right click on the query and click on Properties        
-
-  var dashboardTree = GetTreePanel("DashboardTree")
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](2)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("Right click on " + baqData2["Id"])
-
-  // click 'Properties' option
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
+  ClickPopupMenu("Queries|" + baqData2["Id"] + ": " + baqData2["Id"], "Properties")
   Log["Message"](baqData2["Id"] + " - Properties was selected")
 
   //active to 'Filter' tab
   DashboardPropertiesTabs("Filter")
   Log["Message"](baqData2["Id"] + " - filter tab was selected")
-
-  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-
-  // var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
 
   var ultraGrid = GetGrid("ultraGrid1")
 
@@ -188,14 +165,11 @@ function AddQuery2Dashb(){
   SelectCellDropdownGrid("Value", baqData1["Id"]+"- "+ baqData1["Description"] + ": Customer_CustNum", ultraGrid)
   ultraGrid["Keys"]("[Enter]")
 
-  //click 'OK' button
   ClickButton("OK")
   Log["Message"]("Cells were filled and 'ok' button was clicked")
 
-  //Activate dashboard general panel
   OpenPanelTab("General")
 
-  //Enable 'refresh all' checkbox
   CheckboxState("chkInhibitRefreshAll", true)
 
   SaveDashboard()    
@@ -204,21 +178,14 @@ function AddQuery2Dashb(){
 // Step 9
 function TestBeforeDeploy1(){
 
-  //Operan 'Deploy dashboard' from menu
   ClickMenu("Tools->Deploy Dashboard")
   
-  //9- Click 'Test Application'
   ClickButton("Test Application")
-  // Delay(1500)
-  // ClickButton("Cancel")
 
-  /*9- Test data before deployment */
   Log["Message"]("Step 9")
   Log["Message"]("Ready to test data")
 
-  // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
   Aliases["Epicor"]["MainController"]["Activate"]()
-  // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
   var gridDashboardPanelChildren = RetrieveGridsMainPanel()
 
   //Gives time to load the children inside the variable
@@ -228,11 +195,8 @@ function TestBeforeDeploy1(){
   var baq2Grid = gridDashboardPanelChildren[2]
 
   ClickMenu("Refresh All", "", true)
-  // baq1Grid["Click"]()
-  // ClickMenu("Edit->Refresh")
-  // baq2Grid["Click"]()
-  // ClickMenu("Edit->Refresh")
-   Log["Message"]("Dashboard refreshed")
+
+  Log["Message"]("Dashboard refreshed")
 
   //Select first record on BAQ1 results to notice change of data on BAQ2
   baq1Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Activate"]()
@@ -273,10 +237,8 @@ function TestBeforeDeploy1(){
 // Step 10
 function TestBeforeDeploy2(){
     E10["Refresh"]()
-    // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
     Aliases["Epicor"]["MainController"]["Activate"]()
 
-    // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
     var gridDashboardPanelChildren = RetrieveGridsMainPanel()
     
     //Gives time to load the children inside the variable
@@ -319,12 +281,10 @@ function TestBeforeDeploy2(){
 // Step 11, 12
 function TestBeforeDeploy3(){
 
-    // var DashboardMainPanel = Aliases["Epicor"]["MainController"]["windowDockingArea1"]["dockableWindow1"]["FillPanel"]["AppControllerPanel"]["windowDockingArea1"]["dockableWindow1"]["MainPanel"]["MainDockPanel"]
     Aliases["Epicor"]["MainController"]["Activate"]()
 
     E10["Refresh"]()
 
-    // var gridDashboardPanelChildren = DashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 15)["toArray"]();
     var gridDashboardPanelChildren = RetrieveGridsMainPanel()
 
     //Gives time to load the children inside the variable
@@ -349,7 +309,6 @@ function TestBeforeDeploy3(){
     //Activate Sales Order Window
     Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
     Delay(1500)
-    // var salesOrderValue = Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Value"]
     var salesOrderValue = GetText("txtKeyField")
     
     // cell["Value"] is numeric and salesOrderValue is string
@@ -372,7 +331,6 @@ function TestBeforeDeploy3(){
     //Activate Sales Order Window
     Aliases["Epicor"]["SalesOrderForm"]["Activate"]()        
     
-    // var salesOrderValue = Aliases["Epicor"]["SalesOrderForm"]["windowDockingArea2"]["dockableWindow3"]["sheetTopLevelPanel1"]["windowDockingArea1"]["dockableWindow4"]["summaryPanel1"]["txtKeyField"]["Value"]   
     var salesOrderValue = GetText("txtKeyField")
     
     // cell["Value"] is numeric and salesOrderValue is string
@@ -383,10 +341,9 @@ function TestBeforeDeploy3(){
     }
 
     Delay(2500)
-    //Close Sales Order
+
     ClickMenu("File->Exit")
 
-    //Close Dashboard Panel
     Aliases["Epicor"]["MainController"]["Activate"]()
     ClickMenu("File->Exit")      
 
@@ -412,7 +369,6 @@ function CreateDashboard2(){
   //Open Dashboard   
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
-  //Enable Dashboard Developer Mode  
   DevMode()
 
   //Call function to create and deploy a dashboard
@@ -426,32 +382,39 @@ function CreateDashboard2(){
 
   Log["Message"]("Dashboard saved")
 
-  if(!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["Exists"]){
+  var publishedViewsGrid = GetGrid("grdPubViews")
+  //checks if the 'Available Views' panel is available
+  if(!publishedViewsGrid["Exists"]){
     ClickMenu("View->Published Views")
   }
 
-  if(Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Rows"]["Count"] > 0){
-    Log["Message"]("There are BAQs on available views")
+  //Checks if there is any published view available on the 'Available Views' panel
+  if(publishedViewsGrid["Rows"]["Count"] > 0){
+    Log["Message"]("BAQs " + publishedViewsGrid["Rows"]["Count"] +  " count of published views")
   }
 
   /*MODIFY TO ADAPT DRAG FUNCTION*/
   // 13- drag that element with the name of your description from published view in step 4, to the Dashboard Area       
   Log["Message"]("Step 13")
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow2"]["pnlPubViews"]["grdPubViews"]["Drag"](77, 30, 11, -127);
+  SetToolButtonText("pnlPubViews", "Filtering", "0_")
 
-  //14- Save Dashboard and deploy 
+  E10["Refresh"]()
+
+  publishedViewsGrid["Drag"](77, 30, 11, -127);
+
   Log["Message"]("Step 14")
   SaveDashboard()
   Log["Message"]("Dashboard saved")
 
   //Deactivate Published Views
-  ClickMenu("View->Published Views")
+  if(publishedViewsGrid["Exists"]){
+    ClickMenu("View->Published Views")
+  }
 
   Delay(2500)
   DeployDashboard(DashbData2["deploymentOptions"])
-  Log["Checkpoint"]("Dashboard was deployed")
+  Log["Message"]("Dashboard was deployed")
 
-  //Exit dashboard
   ExitDashboard()
 
   Delay(1000)  
