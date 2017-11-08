@@ -142,18 +142,6 @@ function AddQuery1Dashb(){
   AddQueriesDashboard(baqData1["Id"])
   Log["Message"]("BAQ1 added")
 
-  // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-/*  var dashboardTree = GetTreePanel("DashboardTree")
-
-  //Right click on the query and click on Properties        
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("BAQ1 - right click")
-
-  // click 'Properties' option
-  Log["Message"]("Step 11")
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-  Log["Message"]("BAQ1 - Properties was selected")*/
   ClickPopupMenu("Queries|" + baqData1["Id"] + ": " + baqData1["Id"], "Properties")
 
   Delay(1000)
@@ -163,8 +151,6 @@ function AddQuery1Dashb(){
   DashboardPropertiesTabs("Publish")
   Log["Message"]("BAQ1 - publish tab was selected")
 
-  // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-  // var publishColumns = queryProperties["tabPublish"]["eclpPublishedColumns"]["myCLB"]
   var publishColumns = GetList("myCLB")
   //Select all columns to publish
   for (var i = 0; i <= publishColumns["Items"]["Count"] -1; i++) {
@@ -182,17 +168,6 @@ function AddQuery2Dashb(){
     AddQueriesDashboard(baqData2["Id"])
     Log["Message"]("BAQ2 added")
 
-    // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
-/*    var dashboardTree = GetTreePanel("DashboardTree")
-
-    //Right click on the query and click on Properties        
-    var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
-    dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-    Log["Message"]("BAQ2 - right click")
-
-    // click 'Properties' option
-    Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Properties");
-    Log["Message"]("BAQ2 - Properties was selected")*/
     ClickPopupMenu("Queries|" + baqData2["Id"] + ": " + baqData2["Id"], "Properties")
 
     //active to 'Filter' tab
@@ -200,8 +175,6 @@ function AddQuery2Dashb(){
     DashboardPropertiesTabs("Filter")
     Log["Message"]("BAQ1 - filter tab was selected")
 
-    // var queryProperties = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["QueryPropsPanel"]["PropertiesPanel_Fill_Panel"]["tcQueryProps"]
-    // var ultraGrid = queryProperties["tabFilter"]["WinFormsObject"]("pnlFilter")["WinFormsObject"]("ultraGrid1")
     var ultraGrid = GetGrid("ultraGrid1")
 
     //GRID 
