@@ -353,7 +353,6 @@ E10["Refresh"]()
     cmbCtrl["Keys"]("[Down]")
     cmbCtrl["Keys"]("[Hold]~[Down][Release]")
     
-    // Log.Warning("List Index: " + cmbCtrl.SelectedRow.ListIndex)
     if (cmbCtrl["SelectedRow"] && cmbCtrl["SelectedRow"]["ListIndex"])
       cmbCtrl["Keys"]("[Home]") //to the top of the list
   }
@@ -379,13 +378,7 @@ E10["Refresh"]()
         idx++;
     }        
 
-    // cmbCtrl["Click"](1,1)
     cmbCtrl["Keys"]("[Tab]")
-
-    // if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
-    //     Log["Warning"]("ddWnd not closed correctly")
-    //     cmbCtrl["parent"]["Click"]()
-    // }
 
     return true
   }

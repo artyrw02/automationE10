@@ -86,9 +86,9 @@ function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
     }
   }
 
-    //Gather the items in the dropdown into an array
-    var ddValueList = cell['EditorResolved']['ValueList']  
-    var aRes = []
+  //Gather the items in the dropdown into an array
+  var ddValueList = cell['EditorResolved']['ValueList']  
+  var aRes = []
 
   if( ddValueList["ClrClassName"] == "UltraCombo" ){
       var listItemsCount = ddValueList["Rows"]["Count"]

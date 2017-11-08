@@ -5,7 +5,6 @@
 //Enable Dashboard Developer Mode  
 function DevMode(){
   if (!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["Exists"]) {
-    // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Developer")
     ClickMenu("Tools->Developer")
   }
 }
@@ -39,11 +38,7 @@ function CreateSimpleDashboards(DashbData){
 * @param: dashboardID - String that contains the information of the dashboard 'ID'
 * @return: none*/
 function OpenDashboard(dashboardID) {
-  // var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
-  // dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
-  // dashboardPanel["txtDefinitonID"]["Keys"]("[Tab]")
-
-   EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
+  EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
 
   if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
     Log["Error"]("There is a dialog message active.")
@@ -59,19 +54,12 @@ function OpenDashboard(dashboardID) {
 * @param: generalOptions - String that contains the information of the dashboard 'generalOptions'
 * @return: none*/
 function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions){
-  //Click New Dashboard
-  // Aliases["Epicor"]["Dashboard"]["dbPanel"]["zDashboardPanel_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&New...|New Dashboard")
   ClickMenu("File->New...->New Dashboard")
-  // ClickMenu("File->New...->New Dashboard")
 
-  //Type Definition, Caption and Description
-  // var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]["dockableWindow1"]["pnlGenProps"]
-  // dashboardPanel["txtDefinitonID"]["Keys"](dashboardID)
-  // dashboardPanel["txtDefinitonID"]["Keys"]("[Tab]")
   EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
   
   Delay(1500)
-   if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){    
+  if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){    
     var aString = Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"]
     var aSubString = "TestDashBD set for All Companies already exists"
     var Res, flag = true;
@@ -97,11 +85,8 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
   }
 
   EnterText("txtCaption", dashboardCaption + "[Tab]", "Adding Dashboard Caption")
-  // dashboardPanel["txtCaption"]["Keys"](dashboardCaption)
 
   EnterText("txtDescription", dashDescription + "[Tab]", "Adding Dashboard Description")  
-  // dashboardPanel["txtDescription"]["Keys"](dashDescription)
-
 
   if(generalOptions != undefined){
     var arrOptions = generalOptions.split(",")
@@ -110,7 +95,6 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
       CheckboxState(arrOptions[i], true)
     }
   }
-
 }
 
 /*funtion that adds a query on dashboard defined
@@ -189,11 +173,9 @@ function DeployDashboard(deploymentOptions){
 
   Delay(1500)
   var textStatus = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["*TextBox*", "*txtStatus*"], 30)
-  // var textStatus = GetText("txtStatus")
 
   Delay(1500)
   var deploymentStatus = findValueInString(textStatus["Text"]["OleValue"], "successfully compiled")
-  // var deploymentStatus = findValueInString(textStatus, "successfully compiled")
  
   Delay(1500)
   if(deploymentStatus) {
@@ -206,21 +188,15 @@ function DeployDashboard(deploymentOptions){
   }else{
     Log["Error"]("There was a problem while deploying the dashboard.")
   }
-
-  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
-    Log["Error"]("There is a dialog message active.")
-  }else{
-    Log["Checkpoint"]("Dashboard deployed")
-  }
 }
 
 //Closes the dashboard form
 function ExitDashboard(){
-    E10["Refresh"]()
+  E10["Refresh"]()
 
-    Delay(2500)
-    ClickMenu("File->Exit")
-    Log["Checkpoint"]("Exit Dashboard Form")
+  Delay(2500)
+  ClickMenu("File->Exit")
+  Log["Checkpoint"]("Exit Dashboard Form")
 }
   
 //Closes only the dashboard not the form
@@ -365,11 +341,9 @@ function DashboardGridPropertiesTabs(tab){
 * @param: dashboardIDs - An String that contains one or more dashboard separated by ',' 
 * @return: none*/  
 function DeleteDashboard(dashboardIDs) {
-  // var DashboardFormDefinition = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]["dockableWindow2"]["pnlGeneral"]["windowDockingArea1"]
 
   OpenPanelTab("General")
 
-  // var dashboardIDtext = DashboardFormDefinition["dockableWindow1"]["pnlGenProps"]["txtDefinitonID"]
   //Split string dashboardIDs into an array  
   var arrDashboards
 
@@ -388,17 +362,12 @@ function DeleteDashboard(dashboardIDs) {
     }
 
     if (dashboardIDtext == "") {
-      //Retrieve dashboard
-      // dashboardIDtext["Keys"](arrDashboards[i])
-      // dashboardIDtext["Keys"]("[Tab]")
       EnterText("txtDefinitonID", arrDashboards[i] + "[Tab]")
 
-      // DashboardFormDefinition["dockableWindow1"]["Activate"]()
       OpenPanelTab("General")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
-          // Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
           ClickButton("No")
           Log["Message"]("Dashboard not found.")
         }      
@@ -417,14 +386,11 @@ function DeleteDashboard(dashboardIDs) {
       Log["Message"](arrDashboards[i] + " was deleted.")
 
       //Retrieve dashboard for validation
-      // dashboardIDtext["Keys"](arrDashboards[i])
-      // dashboardIDtext["Keys"]("[Tab]")
       EnterText("txtDefinitonID", arrDashboards[i] + "[Tab]")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
           Log["Checkpoint"](arrDashboards[i] + " was deleted correctly.")
-          // Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["pnlYesNo"]["btnNo2"]["Click"]()
           ClickButton("No")
         }      
       }else{

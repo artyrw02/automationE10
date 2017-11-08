@@ -30,11 +30,12 @@ function DeactivateMainDevMode(){
 * @param: Path - String that contains the path of the form that will be selected separated by ';' separator
 * @return: none*/
 function MainMenuTreeViewSelect(Path){ 
-  Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
+  // Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
   OpenPanelTab("Menu Groups")
   
   if(Path != undefined){
-    var MenuTree = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]
+    // var MenuTree = Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["systemMenu"]["ultraExplorerBarContainerControl1"]["treeView"]
+    var MenuTree = GetTreePanel("treeView")
     Log["Message"]("Epicor path to navigate: " + Path);
     Depth = Path.split(";")   
     Depth = aqString["Replace"](Depth, ",", "|"); 
@@ -73,11 +74,6 @@ function Login(username,password){
   while(!menuSCType["Exists"]){
     Delay(5000)
 
-    if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){
-      Log["Warning"]("Exception Dialog found - " + Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"])
-      Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["btnOk"]["Click"]()
-      Log["Message"]("Clicked")
-    }
     var count = count + 1
     if (count == 90) {
       Log["Error"]("Menu not appear")
@@ -160,15 +156,6 @@ function ChangePlant(Plant){
   }
 }
 
-// function ActivateFavoritesMenuTab() {
-//   if(Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
-//      Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", false)   
-//   }
-//   Delay(1000)
-//    Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)
-//    Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["Activate"]()  
-// }
-
 function ActivateFavoritesMenuTab() {
   if(!Aliases["Epicor"]["MenuForm"]["zEpiForm_Toolbars_Dock_Area_Top"]["ToolbarsManager"]["Tools"]["Item"](2)["Tools"]["Item"](1)["Checked"]){
      Aliases["Epicor"]["MenuForm"]["UltraMainMenu"]["Check"]("View|Favorites", true)   
@@ -202,11 +189,9 @@ function findValueInString(aString, aSubString){
 //working - not completed
 function GetStatusBar(){
   var ActiveWindow = Sys.Desktop.ActiveWindow()
-// Aliases["Epicor"]["DashboardForm"]["WinFormsObject"]("baseStatusBar")["Panels"]["Item"](0)["DisplayText"]
   var statusBar = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["UltraStatusPanel","*StatusBar*"], 30)
   return  statusBar["Panels"]["Item"](0)["DisplayText"]
 }
-
 
 function setCompanyMainTree(company,plant){
   var result = ""

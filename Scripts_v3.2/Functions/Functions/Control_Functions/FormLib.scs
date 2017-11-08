@@ -72,7 +72,6 @@ function ValidatesFormClosed(caption){
 
 }
 
-
 //Used to catch a windows message 
 // Designed for System Dashboards mainly
 function CheckWindowMessage(WndCaption){
@@ -97,7 +96,6 @@ function CheckWindowMessage(WndCaption){
   }
 }
 
-
 function CheckWindowMessageModals(){
   var count = 0 
   var name = "Static"
@@ -118,7 +116,6 @@ function CheckWindowMessageModals(){
     }
   }
 }
-
 
 function CheckExceptionWnd(){
   var wnd = FindObject("*", ["Name","WndCaption"],  ["*Exception*", "*Error*"])

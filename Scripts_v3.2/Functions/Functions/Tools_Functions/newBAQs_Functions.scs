@@ -33,17 +33,9 @@ function CreateSimpleBAQ(baqData){
 * @param: baqID - String that contains the information of the BAQ 'Id'
 * @return: none*/
 function OpenBAQ(baqID){
-  //Change to "General" tab
   OpenPanelTab("General")
   
-  //Set ID and description
   EnterText("txtQueryID", baqID + "[Tab]")
-
-  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
-    Log["Error"]("There is a dialog message active.")
-  }else{
-    Log["Checkpoint"]("BAQ " + baqID +" opened.")
-  }
 }
 
 /*Defines a BAQ and sets the basic information
@@ -54,10 +46,8 @@ function OpenBAQ(baqID){
 function CreateBAQ(baqID, baqDescription, generalConfig){
   Delay(1500)
   
-  //click New BAQ
   ClickMenu("File->New")
   
-  //Set ID and description
   EnterText("txtQueryID", baqID + "[Tab]")
   EnterText("txtDescription", baqDescription + "[Tab]")
 
@@ -131,10 +121,8 @@ function AddColumnsBAQ(table, columns){
 * @param: BAQFormDefinition - Object that contains the definition of the form
 * @return: none*/
 function AnalyzeSyntaxisBAQ(){
-  //-Validate if Analize is active
   OpenPanelTab("Analyze")
 
-  //Analyze and run test for BAQ
   ClickButton("Analyze...")
 }
 
@@ -148,8 +136,6 @@ function TestResultsBAQ(parameterValue){
 
   //Analyze and run test for BAQ
   ClickButton("Test...")
-
-  // CREATE FUNTION TO CATCH NEW WINDOWS IN ANY CASE
 
   if (parameterValue != undefined) {
     ComboboxSelect("edt0", parameterValue)
@@ -220,8 +206,6 @@ function DeleteBAQ(baqIDs){
 
       //Retrieve BAQ for validation
       EnterText("txtQueryID", arrBaqs[i] + "[Tab]")
-      // queryIDtext["Keys"](arrBaqs[i])
-      // queryIDtext["Keys"]("[Tab]")
 
       if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
         if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
@@ -268,8 +252,6 @@ function UpdateTabBAQ(field, fieldAction, querySettings){
     querySettings = querySettings.split(",")
 
     for (var i = 0; i < querySettings.length; i++) {      
-      // checkbox[0]["Checked"] = true
-      // THIS FUNCTIONS ACCEPTS ONLY IDS, MODIFY SCRIPTS TO GET THE ID
       CheckboxState(querySettings[i], true)
     }
   }
