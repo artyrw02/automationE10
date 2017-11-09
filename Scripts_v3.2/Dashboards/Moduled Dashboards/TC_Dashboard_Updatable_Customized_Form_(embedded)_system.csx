@@ -148,7 +148,7 @@ function TestCustomedForm(){
     OpenPanelTab("PartStatus")
     Log["Message"]("PartStatus tab Activated")
 
-     Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
+    ClickMenu("Edit->Refresh")
 
     var PartTxtfield = GetTextBox("txtPart_PartNum")
 
@@ -161,9 +161,7 @@ function TestCustomedForm(){
     
     ClickButton("Retrieve")
 
-    var searchGrid = Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]
-    
-    var searchResultGrid = searchGrid["FindChild"](["FullName", "WndCaption"], ["*grid*","*Search Results*"], 15)
+    var searchResultGrid = GetGrid("ultraGrid1")
 
     if (searchResultGrid["Rows"]["Count"] > 0) {
        Log["Checkpoint"]("There is a part retrieved and displayed on grid")
@@ -182,12 +180,12 @@ function TestCustomedForm(){
     Delay(2500)
     Aliases["Epicor"]["PartForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea3"]["DockableWindow"]["PartStatus"]["PartStatusDashboardPanel"]["windowDockingArea1"]["dockableWindow3"]["dbFillPanel1"]["WindowDockingArea"]["DockableWindow"]["Activate"]()
 
-    var warehouseResultGrid = searchGrid["FindChild"](["FullName", "WndCaption"], ["*grid*","*All*"], 20)
+    var warehouseResultGrid = GetGrid("ultraGrid1")
 
     if (warehouseResultGrid["Rows"]["Count"] > 0) {
-       Log["Checkpoint"]("There is a part retrieved and displayed on warhouse grid")
+       Log["Checkpoint"]("There is a part retrieved and displayed on warehouse grid")
     }else{
-        Log["Error"]("There is not a part retrieved and displayed on warhouse grid")
+        Log["Error"]("There is not a part retrieved and displayed on warehouse grid")
     }
 
     ClickMenu("File->Exit")

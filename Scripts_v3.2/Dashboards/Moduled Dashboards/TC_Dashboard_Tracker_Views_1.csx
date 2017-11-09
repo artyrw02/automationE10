@@ -46,7 +46,6 @@ function AddQuery1Dashb(){
   AddQueriesDashboard(baq1Copy, baq1Copy + " 0")
 }  
 
-
 function AddTrackerView1Query1(){
   Log["Message"]("Step 6")
 
@@ -56,7 +55,8 @@ function AddTrackerView1Query1(){
   EnterText("txtCaption", baq1Copy + ": Tracker" + " 0") 
   
   Log["Message"]("Step 7")      
-  if (Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["Exists"]) {
+  var trackerViewPropsPanel = VerifyForm("Dashboard Tracker View Properties")
+  if (trackerViewPropsPanel) {
     ClickButton("Clear All")
   }
 
@@ -71,7 +71,8 @@ function AddTrackerView1Query1(){
   ClickPopupMenu("Queries|" + baq1Copy + ": " + baq1Copy + " 0" + "|" + baq1Copy + ": Tracker 0", "Properties")
 
   Log["Message"]("Step 10")    
-  if (Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["Exists"]) {
+  var trackerViewPropsPanel = VerifyForm("Dashboard Tracker View Properties")
+  if (trackerViewPropsPanel) {
     ClickButton("Select All")
   }
   
@@ -185,7 +186,7 @@ function AddTrackerView1Query2(){
   SaveDashboard()
 
   Log["Message"]("Step 24")   
-  ClickMenu("Refresh All")
+  ClickMenu("Refresh All", "", true)
   
   var form = GetForm(dashb1)
   form["Maximize"]()
@@ -340,24 +341,24 @@ function OpenMenuTestDashb(){
 
 function AddNewQueryDashboard(){
   Log["Message"]("Step 46")
-    //Navigate and open Dashboard
-    MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
-    Log["Checkpoint"]("Dashboard opened") 
-    
-    // Retrieve the previous dashboard       
-    EnterText("txtDefinitonID", dashb1 + "[Tab]")
+  //Navigate and open Dashboard
+  MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+  Log["Checkpoint"]("Dashboard opened") 
 
-    Delay(2500)
-    OpenPanelTab("General")
+  // Retrieve the previous dashboard       
+  EnterText("txtDefinitonID", dashb1 + "[Tab]")
 
-    //Step47-  Add a New Query and select the zAttribute query.    
-    Log["Message"]("Step 47")  
-    Delay(2000)
-    var query2 = "Attribute"
-    AddQueriesDashboard("z"+query2)
-    
-      //Right click on the query summary and click on the Query   
-      var dashboardTree = GetTreePanel("DashboardTree")
+  Delay(2500)
+  OpenPanelTab("General")
+
+  //Step47-  Add a New Query and select the zAttribute query.    
+  Log["Message"]("Step 47")  
+  Delay(2000)
+  var query2 = "Attribute"
+  AddQueriesDashboard("z"+query2)
+
+  //Right click on the query summary and click on the Query   
+  var dashboardTree = GetTreePanel("DashboardTree")
   ClickPopupMenu("Queries|z" + query2  + ": " + query2, "Properties")
 
   DashboardPropertiesTabs("General")
@@ -411,9 +412,8 @@ function AddNewQueryDashboard(){
 function E10CacheRestart(){
   ClickMenu("Options->Clear Client Cache")
 
-  if (Aliases["Epicor"]["dlgEpicor"]["Exists"]) {
-    ClickButton("Yes")
-  }
+  ClickButton("Yes")
+  
   RestartSmartClient()
   Log["Checkpoint"]("SmartClient Restarted")  
 }  
@@ -422,10 +422,8 @@ function E10CacheRestart(){
 function CreateAttributesQuery(){
   ClickMenu("Options->Clear Client Cache")
 
-  if (Aliases["Epicor"]["dlgEpicor"]["Exists"]) {
-    ClickButton("Yes")
-  }
-
+  ClickButton("Yes")
+  
   Log["Message"]("Step 53")
   MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;Attribute")
 
@@ -433,10 +431,8 @@ function CreateAttributesQuery(){
   ClickMenu("File->New")
 
   // >Enter ISO9000 on attribute field and description
-  var attributePanel = Aliases["Epicor"]["AttributForm"]["windowDockingArea1"]["dockableWindow1"]["mainFillPanel1"]["windowDockingArea1"]["dockableWindow1"]["attributDetailPanel1"]
-
-  attributePanel["grpAttribut"]["txtAttrCode"]["Keys"]("ISO9000")
-  attributePanel["grpAttribut"]["txtDesc"]["Keys"]("ISO9000")
+  EnterText("txtAttrCode", "ISO9000" + "[Tab]")
+  EnterText("txtDesc","ISO9000" + "[Tab]")
 
   // >Save
   ClickMenu("File->Save")
@@ -453,7 +449,6 @@ function TestAttributeData(){
   testingDashboard("Attribute") 
   ClickMenu("File->Exit")
 }
-
 
 function testingDashboard(typeTesting) {
   ClickMenu("Refresh All", "", true)

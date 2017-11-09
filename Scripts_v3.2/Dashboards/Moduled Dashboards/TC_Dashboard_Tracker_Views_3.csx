@@ -8,7 +8,6 @@
 
 function TC_Dashboard_Tracker_Views_3(){}
 
-
 function ChangeRegionControlPanel1(){
   Log["Message"]("Step 1")
   //opens control cmd and opens control panel
@@ -107,13 +106,6 @@ function CreateTrackerViewQuery1(){
   var dashboardTree =  GetTreePanel("DashboardTree")
 
   // Right click on BAQ name from the tree and select New Tracker View       
-/*  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](0)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("BAQ - right click")
-
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("New Tracker View");
-  Log["Message"]("BAQtracker3 - New Tracker View was selected from Menu")*/
-
   ClickPopupMenu("Queries|" + baq + ": " + baq, "New Tracker View")
 
   // Step 10

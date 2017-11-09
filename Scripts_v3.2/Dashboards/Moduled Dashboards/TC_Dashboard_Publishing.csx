@@ -237,7 +237,8 @@ function TestBeforeDeploy1(){
 // Step 10
 function TestBeforeDeploy2(){
     E10["Refresh"]()
-    Aliases["Epicor"]["MainController"]["Activate"]()
+    // Aliases["Epicor"]["MainController"]["Activate"]()
+    ActivateForm("", "MainController")
 
     var gridDashboardPanelChildren = RetrieveGridsMainPanel()
     
@@ -281,7 +282,8 @@ function TestBeforeDeploy2(){
 // Step 11, 12
 function TestBeforeDeploy3(){
 
-    Aliases["Epicor"]["MainController"]["Activate"]()
+    // Aliases["Epicor"]["MainController"]["Activate"]()
+    ActivateForm("", "MainController")
 
     E10["Refresh"]()
 
@@ -296,7 +298,8 @@ function TestBeforeDeploy3(){
     /* 11- change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
     Log["Message"]("Step 11")
     //Activate Dash window
-    Aliases["Epicor"]["MainController"]["Activate"]()
+    // Aliases["Epicor"]["MainController"]["Activate"]()
+    ActivateForm("", "MainController")
     Delay(2500)
 
     //Retrieve cell 'test 1' row 2
@@ -307,7 +310,8 @@ function TestBeforeDeploy3(){
     Log["Message"]("Left click on second record")
     
     //Activate Sales Order Window
-    Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
+    // Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
+    ActivateForm("", "SalesOrderForm")
     Delay(1500)
     var salesOrderValue = GetText("txtKeyField")
     
@@ -319,7 +323,8 @@ function TestBeforeDeploy3(){
     }
     
     //Activate Dash window
-    Aliases["Epicor"]["MainController"]["Activate"]()
+    // Aliases["Epicor"]["MainController"]["Activate"]()
+    ActivateForm("", "MainController")
 
     //Retrieve cell 'test 2'  row 3
     cell = baq2Grid["Rows"]["Item"](2)["Cells"]["Item"](0)
@@ -329,7 +334,8 @@ function TestBeforeDeploy3(){
     Log["Message"]("Left click on second record")
 
     //Activate Sales Order Window
-    Aliases["Epicor"]["SalesOrderForm"]["Activate"]()        
+    Aliases["Epicor"]["SalesOrderForm"]["Activate"]() 
+    ActivateForm("", "SalesOrderForm")       
     
     var salesOrderValue = GetText("txtKeyField")
     
@@ -344,7 +350,8 @@ function TestBeforeDeploy3(){
 
     ClickMenu("File->Exit")
 
-    Aliases["Epicor"]["MainController"]["Activate"]()
+    // Aliases["Epicor"]["MainController"]["Activate"]()
+    ActivateForm("", "MainController")       
     ClickMenu("File->Exit")      
 
     Log["Message"]("Data was validated, no errors found")

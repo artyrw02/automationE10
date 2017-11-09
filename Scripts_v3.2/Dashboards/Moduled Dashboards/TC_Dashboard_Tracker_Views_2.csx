@@ -19,7 +19,7 @@ function CreateBAQ1(){
 
   Delay(2000)
   CopyBAQ("zCustomer01", baq1Copy)
-  Log["Message"]("BAQ 'zCustomer01' copied to 'zCustomer01Copy'")
+  Log["Message"]("BAQ 'zCustomer01' copied to '"+ baq1Copy +"'")
   
   CheckboxState("chkShared", true)
   CheckboxState("chkUpdatable", true)
@@ -326,9 +326,6 @@ function ValidateDisplayGroupTV(){
   Log["Message"]("Step 16")
   ExitDashboard()
   
-  if (!Aliases["Epicor"]["Dashboard"]["Exists"]) {
-    Log["Message"]("Dashboard closed")
-  }  
 }
                
 function ReopenDashbValidateGroup(){
@@ -337,10 +334,6 @@ function ReopenDashbValidateGroup(){
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
   
   OpenDashboard(dashbID)
-
-  if(Aliases["Epicor"]["Dashboard"]["Text"] != ""){
-    Log["Message"]("Dashboard retrieved")
-  }
 
   Log["Message"]("Step 18")
   
@@ -372,9 +365,9 @@ function AddQuery2(){
 
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy + "|" + baq2Copy + ": Summary", "Properties")
    
-  if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
+  var formProperties = VerifyForm("Dashboard Grid Properties")
+  if (formProperties) {
     EnterText("txtCaption" , "All")
-
     ClickButton("OK")
   }
 }
@@ -385,7 +378,9 @@ function AddGrid1Query2(){
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Grid View")
   
   Log["Message"]("Step 23")
-  if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
+
+  var formProperties = VerifyForm("Dashboard Grid Properties")
+  if (formProperties) {
     EnterText("txtCaption", "Manufactured Parts")
     
     Log["Message"]("Step 24")
@@ -409,28 +404,16 @@ function AddGrid1Query2(){
 function AddGrid2Query2(){
   Log["Message"]("Step 26")
   //Right click on the query summary and click on the Query 
-  /*var dashboardTree =  GetTreePanel("DashboardTree")
-
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("Right click on query")
-
-  // click 'New Tracker View' option from menu
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("New Grid View");
-  Log["Message"]("New Grid View was selected from Menu")*/
-  
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Grid View")
 
   Log["Message"]("Step 27")
-  if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
-    // Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["txtCaption"]["Text"] = "Purchased Parts"
+  var formProperties = VerifyForm("Dashboard Grid Properties")
+  if (formProperties) {
     EnterText("txtCaption", "Purchased Parts")
-    // var gridPaneldialog = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]
       
     Log["Message"]("Step 28")
     DashboardGridPropertiesTabs("Filter")
 
-    // var ultraGrid = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["GridViewPropsPanel"]["viewPropsTabCtrl"]["FilterTab"]["pnlFilter"]["ultraGrid1"]
     var ultraGrid = GetGrid("ultraGrid1")
 
     SelectCellDropdownGrid("ColumnName", "Part_TypeCode", ultraGrid)
@@ -442,7 +425,6 @@ function AddGrid2Query2(){
     ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"]  = "P"
     ultraGrid["keys"]("[Del]")
     
-    // Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()
     ClickButton("OK")
 
   }  
@@ -454,7 +436,8 @@ function AddGrid3Query2(){
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Grid View")
      
   Log["Message"]("Step 31")
-  if(Aliases["Epicor"]["DashboardProperties"]["Exists"]){
+  var formProperties = VerifyForm("Dashboard Grid Properties")
+  if (formProperties) {
     EnterText("txtCaption", "Sales Kit Parts")
 
     Log["Message"]("Step 32")
@@ -478,22 +461,12 @@ function AddTrackerView1Query2(){
  Log["Message"]("Step 34")
 
   //Right click on the query summary and click on the Query   
-  /*var dashboardTree =  GetTreePanel("DashboardTree")     
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("BAQ - right click")
-
-  // click 'New Tracker View' option from menu
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("New Tracker View");
-  Log["Message"]("BAQ1 Summary - New Tracker View was selected from Menu")*/
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Tracker View")
 
   //Check the 'Updatable' check box
-  // Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["chkUpdatable"]["Checked"] = true
   CheckboxState("chkUpdatable", true)
 
   // select 'prompt' for Phone and EMailAddress. Click Ok
-  // var dashboardTrackerView = Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["pnlTrackerControls"]["ultraGrid1"]
   var dashboardTrackerView = GetGrid("ultraGrid1")
   
   var column = getColumn(dashboardTrackerView, "Column")
@@ -538,7 +511,6 @@ function AddTrackerView1Query2(){
     }
   }
   //Click Ok to close Properties
-  // Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()    
   ClickButton("OK")
 
   SaveDashboard()
@@ -567,29 +539,15 @@ function CustomizeTrackerViewQuery2(){
   Aliases["Epicor"]["Dashboard"]["Maximize"]();
   
   OpenDashboard(dashbID)
-  // var dashboardTree = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["dbTreePanel"]["windowDockingArea1"]["dockableWindow1"]["DashboardTree"]
 
   Log["Message"]("Step 41")
   var dashboardTree =  GetTreePanel("DashboardTree")
   
   var trackerPanelsDashboard = RetrieveTrackerMainPanel()
-  /*
-  var rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](1)["Nodes"]["Item"](4)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("BAQ - right click")
 
-  // click 'New Tracker View' option from menu
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Customize Tracker View");
-  Log["Message"]("BAQ1 Summary - Customize Tracker View was selected from Menu")*/
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy + "|" + baq2Copy + ": Tracker", "Customize Tracker View")
 
-  /*
-    Step No: 42
-    Step: Select Description label (lblPart_PartDescription) and change the Width property to '0' so the Size now is '0,20'       
-    Result: The changes are set       
-  */ 
   Log["Message"]("Step 42")
-  // var trackerNode = Aliases["Epicor"]["CustomToolsDialog"]["grpControlTree"]["utrControls"]["Nodes"]["Item"](0)
   Delay(2500)
   var trackerNode = GetTreePanel("utrControls")
   trackerNode = trackerNode["Nodes"]["Item"](0)
@@ -608,9 +566,7 @@ function CustomizeTrackerViewQuery2(){
     }
   }
   
-  // var epiPropertyGrid = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgProperties"]["pnlControlProperties"]["pnlProperties"]["pgdProperties"];
-
-   var epiPropertyGrid = FindObject("*PropertyGrid*", "Name", "*pgdProperties*")
+  var epiPropertyGrid = FindObject("*PropertyGrid*", "Name", "*pgdProperties*")
 
   epiPropertyGrid["wItems"]("Layout")["Expand"]("Size");
   epiPropertyGrid["wItems"]("Layout")["wItems"]("Size")["ClickLabel"]("Width");
@@ -618,36 +574,14 @@ function CustomizeTrackerViewQuery2(){
   epiPropertyGrid["wItems"]("Layout")["wItems"]("Size")["ClickLabel"]("Height");
   epiPropertyGrid["Keys"]("^a[Del]" + "20" + "[Enter]");
   
-  /*
-    Step No: 43
-    Step: Click Tools>Toolbox and select an EpiTextBox and drop it in the tracker below the other fields        
-    Result: An EpiTextBox appears now, below the other fields    
-  */ 
   Log["Message"]("Step 43")
-  // var dashboardPanel = Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea1"]
-  // var trackerPanelsDashboard = dashboardPanel["FindAllChildren"]("FullName", "*TrackerPanel", 20)["toArray"]();     
-  
-
-  // Aliases["Epicor"]["CustomToolsDialog"]["UltraMainMenu"]["Click"]("Tools|ToolBox");
-  // Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|ToolBox")
   ClickMenu("Tools->ToolBox")
 
-  // Aliases["Epicor"]["ToolboxForm"]["toolbox"]["ToolboxTab"]["tableLayoutPanel1"]["lvwItems"]["ClickItemXY"]("EpiTextBox", -1, 74, 11);
   var toolboxList = GetList("lvwItems")
   toolboxList["ClickItemXY"]("EpiTextBox", -1, 74, 11)
-
   
   trackerPanelsDashboard[2]["Click"](300, 35);
 
-  /*
-    Step No: 44
-    Step: "On Properties tab set the followin for the EpiTextBox:
-          set IsTrackerQueryControl = true, 
-          set QueryColumn = Part_PartDescription
-          set DashboardPrompt = true
-          Save and close"       
-    Result: An EpiTextBox appears now, below the other fields    
-  */ 
   Log["Message"]("Step 44")
   Delay(2500)
   for (var i = 0; i < trackerNode["Nodes"]["Count"]; i++) {
@@ -670,9 +604,7 @@ function CustomizeTrackerViewQuery2(){
   epiPropertyGrid["wItems"]("Dashboard")["ClickLabel"]("DashboardPrompt");
   epiPropertyGrid["Keys"]("^a[Del]" + "True" + "[Enter]");
 
-  // Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Save Customization")
   ClickMenu("File->Save Customization")
-  // Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Close")  
   ClickMenu("File->Close")
 }
 
@@ -720,21 +652,8 @@ function AddTrackerView1Query3(){
     }
   }        
 
-  // Aliases["Epicor"]["DashboardProperties"]["FillPanel"]["TrackerViewPropsPanel"]["viewPropsTabCtrl"]["GeneralTab"]["chkInputPrompts"]["Checked"] = true
   CheckboxState("chkInputPrompts", true)
-  //Click Ok to close Properties
-  // Aliases["Epicor"]["DashboardProperties"]["btnOkay"]["Click"]()    
   ClickButton("OK")
-
-  //used to recreate object on testcomplete
-  /*var gridDashboard = dashboardPanel["FindAllChildren"]("FullName", "*grid*", 7)["toArray"]();
-  
-  for (var i = 0; i < gridDashboard["length"]; i++) {
-    if (gridDashboard[i]["WndCaption"] == 'zAPInvDtl: Summary') {
-      gridInvDtlPanel = gridDashboard[i]
-      break
-    }
-  }*/  
 }
 
 function CustomizeTrackerViewQuery3(){
@@ -870,20 +789,9 @@ function AddTrackerView1Query4(){
 
 function CustomizeTrackerViewQuery4(){
   Log["Message"]("Step 55C")
-  /*var dashboardTree =  GetTreePanel("DashboardTree")
-  
-  rect = dashboardTree["Nodes"]["Item"](0)["Nodes"]["Item"](3)["Nodes"]["Item"](1)
-  dashboardTree["ClickR"]((rect["Bounds"]["Left"]+ rect["Bounds"]["Right"])/2, (rect["Bounds"]["Top"]+ rect["Bounds"]["Bottom"])/2)
-  Log["Message"]("BAQ - right click")
-
-  // click 'New Tracker View' option from menu
-  Aliases["Epicor"]["Dashboard"]["dbPanel"]["UltraPopupMenu"]["Click"]("Customize Tracker View");
-  Log["Message"]("BAQ1 Summary - Customize Tracker View was selected from Menu")*/
 
   ClickPopupMenu("Queries|" + baq3["baq"] + ": " + baq3["baq"] + "|" + "Hidden Country", "Customize Tracker View")
 
-
-  // var trackerNode = Aliases["Epicor"]["CustomToolsDialog"]["grpControlTree"]["utrControls"]["Nodes"]["Item"](0)
   var trackerNode = GetTreePanel("utrControls")
   Delay(2500)
   trackerNode = trackerNode["Nodes"]["Item"](0)
@@ -902,7 +810,6 @@ function CustomizeTrackerViewQuery4(){
     }
   }
   
-  // var epiPropertyGrid = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]["tpgProperties"]["pnlControlProperties"]["pnlProperties"]["pgdProperties"]
   var epiPropertyGrid = FindObject("*PropertyGrid*", "Name", "*pgdProperties*")
 
   Delay(1000)
@@ -910,9 +817,7 @@ function CustomizeTrackerViewQuery4(){
   epiPropertyGrid["Keys"]("^a[Del]" + "False" + "[Enter]");
   Delay(1000)
 
-  // Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|Save Customization")
   ClickMenu("File->Save Customization")
-  // Aliases["Epicor"]["CustomToolsDialog"]["zEpiForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&File|&Close")
   ClickMenu("File->Close")
 }
 
@@ -1020,7 +925,6 @@ function testQuery1(){
   ClickMenu("Edit->Refresh")
 
   //Select first record on BAQ1 results to notice change of data on BAQ2
-
   columnCustID = getColumn(gridPanel, "Cust. ID") 
   
   for (var i = 0; i < gridPanel["Rows"]["Count"]; i++) {
@@ -1137,7 +1041,6 @@ function testQuery1(){
   }else{
     Log["Error"]("Column 'Email Address' was updated")
   }
-
 }
 
 function testQuery2(){

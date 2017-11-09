@@ -103,9 +103,9 @@ E10["Refresh"]()
     try{
       if (button["Exists"]) {
         button["Click"]()
-        Log["Message"]("Button " + btnName + " clicked.")
+        Log["Message"]("Button " + (btnCaption || btnName) + " clicked.")
       }else{
-        Log["Error"]("Button " + btnName + " was not found.")
+        Log["Error"]("Button " + (btnCaption || btnName) + " was not found.")
       }
     }catch(e){
       LogError(e, e["message"])
@@ -250,10 +250,6 @@ E10["Refresh"]()
               for (var j = 0; j < aWda[i]["Pane"]["Panes"]["Count"]; j++){
                   var pane = aWda[i]["Pane"]["Panes"]["Item"](j) 
                   if (pane["TextTabResolved"] == text || pane["Text"] == text){
-
-                    // if (pane.TextTab != text)
-                    //     Log.Warning("Check OpenPanel: " + pane.TextTab + ", " + pane.Text)                    
-                    //return windowDockingArea where pane was found and the pane item (in structure object)  
                       return {wda: aWda[i], pane: aWda[i]["Pane"]["Panes"]["Item"](j)} 
                   }
               }    

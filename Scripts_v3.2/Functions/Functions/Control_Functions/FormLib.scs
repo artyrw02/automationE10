@@ -2,22 +2,28 @@
 //USEUNIT ControlFunctions
 
 // Gets the object type checkbox
-function GetForm(FormName){
+function GetForm(WndCaption, FormName){
   var E10 = Sys.Process("Epicor")
 
-  var wnd = FindObject("*Form*", "WndCaption", "*" + FormName + "*", E10 )
+  if(WndCaption != "" && FormName != undefined){
+    var wnd = FindObject("*Form*", ["WndCaption", "Name"], ["*" + WndCaption + "*", "*" + FormName + "*"], E10 )
+  }else if(WndCaption != "" && FormName == undefined){
+    var wnd = FindObject("*Form*", ["WndCaption"], ["*" + WndCaption + "*"], E10 )
+  }else if (FormName != undefined && WndCaption == "") {
+    var wnd = FindObject("*Form*", ["Name"], ["*" + FormName + "*"], E10 )
+  }
 
   return wnd
 }
 
-function ActivateForm(FormName){
-  var wnd = GetForm(FormName)
+function ActivateForm(WndCaption, FormName){
+  var wnd = GetForm(WndCaption, FormName)
 
   if(wnd["Exists"]){
     wnd["Activate"]()
-    Log["Message"]("Form '" + FormName + "' activated.")
+    Log["Message"]("Form '" + (WndCaption || FormName) + "' activated.")
   }else{
-    Log["Error"]("Form '" + FormName + "' not found.")
+    Log["Error"]("Form '" + (WndCaption || FormName) + "' not found.")
   }
 }
 
@@ -34,7 +40,7 @@ function CloseForm(obj, FormName){
   }
 }
 
-  // CheckErrorWindow
+// CheckErrorWindow
 
 //Verifies if top form exists 
 function VerifyForm(caption){
@@ -49,23 +55,23 @@ function VerifyForm(caption){
 }
 
 //Logs data of form on top
-function ValidatesFormOpened(caption){
-  var form = VerifyForm(caption)
+function ValidatesFormOpened(caption, name){
+  var form = VerifyForm(caption, name)
 
   if(form){
-    Log["Message"]("Form '" + caption + "' opened.")
+    Log["Message"]("Form '" + (caption || name) + "' opened.")
   }else{
-    Log["Error"]("Form '" + caption + "' not on screen or opened.")
+    Log["Error"]("Form '" + (caption || name) + "' not on screen or opened.")
   }
 
 }
 
 //Logs data of form on top
-function ValidatesFormClosed(caption){
-  var form = GetForm(caption)
+function ValidatesFormClosed(caption, name){
+  var form = GetForm(caption, name)
 
   if(!form["Exists"]){
-    Log["Message"]("Form '" + caption + "' closed.")
+    Log["Message"]("Form '" + (caption || name) + "' closed.")
   }else{
     CloseForm(form)
   }

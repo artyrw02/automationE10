@@ -40,11 +40,7 @@ function CreateSimpleDashboards(DashbData){
 function OpenDashboard(dashboardID) {
   EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
 
-  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
-    Log["Error"]("There is a dialog message active.")
-  }else{
-    Log["Checkpoint"]("Dashboard " + dashboardID + " opened.")
-  }
+  ValidatesFormOpened(dashboardID)
 }
 
 /*funtion that creates a dashboard
@@ -74,18 +70,7 @@ function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptio
     }
   }
 
-  var windowsExceptionDialog = Aliases["Epicor"]["FindAllChildren"]("FullName", "*TestDashBD*", 15)["toArray"]();
-  var windowsExceptionDialogBtn = Aliases["Epicor"]["FindAllChildren"]("FullName", "*Button*", 2)["toArray"]();
-
-  if (windowsExceptionDialog[0] != null && windowsExceptionDialogBtn[0] != null || windowsExceptionDialog[0] != undefined && windowsExceptionDialogBtn[0] != undefined) {
-    if(windowsExceptionDialog[0]["Exists"]){
-      Log["Message"]("Warning - Dashboard: TestA set for All Companies already exists. - Clicked OK on message ")
-      windowsExceptionDialogBtn[0]["Click"]()
-    }
-  }
-
   EnterText("txtCaption", dashboardCaption + "[Tab]", "Adding Dashboard Caption")
-
   EnterText("txtDescription", dashDescription + "[Tab]", "Adding Dashboard Description")  
 
   if(generalOptions != undefined){
@@ -196,7 +181,8 @@ function ExitDashboard(){
 
   Delay(2500)
   ClickMenu("File->Exit")
-  Log["Checkpoint"]("Exit Dashboard Form")
+
+  ValidatesFormClosed("", "Dashboard")
 }
   
 //Closes only the dashboard not the form
@@ -290,6 +276,7 @@ function CreateMenu(MenuData){
     ClickMenu("File->Save")
     Delay(1000)
     ClickMenu("File->Exit")
+    ValidatesFormClosed("", "MenuMForm")
     Log["Message"]("Menu created correctly")
     Delay(1000)
   }else{

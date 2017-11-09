@@ -31,38 +31,24 @@ function CreateBAQ1(){
 
   Log["Message"]("Step 2")
 
-  // Move to EPIC06 company and open Executive analysis> Business Activity Management> Setup> Business Activity Query
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
-  // Enter the following in the "General" tab
-  
-  // QueryID: baqID
-  // Description: baqID
-  // Shared: Checked | Updatable: Checked
   CreateBAQ(baqID, baqID, "chkShared,chkUpdatable")
-  // drag and drop the "Customer" table design area in "Phrase Build" tab
+
   AddTableBAQ("Erp.Customer", "Customer")
-  // In the Display Fields> Column Select tab for the "Customer" table select the Company, CustID, CustNum, Name and Address1 columns and add them to "Display Columns" area
   AddColumnsBAQ("Customer", "Company,CustID,CustNum,Name,Address1")
 
-  // Move to Update> General Properties tab and check "Customer_Name" and "Customer_Address1" column as updatable
   UpdateTabBAQ("Customer_Name", "Updatable")
   UpdateTabBAQ("Customer_Address1", "Updatable")
 
-  // Move to Update processing, click BPM Update, then click the "Business Object..." button and select the "ERP.Customer" then click "Ok" button from the "Select Business Object" window
   OpenPanelTab("Update->Update Processing")
-  // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["Activate"]()
 
-  // Select Erp.Customer business object
-  // BAQFormDefinition["dockableWindow3"]["updatePanel1"]["windowDockingArea1"]["dockableWindow1"]["updProcess1"]["epiGroupBox1"]["updBOSettings1"]["windowDockingArea1"]["dockableWindow1"]["updBOInfo1"]["btnBusObj"]["Click"]()
   ClickButton("Business Object...")
 
   var listBOs = GetList("lbBOs")
   listBOs["ClickItem"]("Erp.Customer")
   ClickButton("OK")
-  // Aliases["Epicor"]["GuessBOForm"]["btnOK"]["Click"]()
 
-  // Save the  BAQ
   SaveBAQ()
   ExitBAQ()
   Log["Message"]("BAQ " + baqID +" created")  

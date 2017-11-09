@@ -311,7 +311,7 @@ function DashbMaintenance(){
 
   ClickButton("Search")
 
-  var gridSearchResults = Aliases["Epicor"]["DashboardSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
+  var gridSearchResults = GetGrid("ugdSearchResults")
 
   if(gridSearchResults["Rows"]["Count"] <= 20){
     Log["Checkpoint"]("Search results returned " + gridSearchResults["Rows"]["Count"] + " records")
@@ -404,14 +404,14 @@ function CreateCopySysDashb(){
   ClickButton("OK")
        
   Log["Message"]("Step 51")
-    SaveDashboard()
+  SaveDashboard()
 }   
    
 //Steps 52 to 55   
 function TestSQLDashbs(){
   // Step No: 52
  
-//Query on SQL the dashboards
+  //Query on SQL the dashboards
   Log["Message"]("Step 52")
   var test1 = QueryDatabaseDashboards(dashb1)
   Log["Message"]("Query with Dashboard ID " + dashb1 + " retrieved " + test1["RecordCount"] + " records.")

@@ -4,7 +4,7 @@
 
 var E10 = Sys.Process("Epicor")
 
-E10["Refresh"]
+E10["Refresh"]()
 
 function GetMenus(pnlPath){
     var fullNamePath = "*" + (pnlPath || "?") + "*"

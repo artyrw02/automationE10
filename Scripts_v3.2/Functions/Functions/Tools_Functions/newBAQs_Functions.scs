@@ -160,6 +160,7 @@ function SaveBAQ(){
 function ExitBAQ(){
   Delay(2500)
   ClickMenu("File->Exit")
+  ValidatesFormClosed("", "BAQDiagramForm")
 }
 
 /*Deletes BAQ
