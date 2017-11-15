@@ -7,10 +7,7 @@
 //A function for each report is created and called on TC routine 
 
 function Report_Testing(){
-	//XML["XmlCheckpoint1"]["Check"]("C:\\Users\\Administrator\\Documents\\Reports\\Sales Order Acknowledgment00885.xml");
- 	// XML["XmlCheckpoint1"]["Check"](pathFileReport);
   Log["Message"]("Starting - Generate Reports")
-
 }
 
 
@@ -44,7 +41,6 @@ function ReportARInvoice() {
 
 	ClickButton("Search")
 
-	// var searchGrid = Aliases["Epicor"]["CustomerSearchForm"]["pnlSearchGrid"]["ugdSearchResults"]
 	var searchGrid = GetGrid("ugdSearchResults")
 	var CustIDColumn = getColumn(searchGrid, "Cust. ID")
 
@@ -99,7 +95,6 @@ function ReportARInvoice() {
                 Click Generate Only*/
 
 function ReportJobTraveler(){
-	// var customer = "ADDISON"
 	var reportStyle = "Standard - SSRS - JOBTRAV2"
 
     ExpandComp("Epicor USA")
@@ -134,7 +129,6 @@ function ReportJobTraveler(){
 
 	ClickButton("OK")
 
-	// var gridJobs = Aliases["Epicor"]["JobTravForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow3"]["filterPanel1"]["windowDockingArea1"]["dockableWindow1"]["jobPanel1"]["grdJob"]
 	var gridJobs = GetGrid("grdJob")
 
 	if (gridJobs["wRowCount"] == 3) {
@@ -358,13 +352,13 @@ function ReportQuoteform(){
 //                 Group: 
 
 function ReportAPPaymentform(){
-    ExpandComp("Epicor USA")
+    /*ExpandComp("Epicor USA")
 
     ChangePlant("Chicago")
 
 	MainMenuTreeViewSelect("Epicor USA;Chicago;Financial Management;Cash Management;General Operations;Payment Entry")
 
-	ValidatesFormOpened("Mass Print Packing Slips")
+	ValidatesFormOpened("AP Payment Entry")
 
 	//Select Report style
 	Delay(1000)
@@ -419,7 +413,7 @@ function ReportAPPaymentform(){
 	//closes Packing Slip form (print)
 	ClickMenu("File->Exit")
 	
-	ValidatesFormClosed("Mass Print Packing Slips")
+	ValidatesFormClosed("AP Payment Entry")*/
 }
    
 
@@ -447,7 +441,7 @@ function ReportPrintPackingform(){
 	
 	ClickButton("Pack Slips...")
 
-	var manufacturing = "102"
+	var manufacturing = "100"
 	
 	//enter 102 for customer Dalton Manufacturing
 	EnterText("eneStartWith1", manufacturing)
@@ -615,9 +609,12 @@ function ReportSOPickList(){
 	OpenPanelTab("Selection")
 
 	var groupDateFrom = FindObject("*Date*", "Name", "*tdtFrom*" )
+	var groupDateTo = FindObject("*Date*", "Name", "*tdtTo*" )
 	var dteActualDate = FindObject("*Date*", "Name", "*dteActualDate*", groupDateFrom)
+	var dteActualDateTo = FindObject("*Date*", "Name", "*dteActualDate*", groupDateTo)
 
 	dteActualDate["Keys"]("10/09/2013" + "[Tab]")
+	dteActualDateTo["Keys"]("13/11/2013" + "[Tab]")
 
 	//Pending Validation
 	Delay(2500)
