@@ -113,7 +113,7 @@ function OpenImportedDashb(){
   OpenDashboard(dashboardID)
   Log["Message"]("Dashboard retrived")
 
-  ClickPopupMenu("Queries|" + baqE9 + ": TestBAQ Caro" + "|" + baqE9 + ": Summary", "Properties")
+  ClickPopupMenu("Queries|" + baqE9 + ": TesBAQ Caro" + "|" + baqE9 + ": Summary", "Properties")
 
   if (Aliases["Epicor"]["DashboardProperties"]["Exists"]) {
     Log["Message"]("Dashboard properties dialog appears")
@@ -158,7 +158,7 @@ function OpenImportedDashb(){
 
   Log["Message"]("Step 9")   
 
-  ClickPopupMenu("Queries|" + baqE9 + ": TestBAQ Caro" + "|" + baqE9 + ": Tracker", "Properties")
+  ClickPopupMenu("Queries|" + baqE9 + ": TesBAQ Caro" + "|" + baqE9 + ": Tracker", "Properties")
 
   if (Aliases["Epicor"]["DashboardProperties"]["Exists"]) {
     Log["Message"]("Dashboard properties dialog appears")
@@ -198,7 +198,7 @@ function AddTrackerView(){
   Log["Message"]("Step 10")     
 
   var zPOLine = "zPOLine" 
-  AddQueriesDashboard(zPOLine)
+  AddQueriesDashboard(zPOLine, zPOLine)
 
   Log["Message"]("Step 12")
 
