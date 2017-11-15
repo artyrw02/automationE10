@@ -146,6 +146,7 @@ function TestCustomedForm(){
     Delay(2500)
     
     OpenPanelTab("PartStatus")
+    Delay(4500)
     Log["Message"]("PartStatus tab Activated")
 
     ClickMenu("Edit->Refresh")
