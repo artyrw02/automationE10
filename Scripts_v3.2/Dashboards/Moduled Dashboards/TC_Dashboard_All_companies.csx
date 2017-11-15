@@ -139,6 +139,7 @@ function Dashb1Exists_EPIC05(){
 
 // Steps 19 to 21
 function VerifyAllCompaniesChk() {
+    ExpandComp(company2)
 
     Log["Message"]("Step 19")
     MainMenuTreeViewSelect(treeMainPanel2 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
