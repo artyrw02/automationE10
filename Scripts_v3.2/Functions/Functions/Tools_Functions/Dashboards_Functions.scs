@@ -40,7 +40,7 @@ function CreateSimpleDashboards(DashbData){
 function OpenDashboard(dashboardID) {
   EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
 
-  ValidatesFormOpened(dashboardID)
+  // ValidatesFormOpened(dashboardID)
 }
 
 /*funtion that creates a dashboard

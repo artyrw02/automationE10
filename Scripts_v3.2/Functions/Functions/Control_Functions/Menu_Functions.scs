@@ -11,7 +11,7 @@ function GetMenus(pnlPath){
     
     //DEBUG
     fullNamePath = fullNamePath.replace(/\//g, "*")
-//    var wnd = pnlPath? E10 : FindTopMostForm()
+    //    var wnd = pnlPath? E10 : FindTopMostForm()
     var wnd = FindTopMostForm() 
 
     obj = FindObjects("*UltraToolbarsDockArea", ["Name", "FullName"], ["*_Toolbars_Dock_Area_Top*", fullNamePath], wnd)
