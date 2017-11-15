@@ -48,7 +48,7 @@ function OpenCMD(application){
 
 function CloseCMD(){
   
-  var p, w, txt, cnt, i, s;
+  var p, w;
    
   p = Sys.Process("cmd");
 
