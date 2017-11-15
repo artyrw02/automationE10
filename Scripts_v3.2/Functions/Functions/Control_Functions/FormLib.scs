@@ -1,5 +1,4 @@
 //USEUNIT ObjectLib
-//USEUNIT ControlFunctions
 
 // Gets the object type checkbox
 function GetForm(WndCaption, FormName){
@@ -29,6 +28,20 @@ function ActivateForm(WndCaption, FormName){
 
 function CloseForm(obj, FormName){
   var wnd = obj ? obj : GetForm(FormName)
+
+  wndCaption = wnd["WndCaption"]
+  
+  if(wnd["Exists"]){
+    wnd["Close"]()
+    Log["Message"]("Form '" + (wndCaption || FormName) + "' closed.")
+  }else{
+    Log["Error"]("Form '" + (wndCaption || FormName) + "' not found.")
+  }
+}
+
+function CloseTopForm(){
+  Delay(4000)
+  var wnd = FindTopMostForm()
 
   wndCaption = wnd["WndCaption"]
   
@@ -89,7 +102,7 @@ function CheckWindowMessage(WndCaption){
 
     if(windowsMsg["Exists"]){
       Log["Message"]("Validating Dialog Message - " + windowsMsg["WndCaption"])
-      ClickButton("OK")
+      //ClickButton("OK")
       break
     }
     count++
@@ -138,7 +151,10 @@ function CheckExceptionWnd(){
   }catch(e){
     Log["Error"](e["message"])
   }finally{
-    ClickButton("OK")
+    //ClickButton("OK")
+    //Validate, if TRUE then allow ClickButton
+    return true
+    
   }
 }
 
