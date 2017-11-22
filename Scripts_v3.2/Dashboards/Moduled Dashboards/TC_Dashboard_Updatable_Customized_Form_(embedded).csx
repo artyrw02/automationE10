@@ -256,6 +256,8 @@ function AddCustomizationDashb(){
   
     Delay(2500)
 
+    Aliases["Epicor"]["CustomToolsDialog"]["Activate"]()
+
     var CustomToolsDialog = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]
     CustomToolsDialog["tpgCodeWizards"]["Tab"]["Selected"] = true
     CustomToolsDialog["tpgCodeWizards"]["tabEventWizard"]["tpgSheetWizard"]["Tab"]["Selected"] = true
