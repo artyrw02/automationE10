@@ -234,7 +234,8 @@ function ConfigureUserForTracing(){
   // Go to User Account Security Maintenance 
   MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;User Account Security Maintenance")
   Log["Message"]("User Account Security Maintenance opened")
-
+  
+  Delay(2500)
   //Retrieve the user you are logged in
   EnterText("txtKeyField", Project["Variables"]["username"] + "[Tab]")
   Log["Message"]("epicor user was retrieved")
