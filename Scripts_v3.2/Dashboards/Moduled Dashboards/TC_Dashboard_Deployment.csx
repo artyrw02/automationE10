@@ -8,7 +8,6 @@
 
 function Dashboard_Deployment()
 {
- 
 }
 
 //Steps 2 to 7
@@ -25,11 +24,27 @@ function RetrieveSysDashb(){
 
   Log["Message"]("Step 3 - Retrieve " + dashb1 + " dashboard")
 
-  OpenDashboard(dashb1)
+  EnterText("txtDefinitonID", dashb1 + "[Tab]", "Adding Dashboard name")
 
-  CheckWindowMessageModals()
-  Delay(2500)
-  ClickButton("OK")
+  //Verify dialog message
+  var dialog = CheckWindowMessageModals()
+
+  if(dialog){
+    Delay(2500)
+    ClickButton("OK")
+  }
+
+  var form
+
+  while(true){
+    form = GetForm("", "Dashboard")
+    Delay(2500)
+
+    if(form["Exists"]){
+      ValidatesFormOpened("", "Dashboard")
+      break
+    }
+  }
 
   Log["Message"]("Step 4 - Create a copy of Dashboard")
 
@@ -214,8 +229,12 @@ function SysDashbMaintenanceGenerateWeb(){
   Log["Message"]("Step 42 - Select Deploy Smart Client Application")
 
   ClickMenu("Actions->Generate All Web Forms")
+  
+  var statusBarPath = Aliases["Epicor"]["DashboardForm"]["WinFormsObject"]("baseStatusBar")
+  
+  getStatusTemp(statusBarPath)
 
-  Delay(3500)
+  Delay(7500)
 
   ClickMenu("File->Exit")
 }
@@ -242,11 +261,16 @@ function SysDashbMaintenanceDeploy2(){
   Log["Message"]("Step 46 - Click on Actions> Deploy UI Application")
   ClickMenu("Actions->Deploy UI Application")
 
+  var statusBarPath = Aliases["Epicor"]["DashboardForm"]["WinFormsObject"]("baseStatusBar")
+  
+  getStatusTemp(statusBarPath)
+
   ClickMenu("File->Exit")
 }
 
 
 function DashboardPanelTest(){
+  Delay(2500)
   ClickMenu("Edit->Refresh")
   Delay(5500)
   var gridDashboard = RetrieveGridsMainPanel()
