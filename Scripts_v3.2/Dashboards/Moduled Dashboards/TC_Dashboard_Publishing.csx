@@ -6,16 +6,16 @@
 //USEUNIT FormLib
 //USEUNIT Data_Dashboard_Publishing
 
-function Dashboard_Publishing(){
+function Dashboard_Publishing() {
 
 }
 
 //Step 1
-function CreateBAQ1(){
+function CreateBAQ1() {
   ExpandComp(company1)
 
   ChangePlant(plant1)
-  
+
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
   Log["Message"]("Step 1")
@@ -24,7 +24,7 @@ function CreateBAQ1(){
 }
 
 //Step 2
-function CreateBAQ2(){
+function CreateBAQ2() {
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
 
   Log["Message"]("Step 2")
@@ -33,7 +33,7 @@ function CreateBAQ2(){
 }
 
 // Steps 3
-function CreateDashboard(){
+function CreateDashboard() {
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
   DevMode()
@@ -42,29 +42,29 @@ function CreateDashboard(){
 
   Log["Message"]("Step 3")
 
-  NewDashboard(DashbData["dashboardID"],DashbData["dashboardCaption"],DashbData["dashDescription"])
+  NewDashboard(DashbData["dashboardID"], DashbData["dashboardCaption"], DashbData["dashDescription"])
   Log["Message"]("General data for data filled")
 
   AddQueriesDashboard(baqData1["Id"], baqData1["Id"] + "0")
   Log["Message"](baqData1["Id"] + " added to the dashboard")
-}    
+}
 
 // step 4, 5
-function PublishView(){
-  
+function PublishView() {
+
   Log["Message"]("Step 4")
 
   var publishedViewsGrid = GetGrid("grdPubViews")
   //checks if the 'Available Views' panel is available
-  if(!publishedViewsGrid["Exists"]){
+  if (!publishedViewsGrid["Exists"]) {
     ClickMenu("View->Published Views")
-    
+
     var publishedViewsGrid = GetGrid("grdPubViews")
     //Checks if there is any published view available on the 'Available Views' panel
-    if(publishedViewsGrid["Rows"]["Count"] > 0){
-      Log["Message"]("BAQs " + publishedViewsGrid["Rows"]["Count"] +  " count of published views")
+    if (publishedViewsGrid["Rows"]["Count"] > 0) {
+      Log["Message"]("BAQs " + publishedViewsGrid["Rows"]["Count"] + " count of published views")
       var countPublishView = publishedViewsGrid["Rows"]["Count"] - 1 + "_"
-    }else{
+    } else {
       var countPublishView = "0_"
     }
   }
@@ -89,20 +89,23 @@ function PublishView(){
 }
 
 // Steps 6, 7
-function RetrieveDashbForPublish(){
+function RetrieveDashbForPublish() {
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
   OpenDashboard(DashbData["dashboardID"])
   Log["Message"]("Dashboard " + DashbData["dashboardID"] + " loaded")
 
+  E10["Refresh"]()
+  Delay(2500)
+
   var publishedViewsGrid = GetGrid("grdPubViews")
   //checks if the 'Available Views' panel is available
-  if(!publishedViewsGrid["Exists"]){
+  if (!publishedViewsGrid["Exists"]) {
     ClickMenu("View->Published Views")
   }
 
   //Checks if there is any published view available on the 'Available Views' panel
-  if(publishedViewsGrid["Rows"]["Count"] > 0){
+  if (publishedViewsGrid["Rows"]["Count"] > 0) {
     Log["Message"]("There are BAQs on published views")
   }
 
@@ -126,19 +129,19 @@ function RetrieveDashbForPublish(){
   // Active Publish tab and select all columns to be published
   DashboardPropertiesTabs("Publish")
 
-  Log["Message"]("Publish tab was selected from "+ baqData1["Id"] + " dragged - published views")
+  Log["Message"]("Publish tab was selected from " + baqData1["Id"] + " dragged - published views")
 
   var publishColumns = GetList("myCLB")
-  
+
   //Select Customer_CustNum column to publish
-  for (var i = 0; i <= publishColumns["Items"]["Count"] -1; i++) {
-    if(publishColumns["Items"]["Item_2"](i)["Text"] == "Customer_CustNum"){
+  for (var i = 0; i <= publishColumns["Items"]["Count"] - 1; i++) {
+    if (publishColumns["Items"]["Item_2"](i)["Text"] == "Customer_CustNum") {
       publishColumns["ClickItem"](i)
-      Log["Message"]("BAQ1 - Column(s) "+ publishColumns["Items"]["Item_2"](i)["Text"] +" selected to publish")
+      Log["Message"]("BAQ1 - Column(s) " + publishColumns["Items"]["Item_2"](i)["Text"] + " selected to publish")
       break
     }
   }
-  
+
   ClickButton("OK")
   Log["Message"]("BAQ1 - properties 'ok' button was clicked")
 
@@ -146,7 +149,7 @@ function RetrieveDashbForPublish(){
 }
 
 // Step 8
-function AddQuery2Dashb(){
+function AddQuery2Dashb() {
   Log["Message"]("Step 8")
   AddQueriesDashboard(baqData2["Id"])
   Log["Message"](baqData2["Id"] + " added")
@@ -162,7 +165,7 @@ function AddQuery2Dashb(){
 
   SelectCellDropdownGrid("ColumnName", "OrderHed_CustNum", ultraGrid)
   SelectCellDropdownGrid("Condition", "=", ultraGrid)
-  SelectCellDropdownGrid("Value", baqData1["Id"]+"- "+ baqData1["Description"] + ": Customer_CustNum", ultraGrid)
+  SelectCellDropdownGrid("Value", baqData1["Id"] + "- " + baqData1["Description"] + ": Customer_CustNum", ultraGrid)
   ultraGrid["Keys"]("[Enter]")
 
   ClickButton("OK")
@@ -172,14 +175,14 @@ function AddQuery2Dashb(){
 
   CheckboxState("chkInhibitRefreshAll", true)
 
-  SaveDashboard()    
+  SaveDashboard()
 }
 
 // Step 9
-function TestBeforeDeploy1(){
+function TestBeforeDeploy1() {
 
   ClickMenu("Tools->Deploy Dashboard")
-  
+
   ClickButton("Test Application")
 
   Log["Message"]("Step 9")
@@ -205,13 +208,13 @@ function TestBeforeDeploy1(){
   var rect = cell["GetUIElement"]()["Rect"]
 
   //Select on active cell
-  baq1Grid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+  baq1Grid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"] / 2)
 
   var baqCellValueKey1 = baq1Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Value"]
   var baqCellValueKey2 = baq2Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Value"]
-  
-  if( baqCellValueKey1["OleValue"] == baqCellValueKey2["OleValue"]){
-    Log["Message"]("Data from "+ baqData1["Id"] +" row 0 matches the result on baq2")
+
+  if (baqCellValueKey1["OleValue"] == baqCellValueKey2["OleValue"]) {
+    Log["Message"]("Data from " + baqData1["Id"] + " row 0 matches the result on baq2")
   }
 
   //Select second record on BAQ1 results to notice change of data on BAQ2
@@ -221,13 +224,13 @@ function TestBeforeDeploy1(){
   rect = cell["GetUIElement"]()["Rect"]
 
   //Select on active cell
-  baq1Grid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+  baq1Grid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"] / 2)
 
   baqCellValueKey1 = baq1Grid["Rows"]["Item"](1)["Cells"]["Item"](1)["Value"]
   baqCellValueKey2 = baq2Grid["Rows"]["Item"](0)["Cells"]["Item"](1)["Value"]
-  
-  if( baqCellValueKey1["OleValue"] == baqCellValueKey2["OleValue"]){
-    Log["Message"]("Data from "+ baqData1["Id"] + " row 1 matches the result on baq2"+ baqData2["Id"] )
+
+  if (baqCellValueKey1["OleValue"] == baqCellValueKey2["OleValue"]) {
+    Log["Message"]("Data from " + baqData1["Id"] + " row 1 matches the result on baq2" + baqData2["Id"])
   }
 
   Delay(1500)
@@ -235,169 +238,170 @@ function TestBeforeDeploy1(){
 }
 
 // Step 10
-function TestBeforeDeploy2(){
-    E10["Refresh"]()
-    // Aliases["Epicor"]["MainController"]["Activate"]()
-    ActivateForm("", "MainController")
+function TestBeforeDeploy2() {
+  E10["Refresh"]()
+  // Aliases["Epicor"]["MainController"]["Activate"]()
+  ActivateForm("", "MainController")
 
-    var gridDashboardPanelChildren = RetrieveGridsMainPanel()
-    
-    //Gives time to load the children inside the variable
-    Delay(2000)
+  var gridDashboardPanelChildren = RetrieveGridsMainPanel()
 
-    var baq1Grid = gridDashboardPanelChildren[1]
-    var baq2Grid = gridDashboardPanelChildren[2]
+  //Gives time to load the children inside the variable
+  Delay(2000)
+
+  var baq1Grid = gridDashboardPanelChildren[1]
+  var baq2Grid = gridDashboardPanelChildren[2]
 
   /* 10- In the second grid from the dashboard right click on any Order from "Order" column
    select open with > Sales Order Entry  (Or do the same with any CustID from the first grid and open it with Customer Maintenance) */
-    Log["Message"]("Step 10")
-    //Retrieve cell      
-    cell = baq2Grid["Rows"]["Item"](0)["Cells"]["Item"](0)
-    rect = cell["GetUIElement"]()["Rect"]
+  Log["Message"]("Step 10")
+  //Retrieve cell      
+  cell = baq2Grid["Rows"]["Item"](0)["Cells"]["Item"](0)
+  rect = cell["GetUIElement"]()["Rect"]
 
-    baq2Grid["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-    Log["Message"]("Cell from grid 2 "+ baqData2["Id"] +" was selected")
+  baq2Grid["ClickR"](rect.X + rect.Width - 5, rect.Y + rect.Height / 2)
+  Log["Message"]("Cell from grid 2 " + baqData2["Id"] + " was selected")
 
-    // click 'Properties' option
-    baq2Grid["UltraPopupMenu"]["Click"]("Open With...|Sales Order Entry");
+  // click 'Properties' option
+  baq2Grid["UltraPopupMenu"]["Click"]("Open With...|Sales Order Entry");
 
-    var count
-    while(true){
-      Delay(2500)
-      if(Aliases["Epicor"]["SalesOrderForm"]["Exists"]){
-        Log["Message"]("|Sales Order Entry opened")
-        break
-      }else{
-        count++
-        Log["Message"]("Trying to open: " + count)
-      }
-
-      if (count == 10 && Aliases["Epicor"]["SalesOrderForm"]["Exists"] == false) {
-        Log["Error"]("There was a problem opening Sales Order Entry")
-      }
+  var count = 0
+  while (true) {
+    Delay(2500)
+    if (Aliases["Epicor"]["SalesOrderForm"]["Exists"]) {
+      Log["Message"]("|Sales Order Entry opened")
+      break
+    } else {
+      count++
+      Log["Message"]("Trying to open: " + count)
     }
+
+    if (count == 10 && Aliases["Epicor"]["SalesOrderForm"]["Exists"] == false) {
+      Log["Error"]("There was a problem opening Sales Order Entry")
+    }
+  }
   /* end Open Sales order */
 }
 
 // Step 11, 12
-function TestBeforeDeploy3(){
+function TestBeforeDeploy3() {
 
-    // Aliases["Epicor"]["MainController"]["Activate"]()
-    ActivateForm("", "MainController")
+  // Aliases["Epicor"]["MainController"]["Activate"]()
+  ActivateForm("", "MainController")
 
-    E10["Refresh"]()
+  E10["Refresh"]()
 
-    var gridDashboardPanelChildren = RetrieveGridsMainPanel()
+  var gridDashboardPanelChildren = RetrieveGridsMainPanel()
 
-    //Gives time to load the children inside the variable
-    Delay(2000)
+  //Gives time to load the children inside the variable
+  Delay(2000)
 
-    var baq1Grid = gridDashboardPanelChildren[1]
-    var baq2Grid = gridDashboardPanelChildren[2]
-    
-    /* 11- change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
-    Log["Message"]("Step 11")
-    //Activate Dash window
-    // Aliases["Epicor"]["MainController"]["Activate"]()
-    ActivateForm("", "MainController")
-    Delay(2500)
+  var baq1Grid = gridDashboardPanelChildren[1]
+  var baq2Grid = gridDashboardPanelChildren[2]
 
-    //Retrieve cell 'test 1' row 2
-    cell = baq2Grid["Rows"]["Item"](1)["Cells"]["Item"](0)
-    rect = cell["GetUIElement"]()["Rect"]
+  /* 11- change between orders from second grid and see what happens to Sales Order Entry form that is already opened */
+  Log["Message"]("Step 11")
+  //Activate Dash window
+  // Aliases["Epicor"]["MainController"]["Activate"]()
+  ActivateForm("", "MainController")
+  Delay(2500)
 
-    baq2Grid["Click"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-    Log["Message"]("Left click on second record")
-    
-    //Activate Sales Order Window
-    // Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
-    ActivateForm("", "SalesOrderForm")
-    Delay(1500)
-    var salesOrderValue = GetText("txtKeyField")
-    
-    // cell["Value"] is numeric and salesOrderValue is string
-    if( aqConvert["IntToStr"](cell["Value"]) == salesOrderValue){
-      Log["Message"]("Order " + cell["Value"] + " from grid 3 is loaded in Sales Order " + salesOrderValue)
-    }else{
-      Log["Warning"]("Order " + cell["Value"] + " from grid 3 is not loaded in Sales Order " + salesOrderValue)
-    }
-    
-    //Activate Dash window
-    // Aliases["Epicor"]["MainController"]["Activate"]()
-    ActivateForm("", "MainController")
+  //Retrieve cell 'test 1' row 2
+  cell = baq2Grid["Rows"]["Item"](1)["Cells"]["Item"](0)
+  rect = cell["GetUIElement"]()["Rect"]
 
-    //Retrieve cell 'test 2'  row 3
-    cell = baq2Grid["Rows"]["Item"](2)["Cells"]["Item"](0)
-    rect = cell["GetUIElement"]()["Rect"]
+  baq2Grid["Click"](rect.X + rect.Width - 5, rect.Y + rect.Height / 2)
+  Log["Message"]("Left click on second record")
 
-    baq2Grid["Click"](rect.X + rect.Width - 5, rect.Y + rect.Height/2)
-    Log["Message"]("Left click on second record")
+  //Activate Sales Order Window
+  // Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
+  ActivateForm("", "SalesOrderForm")
+  Delay(1500)
+  var salesOrderValue = GetText("txtKeyField")
 
-    //Activate Sales Order Window
-    Aliases["Epicor"]["SalesOrderForm"]["Activate"]() 
-    ActivateForm("", "SalesOrderForm")       
-    
-    var salesOrderValue = GetText("txtKeyField")
-    
-    // cell["Value"] is numeric and salesOrderValue is string
-    if( aqConvert["IntToStr"](cell["Value"]) == salesOrderValue){
-      Log["Message"]("Order " + cell["Value"] + " from grid 3 is loaded in Sales Order " + salesOrderValue)
-    }else{
-      Log["Warning"]("Order " + cell["Value"] + " from grid 3 is not loaded in Sales Order " + salesOrderValue)
-    }
+  // cell["Value"] is numeric and salesOrderValue is string
+  if (aqConvert["IntToStr"](cell["Value"]) == salesOrderValue) {
+    Log["Message"]("Order " + cell["Value"] + " from grid 3 is loaded in Sales Order " + salesOrderValue)
+  } else {
+    Log["Warning"]("Order " + cell["Value"] + " from grid 3 is not loaded in Sales Order " + salesOrderValue)
+  }
 
-    Delay(2500)
+  //Activate Dash window
+  // Aliases["Epicor"]["MainController"]["Activate"]()
+  ActivateForm("", "MainController")
 
-    ClickMenu("File->Exit")
+  //Retrieve cell 'test 2'  row 3
+  cell = baq2Grid["Rows"]["Item"](2)["Cells"]["Item"](0)
+  rect = cell["GetUIElement"]()["Rect"]
 
-    // Aliases["Epicor"]["MainController"]["Activate"]()
-    ActivateForm("", "MainController")       
-    ClickMenu("File->Exit")      
+  baq2Grid["Click"](rect.X + rect.Width - 5, rect.Y + rect.Height / 2)
+  Log["Message"]("Left click on second record")
 
-    Log["Message"]("Data was validated, no errors found")
+  //Activate Sales Order Window
+  Aliases["Epicor"]["SalesOrderForm"]["Activate"]()
+  ActivateForm("", "SalesOrderForm")
+
+  var salesOrderValue = GetText("txtKeyField")
+
+  // cell["Value"] is numeric and salesOrderValue is string
+  if (aqConvert["IntToStr"](cell["Value"]) == salesOrderValue) {
+    Log["Message"]("Order " + cell["Value"] + " from grid 3 is loaded in Sales Order " + salesOrderValue)
+  } else {
+    Log["Warning"]("Order " + cell["Value"] + " from grid 3 is not loaded in Sales Order " + salesOrderValue)
+  }
+
+  Delay(2500)
+
+  ClickMenu("File->Exit")
+
+  // Aliases["Epicor"]["MainController"]["Activate"]()
+  ActivateForm("", "MainController")
+  ClickMenu("File->Exit")
+
+  Log["Message"]("Data was validated, no errors found")
 }
 
-function DeployDashb(){
+function DeployDashb() {
   E10["Refresh"]()
   Delay(2500)
   ClickButton("Cancel")
-  
+
   DeployDashboard(DashbData["deploymentOptions"])
   Log["Message"]("Dashboard was deployed")
 
-  Log["Message"]("Step 12") 
-  
+  Log["Message"]("Step 12")
+
   //Exit dashboard
   ExitDashboard()
   Log["Message"]("Dashboard was created correctly.")
 }
 // Step 13,14
-function CreateDashboard2(){
+function CreateDashboard2() {
   //Open Dashboard   
+  E10["Refresh"]()
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
   DevMode()
 
   //Call function to create and deploy a dashboard
-  NewDashboard(DashbData2["dashboardID"],DashbData2["dashboardCaption"],DashbData2["dashDescription"])
+  NewDashboard(DashbData2["dashboardID"], DashbData2["dashboardCaption"], DashbData2["dashDescription"])
   Log["Message"]("General data for data filled")
 
   AddQueriesDashboard(baqData1["Id"])
   Log["Message"](baqData1["Id"] + " added")
-  
+
   SaveDashboard()
 
   Log["Message"]("Dashboard saved")
 
   var publishedViewsGrid = GetGrid("grdPubViews")
   //checks if the 'Available Views' panel is available
-  if(!publishedViewsGrid["Exists"]){
+  if (!publishedViewsGrid["Exists"]) {
     ClickMenu("View->Published Views")
   }
 
   //Checks if there is any published view available on the 'Available Views' panel
-  if(publishedViewsGrid["Rows"]["Count"] > 0){
-    Log["Message"]("BAQs " + publishedViewsGrid["Rows"]["Count"] +  " count of published views")
+  if (publishedViewsGrid["Rows"]["Count"] > 0) {
+    Log["Message"]("BAQs " + publishedViewsGrid["Rows"]["Count"] + " count of published views")
   }
 
   /*MODIFY TO ADAPT DRAG FUNCTION*/
@@ -414,7 +418,7 @@ function CreateDashboard2(){
   Log["Message"]("Dashboard saved")
 
   //Deactivate Published Views
-  if(publishedViewsGrid["Exists"]){
+  if (publishedViewsGrid["Exists"]) {
     ClickMenu("View->Published Views")
   }
 
@@ -424,5 +428,5 @@ function CreateDashboard2(){
 
   ExitDashboard()
 
-  Delay(1000)  
+  Delay(1000)
 }
