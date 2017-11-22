@@ -30,8 +30,8 @@ function DeactivateMainDevMode(){
 * @param: Path - String that contains the path of the form that will be selected separated by ';' separator
 * @return: none*/
 function MainMenuTreeViewSelect(Path){ 
-  Aliases["Epicor"]["MenuForm"]["Activate"]()
   // Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow3"]["Activate"]()
+  Aliases["Epicor"]["MenuForm"]["Activate"]()
   OpenPanelTab("Menu Groups")
   
   if(Path != undefined){
@@ -41,6 +41,7 @@ function MainMenuTreeViewSelect(Path){
     Depth = Path.split(";")   
     Depth = aqString["Replace"](Depth, ",", "|"); 
     Log["Message"](Depth);
+    E10["Refresh"]()
     MenuTree["ClickItem"](Depth); 
   }
 }
