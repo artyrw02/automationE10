@@ -184,10 +184,50 @@ function AddTrackerView1Query2(){
   ClickButton("OK")
 
   SaveDashboard()
-
-  Log["Message"]("Step 24")   
-  ClickMenu("Refresh All", "", true)
   
+  Delay(2500)
+  DeployDashboard("Deploy Smart Client,Add Favorite Item")
+
+  ExitDashboard()
+}
+
+function CreateMenu1() {
+  Log["Message"]("Step 35")
+  Delay(1500)
+  E10["Refresh"]()
+  MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
+
+  CreateMenu(MenuData)
+}
+
+function RestartE10() {
+  Log["Message"]("Step 36")
+  Delay(1000)
+  RestartSmartClient()
+  Log["Message"]("SmartClient Restarted")
+}
+
+//Used to test tracker view before customizing
+function OpenMenuTestDashbTracker3() {
+  Log["Message"]("Step 37")
+  MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
+
+  // Step38- Refresh Data
+  Log["Message"]("Testing tracker view for second query")
+  ClickMenu("Refresh All", "", true)
+
+  // Test data from menu
+  Log["Message"]("Step 39")
+  testingDashboard("tracker2")
+  ClickMenu("File->Exit")
+}  
+
+function OpenDashb() {
+  Log["Message"]("Step 24")
+  MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
+  
+  OpenDashboard(dashb1)
+
   var form = GetForm(dashb1)
   form["Maximize"]()
 }
@@ -308,23 +348,16 @@ function DeployDashb(){
   Log["Message"]("Dashboard created")
 }
 
-function CreateMenu1() {
-  Log["Message"]("Step 35")
-  Delay(1500)
-  E10["Refresh"]()
-  MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
+function E10CacheRestart() {
+  Delay(2500)
+  ClickMenu("Options->Clear Client Cache")
 
-  CreateMenu(MenuData)
-}
+  ClickButton("Yes")
 
-
-function RestartE10(){
-  Log["Message"]("Step 36")
-  Delay(1000)
   RestartSmartClient()
-  Log["Message"]("SmartClient Restarted")
-}
-  
+  Log["Checkpoint"]("SmartClient Restarted")
+}  
+
 function OpenMenuTestDashb(){
   Log["Message"]("Step 37")
   MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
@@ -409,7 +442,8 @@ function AddNewQueryDashboard(){
   ExitDashboard() 
 }
   
-function E10CacheRestart(){
+function E10CacheRestart2(){
+  Delay(2500)
   ClickMenu("Options->Clear Client Cache")
 
   ClickButton("Yes")
@@ -451,6 +485,7 @@ function TestAttributeData(){
 }
 
 function testingDashboard(typeTesting) {
+  Delay(2500)
   ClickMenu("Refresh All", "", true)
     
   var gridDashboardPanelChildren = RetrieveGridsMainPanel()
@@ -458,6 +493,8 @@ function testingDashboard(typeTesting) {
 
 
   if (typeTesting == "tracker") {
+
+    E10["Refresh"]()
     // Display the GroupCode combo box from the tracker views of added queries        
 
       //Get Children from the first two tracker Panels of the firsy Query
@@ -574,23 +611,22 @@ function testingDashboard(typeTesting) {
       }   
     //--------------------------------------
       // Change to the customized tab of your second tracker view   
-        OpenPanelTab("testDashb")
+      OpenPanelTab("testDashb")
 
-        var trackerTestDashbPanelChildren = RetrieveTrackerMainPanel("testDashb")
-        
-        if(Aliases["Epicor"]["ExceptionDialog"]['Exists']){
-          Log["Error"]("There is an error on the tab created")
-        } else{
-          if(trackerTestDashbPanelChildren[0]["Controls"]["Count"] > 1 ){
-            Log["Message"]("Controllers are displayed")
-          }else{
-            Log["Error"]("Controllers are not displayed")
-          }
-        } 
+      var trackerTestDashbPanelChildren = RetrieveTrackerMainPanel("testDashb")
+
+      if (Aliases["Epicor"]["ExceptionDialog"]['Exists']) {
+        Log["Error"]("There is an error on the tab created")
+      } else {
+        if (trackerTestDashbPanelChildren[0]["Controls"]["Count"] > 1) {
+          Log["Message"]("Controllers are displayed")
+        } else {
+          Log["Error"]("Controllers are not displayed")
+        }
+      } 
 
     //--------------------------------------
-  }else if(typeTesting == "Attribute"){
-
+  }else if (typeTesting == "tracker2"){
     var groupCodeTrackerP3 = trackerPDashboardChildren[2]["FindChild"]("FullName", "*eucCustomer_GroupCode", 1);
 
       if (groupCodeTrackerP3["Exists"] == true) {
@@ -600,37 +636,40 @@ function testingDashboard(typeTesting) {
       }
       // On the second query, on its tracker view enter A on CustID field and click Refresh 
       var custIDTrackerP3 = trackerPDashboardChildren[2]["FindChild"]("FullName", "*txtCustomer_CustID", 1);
-      
+
       trackerPDashboardChildren[2]["Parent"]["Activate"]()
       custIDTrackerP3["Keys"]("A")
-      ClickMenu("Edit->Refresh")
+    ClickMenu("Edit->Refresh")
 
-      //Select first record on BAQTrackerV1 results to notice change of data on BAQ2
+    //Select first record on BAQTrackerV1 results to notice change of data on BAQ2
 
-      columnCustID = getColumn(gridDashboardPanelChildren[1], "Cust. ID") 
-      
-      for (var i = 0; i < gridDashboardPanelChildren[1]["Rows"]["Count"]; i++) {
-        //Points to column Cust. ID
-        var aString = gridDashboardPanelChildren[1]["Rows"]["Item"](i)["Cells"]["Item"](columnCustID)["Text"]["OleValue"]
-        var aSubString = custIDTrackerP3["Text"]["OleValue"]
-        var Res, flag = true;
+    columnCustID = getColumn(gridDashboardPanelChildren[1], "Cust. ID") 
 
-        Res = aqString["Find"](aString, aSubString)
-        if (Res != -1) {
-          flag = true
-        }
-        else{
-          Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
-          flag = false
-          break
-        }
+    for (var i = 0; i < gridDashboardPanelChildren[1]["Rows"]["Count"]; i++) {
+      //Points to column Cust. ID
+      var aString = gridDashboardPanelChildren[1]["Rows"]["Item"](i)["Cells"]["Item"](columnCustID)["Text"]["OleValue"]
+      var aSubString = custIDTrackerP3["Text"]["OleValue"]
+      var Res, flag = true;
+
+      Res = aqString["Find"](aString, aSubString)
+      if (Res != -1) {
+        flag = true
       }
-      
-      if (flag) {
-        Log["Checkpoint"]("Grid retrieved just records starting with A " )
+      else{
+        Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+        flag = false
+        break
       }
-        
-    //-------------------------------------------------------------------
+    }
+
+    if (flag) {
+      Log["Checkpoint"]("Grid retrieved just records starting with A " )
+    }
+
+  }else if(typeTesting == "Attribute"){
+    E10["Refresh"]()
+    Delay(1500)
+    
     var columnAttr = getColumn(gridDashboardPanelChildren[2], "Attr Code") 
     var columnDescription = getColumn(gridDashboardPanelChildren[2], "Description")
 
