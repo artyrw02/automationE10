@@ -6,12 +6,12 @@
 //USEUNIT Menu_Functions
 //USEUNIT Data_Dashboard_TrackerViews_2
 
-function TC_Dashboard_Tracker_Views_2(){}
-    
-function CreateBAQ1(){
+function TC_Dashboard_Tracker_Views_2() { }
+
+function CreateBAQ1() {
   ExpandComp(company1)
 
-  ChangePlant(plant1)  
+  ChangePlant(plant1)
 
   Log["Message"]("Step 2")
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
@@ -19,8 +19,8 @@ function CreateBAQ1(){
 
   Delay(2000)
   CopyBAQ("zCustomer01", baq1Copy)
-  Log["Message"]("BAQ 'zCustomer01' copied to '"+ baq1Copy +"'")
-  
+  Log["Message"]("BAQ 'zCustomer01' copied to '" + baq1Copy + "'")
+
   CheckboxState("chkShared", true)
   CheckboxState("chkUpdatable", true)
 
@@ -38,13 +38,13 @@ function CreateBAQ1(){
 
   var listBOs = GetList("lbBOs")
   listBOs["ClickItem"]("Erp.Customer")
-  
+
   ClickButton("OK")
-  
-  SaveBAQ()      
+
+  SaveBAQ()
 }
 
-function CreateBAQ2(){
+function CreateBAQ2() {
   Log["Message"]("Step 3")
   ClickMenu("Edit->Clear")
   Log["Message"]("BAQ opened")
@@ -52,7 +52,7 @@ function CreateBAQ2(){
   Delay(2000)
   CopyBAQ("zPartTracker01", baq2Copy)
   Log["Message"]("BAQ 'zPartTracker01' copied to '" + baq2Copy + "'")
-  
+
   CheckboxState("chkShared", true)
   CheckboxState("chkUpdatable", true)
 
@@ -70,10 +70,10 @@ function CreateBAQ2(){
   listBOs["ClickItem"]("Erp.Part")
 
   ClickButton("OK")
-  SaveBAQ()      
+  SaveBAQ()
 }
 
-function CreateBAQ3(){
+function CreateBAQ3() {
   Log["Message"]("Step 3A")
 
   ClickMenu("Edit->Clear")
@@ -83,7 +83,7 @@ function CreateBAQ3(){
   AddTableBAQ(baq3["Table"], baq3["Alias"])
 
   AddColumnsBAQ(baq3["Alias"], baq3["Columns"])
-  
+
   OpenPanelTab("Update->General Properties")
   CheckboxState("chkSupportMDR", true)
 
@@ -97,11 +97,11 @@ function CreateBAQ3(){
   treePanel["ClickItem"]("Updatable Fields|Customer_Country")
 
   ComboboxSelect("cmbEditorType", "DropDown List")
-  
+
   ComboboxSelect("cmbDataFrom", "BAQ")
-  
+
   EnterText("txtExportID", "zCustomer01" + "[Tab]")
-  
+
   ComboboxSelect("cmbDisplay", "Customer_Country")
   ComboboxSelect("cmbValue", "Customer_Country")
 
@@ -113,12 +113,12 @@ function CreateBAQ3(){
   Delay(1500)
   E10["Refresh"]()
   OpenPanelTab("Update->Update Processing")
-  
+
   ClickButton("Business Object...")
 
   var listBOs = GetList("lbBOs")
   listBOs["ClickItem"]("Erp.Customer")
-  
+
   ClickButton("OK")
 
   AnalyzeSyntaxisBAQ()
@@ -132,15 +132,15 @@ function CreateBAQ3(){
   E10["Refresh"]()
 
   SaveBAQ()
-  ExitBAQ()  
-}      
-        
-function CreateDashboard(){
+  ExitBAQ()
+}
+
+function CreateDashboard() {
 
   Log["Message"]("Step 4")
-  
+
   E10["Refresh"]()
-  
+
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
 
   Log["Message"]("Dashboard opened")
@@ -148,31 +148,31 @@ function CreateDashboard(){
   Log["Message"]("DevMode activated")
 
   Log["Message"]("Step 5")
-  NewDashboard(dashbID, dashbID, dashbID, "chkInhibitRefreshAll")  
+  NewDashboard(dashbID, dashbID, dashbID, "chkInhibitRefreshAll")
 }
-  
-function AddQuery1(){
+
+function AddQuery1() {
   Log["Message"]("Step 6")
   Delay(2500)
   AddQueriesDashboard(baq1Copy, baq1Copy)
-    
+
   Log["Message"]("Step 7")
 
   ClickPopupMenu("Queries|" + baq1Copy + ": " + baq1Copy + "|" + baq1Copy + ": Summary", "Properties")
-   
+
   if (Aliases["Epicor"]["DashboardProperties"]["Exists"]) {
     Log["Message"]("Dashboard properties dialog appears")
   }
-    
+
   Log["Message"]("Step 8")
   CheckboxState("chkUpdatable", true)
 
   var dashboardGrid = GetGrid("ultraGrid1")
-  
+
   var column = getColumn(dashboardGrid, "Column")
   var columnPrompt = getColumn(dashboardGrid, "Prompt")
 
-   //find the row where GroupCode is located
+  //find the row where GroupCode is located
   for (var i = 0; i <= dashboardGrid["wRowCount"] - 1; i++) {
     //Select row and check Prompt checkbox
     var cell = dashboardGrid["Rows"]["Item"](i)["Cells"]["Item"](column)
@@ -190,20 +190,20 @@ function AddQuery1(){
   }
 
   ClickButton("OK")
-}    
-   
-function AddTrackerView1Query1(){
+}
+
+function AddTrackerView1Query1() {
   Log["Message"]("Step 9")
 
   ClickPopupMenu("Queries|" + baq1Copy + ": " + baq1Copy, "New Tracker View")
-   
+
   // Sets an alias for the tracker view
-  EnterText("txtCaption", baq1Copy + ": Tracker" + " 0") 
+  EnterText("txtCaption", baq1Copy + ": Tracker" + " 0")
 
   Log["Message"]("Step 10")
 
   var TrackerViewsGrid = GetGrid("ultraGrid1")
-  
+
   var column = getColumn(TrackerViewsGrid, "Column")
   var columnPrompt = getColumn(TrackerViewsGrid, "Prompt")
   var columnCondition = getColumn(TrackerViewsGrid, "Condition")
@@ -221,7 +221,7 @@ function AddTrackerView1Query1(){
       //Activates 'Condition' column
       TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Click"]()
 
-      while(true){
+      while (true) {
         TrackerViewsGrid["Keys"]("[Down]")
         if (TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["EditorResolved"]["SelectedText"] == "StartsWith") {
           break
@@ -242,23 +242,23 @@ function AddTrackerView1Query1(){
       TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
       // Check Prompt check box on field
       TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
-    }            
+    }
   }
 
-  ClickButton("OK") 
-}      
-    
-function AddTrackerView2Query1(){ 
+  ClickButton("OK")
+}
+
+function AddTrackerView2Query1() {
   Log["Message"]("Step 11")
   ClickPopupMenu("Queries|" + baq1Copy + ": " + baq1Copy, "New Tracker View")
-   
+
   // Sets an alias for the tracker view
-  EnterText("txtCaption", baq1Copy + ": Tracker" + " 1") 
+  EnterText("txtCaption", baq1Copy + ": Tracker" + " 1")
 
   Log["Message"]("Step 12")
 
   var TrackerViewsGrid = GetGrid("ultraGrid1")
-  
+
   var column = getColumn(TrackerViewsGrid, "Column")
   var columnPrompt = getColumn(TrackerViewsGrid, "Prompt")
   var columnCondition = getColumn(TrackerViewsGrid, "Condition")
@@ -274,7 +274,7 @@ function AddTrackerView2Query1(){
       //Activates 'Condition' column
       TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["Click"]()
 
-      while(true){
+      while (true) {
         TrackerViewsGrid["Keys"]("[Down]")
         if (TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnCondition)["EditorResolved"]["SelectedText"] == "StartsWith") {
           break
@@ -295,13 +295,13 @@ function AddTrackerView2Query1(){
       TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
       // Check Prompt check box on field
       TrackerViewsGrid["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
-    }            
+    }
   }
 
   ClickButton("OK")
 }
-          
-function ValidateDisplayGroupTV(){
+
+function ValidateDisplayGroupTV() {
   Log["Message"]("Step 15")
 
   var trackerPDashboardChildren = RetrieveTrackerMainPanel()
@@ -313,11 +313,11 @@ function ValidateDisplayGroupTV(){
   custCompanyTrackerP1["Keys"]("Aerospace")
   custCompanyTrackerP2["Keys"]("Aerospace")
 
-  if(custCompanyTrackerP1["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0){
+  if (custCompanyTrackerP1["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0) {
     Log["Checkpoint"]("Dropdown from GroupCode of Tracker View 1 has values")
   }
 
-  if(custCompanyTrackerP2["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0){
+  if (custCompanyTrackerP2["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0) {
     Log["Checkpoint"]("Dropdown from GroupCode of Tracker View 2 has values")
   }
 
@@ -325,17 +325,19 @@ function ValidateDisplayGroupTV(){
 
   Log["Message"]("Step 16")
   ExitDashboard()
-  
+
 }
-               
-function ReopenDashbValidateGroup(){
+
+function ReopenDashbValidateGroup() {
   Log["Message"]("Step 17")
-  
+
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
-  
+
   OpenDashboard(dashbID)
 
   Log["Message"]("Step 18")
+  Delay(2500)
+  E10["Refresh"]()
   
   var trackerPDashboardChildren = RetrieveTrackerMainPanel()
 
@@ -346,43 +348,43 @@ function ReopenDashbValidateGroup(){
   custCompanyTrackerP1["Keys"]("Aerospace")
   custCompanyTrackerP2["Keys"]("Aerospace")
 
-  if(custCompanyTrackerP1["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0){
+  if (custCompanyTrackerP1["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0) {
     Log["Checkpoint"]("Dropdown from GroupCode of Tracker View 1 has values")
   }
 
-  if(custCompanyTrackerP2["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0){
+  if (custCompanyTrackerP2["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0) {
     Log["Checkpoint"]("Dropdown from GroupCode of Tracker View 2 has values")
-  }  
-}  
+  }
+}
 
-function AddQuery2(){
+function AddQuery2() {
   Log["Message"]("Step 19")
   Delay(2500)
 
-  AddQueriesDashboard(baq2Copy, baq2Copy)  
+  AddQueriesDashboard(baq2Copy, baq2Copy)
 
   Log["Message"]("Step 21")
 
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy + "|" + baq2Copy + ": Summary", "Properties")
-   
+
   var formProperties = VerifyForm("Dashboard Grid Properties")
   if (formProperties) {
-    EnterText("txtCaption" , "All")
+    EnterText("txtCaption", "All")
     ClickButton("OK")
   }
 }
 
-function AddGrid1Query2(){
+function AddGrid1Query2() {
   Log["Message"]("Step 22")
 
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Grid View")
-  
+
   Log["Message"]("Step 23")
 
   var formProperties = VerifyForm("Dashboard Grid Properties")
   if (formProperties) {
     EnterText("txtCaption", "Manufactured Parts")
-    
+
     Log["Message"]("Step 24")
     DashboardGridPropertiesTabs("Filter")
 
@@ -390,18 +392,18 @@ function AddGrid1Query2(){
 
     SelectCellDropdownGrid("ColumnName", "Part_TypeCode", ultraGrid)
     SelectCellDropdownGrid("Condition", "=", ultraGrid)
-    
+
     var columnValue = getColumn(ultraGrid, "Value")
-    
+
     ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["Click"]()
-    ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"]  = "M"
-    
+    ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"] = "M"
+
     ClickButton("OK")
 
-  }  
+  }
 }
-  
-function AddGrid2Query2(){
+
+function AddGrid2Query2() {
   Log["Message"]("Step 26")
   //Right click on the query summary and click on the Query 
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Grid View")
@@ -410,7 +412,7 @@ function AddGrid2Query2(){
   var formProperties = VerifyForm("Dashboard Grid Properties")
   if (formProperties) {
     EnterText("txtCaption", "Purchased Parts")
-      
+
     Log["Message"]("Step 28")
     DashboardGridPropertiesTabs("Filter")
 
@@ -418,23 +420,23 @@ function AddGrid2Query2(){
 
     SelectCellDropdownGrid("ColumnName", "Part_TypeCode", ultraGrid)
     SelectCellDropdownGrid("Condition", "=", ultraGrid)
-    
+
     var columnValue = getColumn(ultraGrid, "Value")
-    
+
     ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["Click"]()
-    ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"]  = "P"
+    ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"] = "P"
     ultraGrid["keys"]("[Del]")
-    
+
     ClickButton("OK")
 
-  }  
+  }
 }
 
-function AddGrid3Query2(){
+function AddGrid3Query2() {
   Log["Message"]("Step 30")
 
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Grid View")
-     
+
   Log["Message"]("Step 31")
   var formProperties = VerifyForm("Dashboard Grid Properties")
   if (formProperties) {
@@ -447,18 +449,18 @@ function AddGrid3Query2(){
 
     SelectCellDropdownGrid("ColumnName", "Part_TypeCode", ultraGrid)
     SelectCellDropdownGrid("Condition", "=", ultraGrid)
-    
+
     var columnValue = getColumn(ultraGrid, "Value")
-    
+
     ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["Click"]()
-    ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"]  = "K"
-    
+    ultraGrid["Rows"]["Item"](0)["Cells"]["Item"](columnValue)["EditorResolved"]["SelectedText"] = "K"
+
     ClickButton("OK")
-  } 
+  }
 }
 
-function AddTrackerView1Query2(){
- Log["Message"]("Step 34")
+function AddTrackerView1Query2() {
+  Log["Message"]("Step 34")
 
   //Right click on the query summary and click on the Query   
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy, "New Tracker View")
@@ -468,18 +470,18 @@ function AddTrackerView1Query2(){
 
   // select 'prompt' for Phone and EMailAddress. Click Ok
   var dashboardTrackerView = GetGrid("ultraGrid1")
-  
+
   var column = getColumn(dashboardTrackerView, "Column")
   var columnPrompt = getColumn(dashboardTrackerView, "Prompt")
   var columnLabel = getColumn(dashboardTrackerView, "Label Caption")
   var columnVisible = getColumn(dashboardTrackerView, "Visible")
-  
+
   var promptFields = "Part_ClassID,Part_ProdCode,Part_TaxCatID"
   var uncheckVisible = "InActive,Global,Non-Stock Item,Track Lots,Track Dim,Track Serial,Method,Company"
 
   promptFields = promptFields.split(",")
 
-   //find the row where GroupCode is located
+  //find the row where GroupCode is located
   for (var i = 0; i <= dashboardTrackerView["wRowCount"] - 1; i++) {
     //Select row and check Prompt checkbox
     var cell = dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](column)
@@ -496,7 +498,7 @@ function AddTrackerView1Query2(){
 
   uncheckVisible = uncheckVisible.split(",")
 
-   //find the row where Label matches the specified in order to uncheck visible checkbox
+  //find the row where Label matches the specified in order to uncheck visible checkbox
   for (var i = 0; i <= dashboardTrackerView["wRowCount"] - 1; i++) {
     //Select row and check Prompt checkbox
     var cell = dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnLabel)
@@ -516,33 +518,33 @@ function AddTrackerView1Query2(){
   SaveDashboard()
 
   ExitDashboard()
-} 
-       
-function UpdateBAQ(){
+}
+
+function UpdateBAQ() {
   Log["Message"]("Step 39")
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
-  
+
   Log["Message"]("BAQ opened")
 
   OpenBAQ(baq2Copy)
   UpdateTabBAQ("Part_PartDescription", "Updatable")
 
   SaveBAQ()
-  ExitBAQ()  
+  ExitBAQ()
 }
 
-function CustomizeTrackerViewQuery2(){
+function CustomizeTrackerViewQuery2() {
   Log["Message"]("Step 40")
   MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;General Operations;Dashboard")
   Log["Message"]("BAQ opened")
   //  Maximize Dashboard
   Aliases["Epicor"]["Dashboard"]["Maximize"]();
-  
+
   OpenDashboard(dashbID)
 
   Log["Message"]("Step 41")
-  var dashboardTree =  GetTreePanel("DashboardTree")
-  
+  var dashboardTree = GetTreePanel("DashboardTree")
+
   var trackerPanelsDashboard = RetrieveTrackerMainPanel()
 
   ClickPopupMenu("Queries|" + baq2Copy + ": " + baq2Copy + "|" + baq2Copy + ": Tracker", "Customize Tracker View")
@@ -558,14 +560,14 @@ function CustomizeTrackerViewQuery2(){
       trackerNode["Nodes"]["Item"](i)["Selected"] = true
       trackerNode["Nodes"]["Item"](i)["Expanded"] = true
       for (var j = 0; j < trackerNode["Nodes"]["Item"](i)["Nodes"]["Count"]; j++) {
-        if(trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "lblPart_PartDescription"){
+        if (trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "lblPart_PartDescription") {
           trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Selected"] = true
           break
         }
       }
     }
   }
-  
+
   var epiPropertyGrid = FindObject("*PropertyGrid*", "Name", "*pgdProperties*")
 
   epiPropertyGrid["wItems"]("Layout")["Expand"]("Size");
@@ -573,13 +575,13 @@ function CustomizeTrackerViewQuery2(){
   epiPropertyGrid["Keys"]("^a[Del]" + "0" + "[Enter]");
   epiPropertyGrid["wItems"]("Layout")["wItems"]("Size")["ClickLabel"]("Height");
   epiPropertyGrid["Keys"]("^a[Del]" + "20" + "[Enter]");
-  
+
   Log["Message"]("Step 43")
   ClickMenu("Tools->ToolBox")
 
   var toolboxList = GetList("lvwItems")
   toolboxList["ClickItemXY"]("EpiTextBox", -1, 74, 11)
-  
+
   trackerPanelsDashboard[2]["Click"](300, 35);
 
   Log["Message"]("Step 44")
@@ -589,14 +591,14 @@ function CustomizeTrackerViewQuery2(){
       trackerNode["Nodes"]["Item"](i)["Selected"] = true
       trackerNode["Nodes"]["Item"](i)["Expanded"] = true
       for (var j = 0; j < trackerNode["Nodes"]["Item"](i)["Nodes"]["Count"]; j++) {
-        if(trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "[C]epiTextBox1"){
+        if (trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "[C]epiTextBox1") {
           trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Selected"] = true
           break
         }
       }
     }
   }
-  
+
   epiPropertyGrid["wItems"]("Misc")["ClickLabel"]("IsTrackerQueryControl");
   epiPropertyGrid["Keys"]("^a[Del]" + "True" + "[Enter]");
   epiPropertyGrid["wItems"]("Misc")["ClickLabel"]("QueryColumn");
@@ -608,14 +610,14 @@ function CustomizeTrackerViewQuery2(){
   ClickMenu("File->Close")
 }
 
-function AddQuery3(){
+function AddQuery3() {
   Log["Message"]("Step 45")
   Delay(2500)
   var invDtlQuery = "zAPInvDtl"
   AddQueriesDashboard(invDtlQuery, invDtlQuery)
 }
- 
-function AddTrackerView1Query3(){
+
+function AddTrackerView1Query3() {
   Log["Message"]("Step 46")
   var invDtlQuery = "zAPInvDtl"
   ClickPopupMenu("Queries|" + invDtlQuery + ": " + invDtlQuery, "New Tracker View")
@@ -625,11 +627,11 @@ function AddTrackerView1Query3(){
   }
 
   var dashboardTrackerView = GetGrid("ultraGrid1")
-  
+
   var column = getColumn(dashboardTrackerView, "Column")
   var columnPrompt = getColumn(dashboardTrackerView, "Prompt")
   var columnVisible = getColumn(dashboardTrackerView, "Visible")
-  
+
   var promptFields = "APInvDtl_InvoiceNum"
 
   promptFields = promptFields.split(",")
@@ -646,22 +648,22 @@ function AddTrackerView1Query3(){
 
         // Check Prompt check box on field
         dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
-        dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"              
+        dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
         break
       }
     }
-  }        
+  }
 
   CheckboxState("chkInputPrompts", true)
   ClickButton("OK")
 }
 
-function CustomizeTrackerViewQuery3(){
+function CustomizeTrackerViewQuery3() {
 
   Log["Message"]("Step 47")
   var invDtlQuery = "zAPInvDtl"
-  
-  var trackerPanelsDashboard = RetrieveTrackerMainPanel()  
+
+  var trackerPanelsDashboard = RetrieveTrackerMainPanel()
 
   ClickPopupMenu("Queries|" + invDtlQuery + ": " + invDtlQuery + "|" + invDtlQuery + ": Tracker", "Customize Tracker View")
 
@@ -669,7 +671,7 @@ function CustomizeTrackerViewQuery3(){
   Delay(2500)
   ClickMenu("Tools->ToolBox")
   Delay(2500)
-  
+
   var toolboxList = GetList("lvwItems")
   toolboxList["ClickItemXY"]("EpiCombo", -1, 63, 8)
 
@@ -683,7 +685,7 @@ function CustomizeTrackerViewQuery3(){
   ActivateForm("Customization Tools Dialog")
   var trackerNode = GetTreePanel("utrControls")
   Delay(2500)
-  
+
   trackerNode = trackerNode["Nodes"]["Item"](0)
   trackerNode["Expanded"] = true
 
@@ -692,14 +694,14 @@ function CustomizeTrackerViewQuery3(){
       trackerNode["Nodes"]["Item"](i)["Selected"] = true
       trackerNode["Nodes"]["Item"](i)["Expanded"] = true
       for (var j = 0; j < trackerNode["Nodes"]["Item"](i)["Nodes"]["Count"]; j++) {
-        if(trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "[C]epiCombo1"){
+        if (trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "[C]epiCombo1") {
           trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Selected"] = true
           break
         }
       }
     }
   }
-  
+
   var epiPropertyGrid = FindObject("*PropertyGrid*", "Name", "*pgdProperties*")
 
   delay(1000)
@@ -711,7 +713,7 @@ function CustomizeTrackerViewQuery3(){
   delay(1000)
   epiPropertyGrid["wItems"]("EpiCombo")["ClickLabel"]("EpiBOName");
   epiPropertyGrid["Keys"]("^a[Del]" + "Erp:BO:Part" + "[Tab]" + "[Enter]" + "[Enter]");
-  
+
   epiPropertyGrid["wItems"]("EpiCombo")["ClickLabel"]("EpiColumns");
   epiPropertyGrid["Keys"]("^a[Tab]" + "[Enter]");
   if (Aliases["Epicor"]["StringCollectionEditor"]["Exists"]) {
@@ -728,23 +730,23 @@ function CustomizeTrackerViewQuery3(){
   delay(1000)
   epiPropertyGrid["Keys"]("^a[Del]" + "Part" + "[Enter]");
   epiPropertyGrid["wItems"]("EpiCombo")["ClickLabel"]("ValueMember");
-  epiPropertyGrid["Keys"]("^a[Del]" + "PartNum" + "[Enter]");      
+  epiPropertyGrid["Keys"]("^a[Del]" + "PartNum" + "[Enter]");
   delay(1000)
   epiPropertyGrid["wItems"]("Misc")["ClickLabel"]("QueryColumn");
   epiPropertyGrid["Keys"]("^a[Del]" + "APInvDtl_PartNum" + "[Enter]");
 
   ClickMenu("File->Save Customization")
   ClickMenu("File->Close")
-}      
-
-function AddQuery4(){
-  Log["Message"]("Step 55A")
-  
-  AddQueriesDashboard(baq3["baq"])  
 }
 
-function AddTrackerView1Query4(){
-  
+function AddQuery4() {
+  Log["Message"]("Step 55A")
+
+  AddQueriesDashboard(baq3["baq"])
+}
+
+function AddTrackerView1Query4() {
+
   Log["Message"]("Step 55B")
 
   ClickPopupMenu("Queries|" + baq3["baq"] + ": " + baq3["baq"], "New Tracker View")
@@ -757,11 +759,11 @@ function AddTrackerView1Query4(){
 
   // select 'prompt' for Phone and EMailAddress. Click Ok
   var dashboardTrackerView = GetGrid("ultraGrid1")
-  
+
   var column = getColumn(dashboardTrackerView, "Column")
   var columnPrompt = getColumn(dashboardTrackerView, "Prompt")
   var columnVisible = getColumn(dashboardTrackerView, "Visible")
-  
+
   var promptFields = "Customer_Country"
 
   promptFields = promptFields.split(",")
@@ -778,16 +780,16 @@ function AddTrackerView1Query4(){
 
         // Check Prompt check box on field
         dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["Click"]()
-        dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"              
+        dashboardTrackerView["Rows"]["Item"](i)["Cells"]["Item"](columnPrompt)["EditorResolved"]["CheckState"] = "Checked"
         break
       }
     }
-  }        
+  }
 
-  ClickButton("OK")  
+  ClickButton("OK")
 }
 
-function CustomizeTrackerViewQuery4(){
+function CustomizeTrackerViewQuery4() {
   Log["Message"]("Step 55C")
 
   ClickPopupMenu("Queries|" + baq3["baq"] + ": " + baq3["baq"] + "|" + "Hidden Country", "Customize Tracker View")
@@ -802,14 +804,14 @@ function CustomizeTrackerViewQuery4(){
       trackerNode["Nodes"]["Item"](i)["Selected"] = true
       trackerNode["Nodes"]["Item"](i)["Expanded"] = true
       for (var j = 0; j < trackerNode["Nodes"]["Item"](i)["Nodes"]["Count"]; j++) {
-        if(trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "cboCustomer_Country"){
+        if (trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Text"] == "cboCustomer_Country") {
           trackerNode["Nodes"]["Item"](i)["Nodes"]["Item"](j)["Selected"] = true
           break
         }
       }
     }
   }
-  
+
   var epiPropertyGrid = FindObject("*PropertyGrid*", "Name", "*pgdProperties*")
 
   Delay(1000)
@@ -821,35 +823,35 @@ function CustomizeTrackerViewQuery4(){
   ClickMenu("File->Close")
 }
 
-function DeployDashbClose(){
+function DeployDashbClose() {
   Log["Message"]("Step 56")
   SaveDashboard()
   Delay(2500)
   DeployDashboard("Deploy Smart Client,Add Favorite Item,Generate Web Form")
-  ExitDashboard()  
+  ExitDashboard()
 }
 
-function CreateMenu1(){
+function CreateMenu1() {
   Log["Message"]("Step 57")
   Delay(2500)
   E10["Refresh"]()
-  
+
   MainMenuTreeViewSelect(treeMainPanel1 + "System Setup;Security Maintenance;Menu Maintenance")
 
-  CreateMenu(MenuData)  
+  CreateMenu(MenuData)
 }
 
-function RestartE10(){
+function RestartE10() {
   ClickMenu("Options->Clear Client Cache")
   ClickButton("Yes")
 
   Log["Message"]("Step 60")
   Delay(1000)
   RestartSmartClient()
-  Log["Message"]("SmartClient Restarted")  
+  Log["Message"]("SmartClient Restarted")
 }
 
-function OpenMenu(){
+function OpenMenu() {
   Log["Message"]("Step 61")
   Delay(1000)
 
@@ -857,8 +859,8 @@ function OpenMenu(){
   MainMenuTreeViewSelect(treeMainPanel1 + "Sales Management;Customer Relationship Management;Setup;" + MenuData["menuName"])
 }
 
-function testQuery1(){
-  
+function testQuery1() {
+
   Log["Message"]("Step 62")
   Delay(2500)
   ClickMenu("Refresh All", "", true)
@@ -870,11 +872,11 @@ function testQuery1(){
   Log["Message"]("Step 63")
   if (gridPanel["Rows"]["Count"] > 0) {
     Log["Message"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
-  }else{
+  } else {
     Log["Error"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
   }
 
-  var columnCustID = getColumn(gridPanel, "Cust. ID") 
+  var columnCustID = getColumn(gridPanel, "Cust. ID")
   var columnGroup = getColumn(gridPanel, "Group")
 
   var custGroupCodeTrackerP1 = trackerMainPanel[0]["FindChild"]("FullName", "*eucCustomer_GroupCode", 1);
@@ -886,21 +888,21 @@ function testQuery1(){
     if (custGroupCodeTrackerP1["Text"]["OleValue"] == custGroupCodeTrackerP2["Text"]["OleValue"]) {
       Log["Message"]("Group codes are the same. Tracker 1 = " + custGroupCodeTrackerP1["Text"]["OleValue"] + " | Tracker 2 = " + custGroupCodeTrackerP2["Text"]["OleValue"])
       break
-    }else{
+    } else {
       Log["Error"]("Group codes are not the same. Tracker 1 = " + custGroupCodeTrackerP1["Text"]["OleValue"] + " | Tracker 2 = " + custGroupCodeTrackerP2["Text"]["OleValue"])
     }
   }
-     
+
   Log["Message"]("Step 64")
-  
+
   custGroupCodeTrackerP1["Keys"]("Aerospace")
   custGroupCodeTrackerP2["Keys"]("Aerospace")
 
-  if(custGroupCodeTrackerP1["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0){
+  if (custGroupCodeTrackerP1["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0) {
     Log["Checkpoint"]("Dropdown from GroupCode of Tracker View 1 has values")
   }
 
-  if(custGroupCodeTrackerP2["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0){
+  if (custGroupCodeTrackerP2["SelectedRow"]["ListObject"]["Row"]["Table"]["Count"] > 0) {
     Log["Checkpoint"]("Dropdown from GroupCode of Tracker View 2 has values")
   }
 
@@ -908,13 +910,13 @@ function testQuery1(){
 
   ClickMenu("Edit->Clear")
 
-  if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+  if (Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]) {
     ClickButton("Yes")
   }
 
-  if (gridPanel["Rows"]["Count"] == 0 && custGroupCodeTrackerP1["Text"]["OleValue"] == "" && custGroupCodeTrackerP2["Text"]["OleValue"] == "" ) {
+  if (gridPanel["Rows"]["Count"] == 0 && custGroupCodeTrackerP1["Text"]["OleValue"] == "" && custGroupCodeTrackerP2["Text"]["OleValue"] == "") {
     Log["Checkpoint"]("Form cleared.")
-  }else{
+  } else {
     Log["Error"]("Form still have records.")
   }
 
@@ -925,8 +927,8 @@ function testQuery1(){
   ClickMenu("Edit->Refresh")
 
   //Select first record on BAQ1 results to notice change of data on BAQ2
-  columnCustID = getColumn(gridPanel, "Cust. ID") 
-  
+  columnCustID = getColumn(gridPanel, "Cust. ID")
+
   for (var i = 0; i < gridPanel["Rows"]["Count"]; i++) {
     //Points to column Cust. ID
     var aString = gridPanel["Rows"]["Item"](i)["Cells"]["Item"](columnCustID)["Text"]["OleValue"]
@@ -935,29 +937,29 @@ function testQuery1(){
 
     Res = aqString["Find"](aString, aSubString)
     if (Res != -1) {
-        flag = true
+      flag = true
     }
-    else{
-        Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
-        flag = false
-        break
+    else {
+      Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+      flag = false
+      break
     }
   }
-  
+
   if (flag) {
-    Log["Checkpoint"]("Grid retrieved just records starting with A " )
+    Log["Checkpoint"]("Grid retrieved just records starting with A ")
   }
-      
+
   Log["Message"]("Step 67")
   ClickMenu("Edit->Clear")
 
-  if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+  if (Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]) {
     ClickButton("Yes")
-  }  
+  }
 
-  if (gridPanel["Rows"]["Count"] == 0 && custGroupCodeTrackerP1["Text"]["OleValue"] == "" && custGroupCodeTrackerP2["Text"]["OleValue"] == "" ) {
+  if (gridPanel["Rows"]["Count"] == 0 && custGroupCodeTrackerP1["Text"]["OleValue"] == "" && custGroupCodeTrackerP2["Text"]["OleValue"] == "") {
     Log["Checkpoint"]("Form cleared.")
-  }else{
+  } else {
     Log["Error"]("Form still have records.")
   }
 
@@ -968,8 +970,8 @@ function testQuery1(){
   ClickMenu("Edit->Refresh")
 
   //Select first record on BAQ1 results to notice change of data on BAQ2
-  columnCustID = getColumn(gridPanel, "Cust. ID") 
-  
+  columnCustID = getColumn(gridPanel, "Cust. ID")
+
   for (var i = 0; i < gridPanel["Rows"]["Count"]; i++) {
     //Points to column Cust. ID
     var aString = gridPanel["Rows"]["Item"](i)["Cells"]["Item"](columnCustID)["Text"]["OleValue"]
@@ -978,29 +980,29 @@ function testQuery1(){
 
     Res = aqString["Find"](aString, aSubString)
     if (Res != -1) {
-        flag = true
+      flag = true
     }
-    else{
-        Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
-        flag = false
-        break
+    else {
+      Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+      flag = false
+      break
     }
   }
-  
+
   if (flag) {
-    Log["Checkpoint"]("Grid retrieved just records with dalton " )
+    Log["Checkpoint"]("Grid retrieved just records with dalton ")
   }
 
   Log["Message"]("Step 69")
   ClickMenu("Edit->Clear")
 
-  if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+  if (Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]) {
     ClickButton("Yes")
-  }  
+  }
 
-  if (gridPanel["Rows"]["Count"] == 0 && custGroupCodeTrackerP1["Text"]["OleValue"] == "" && custGroupCodeTrackerP2["Text"]["OleValue"] == "" ) {
+  if (gridPanel["Rows"]["Count"] == 0 && custGroupCodeTrackerP1["Text"]["OleValue"] == "" && custGroupCodeTrackerP2["Text"]["OleValue"] == "") {
     Log["Checkpoint"]("Form cleared.")
-  }else{
+  } else {
     Log["Error"]("Form still have records.")
   }
 
@@ -1022,28 +1024,28 @@ function testQuery1(){
 
   if (gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum)["Text"]["OleValue"] == oldValuePhoneN) {
     Log["Checkpoint"]("Column 'Phone Number' was not updated")
-  }else{
+  } else {
     Log["Error"]("Column 'Phone Number' was updated")
   }
 
   Log["Message"]("Step 72")
 
-  var oldValueEmail = gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum+1)["Text"]["OleValue"]
+  var oldValueEmail = gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum + 1)["Text"]["OleValue"]
 
-  gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum+1)["Activate"]()
+  gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum + 1)["Activate"]()
   var custEmailTrackerP2 = trackerMainPanel[0]["FindChild"]("FullName", "*txtCustomer_EMailAddress", 1);
 
   custEmailTrackerP2["Keys"]("012012012")
 
-  gridPanel["Rows"]["Item"](1)["Cells"]["Item"](phoneNum+1)["Activate"]()
-  if (gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum+1)["Text"]["OleValue"] == custEmailTrackerP2["Text"]["OleValue"]) {
+  gridPanel["Rows"]["Item"](1)["Cells"]["Item"](phoneNum + 1)["Activate"]()
+  if (gridPanel["Rows"]["Item"](0)["Cells"]["Item"](phoneNum + 1)["Text"]["OleValue"] == custEmailTrackerP2["Text"]["OleValue"]) {
     Log["Checkpoint"]("Column 'Email Address' was not updated")
-  }else{
+  } else {
     Log["Error"]("Column 'Email Address' was updated")
   }
 }
 
-function testQuery2(){
+function testQuery2() {
   ClickMenu("Refresh All", "", true)
 
   var trackerMainPanel = RetrieveTrackerMainPanel()
@@ -1057,29 +1059,29 @@ function testQuery2(){
 
   if (gridPanelAll["Rows"]["Count"] > 0) {
     Log["Message"]("Grid " + gridPanelAll["WndCaption"] + " retrieved " + gridPanelAll["Rows"]["Count"] + " records.")
-  }else{
+  } else {
     Log["Error"]("Grid " + gridPanelAll["WndCaption"] + " retrieved " + gridPanelAll["Rows"]["Count"] + " records.")
-  }  
+  }
   if (gridPanelManufactured["Rows"]["Count"] > 0) {
     Log["Message"]("Grid " + gridPanelManufactured["WndCaption"] + " retrieved " + gridPanelManufactured["Rows"]["Count"] + " records.")
-  }else{
+  } else {
     Log["Error"]("Grid " + gridPanelManufactured["WndCaption"] + " retrieved " + gridPanelManufactured["Rows"]["Count"] + " records.")
-  }   
+  }
   if (gridPanelPurchased["Rows"]["Count"] > 0) {
     Log["Message"]("Grid " + gridPanelPurchased["WndCaption"] + " retrieved " + gridPanelPurchased["Rows"]["Count"] + " records.")
-  }else{
+  } else {
     Log["Error"]("Grid " + gridPanelPurchased["WndCaption"] + " retrieved " + gridPanelPurchased["Rows"]["Count"] + " records.")
-  }   
+  }
   if (gridPanelSales["Rows"]["Count"] > 0) {
     Log["Message"]("Grid " + gridPanelSales["WndCaption"] + " retrieved " + gridPanelSales["Rows"]["Count"] + " records.")
-  }else{
+  } else {
     Log["Error"]("Grid " + gridPanelSales["WndCaption"] + " retrieved " + gridPanelSales["Rows"]["Count"] + " records.")
   }
 
-  var columnTypeCodeA = getColumn(gridPanelAll, "Type") 
-  var columnTypeCodeM = getColumn(gridPanelManufactured, "Type") 
-  var columnTypeCodeP = getColumn(gridPanelPurchased, "Type") 
-  var columnTypeCodeK = getColumn(gridPanelSales, "Type") 
+  var columnTypeCodeA = getColumn(gridPanelAll, "Type")
+  var columnTypeCodeM = getColumn(gridPanelManufactured, "Type")
+  var columnTypeCodeP = getColumn(gridPanelPurchased, "Type")
+  var columnTypeCodeK = getColumn(gridPanelSales, "Type")
   var flag
 
   //Move through the rows from grid Manufactured to check the type code "M"
@@ -1087,17 +1089,17 @@ function testQuery2(){
     gridPanelManufactured["Rows"]["Item"](i)["Cells"]["Item"](columnTypeCodeM)["Activate"]()
     var type = gridPanelManufactured["Rows"]["Item"](i)["Cells"]["Item"](columnTypeCodeM)["Text"]["OleValue"]
     flag = true
-    if (type == "M" ) {
+    if (type == "M") {
       flag = true
-    }else{
+    } else {
       flag = false
       break
     }
   }
 
-  if(flag){
+  if (flag) {
     Log["Message"]("Grid displays only records with type code " + type)
-  }else{
+  } else {
     Log["Error"]("Grid doesn't display only records with type code " + type)
   }
 
@@ -1106,52 +1108,52 @@ function testQuery2(){
     gridPanelPurchased["Rows"]["Item"](i)["Cells"]["Item"](columnTypeCodeP)["Activate"]()
     var type = gridPanelPurchased["Rows"]["Item"](i)["Cells"]["Item"](columnTypeCodeP)["Text"]["OleValue"]
     flag = true
-    if (type == "P" )  {
+    if (type == "P") {
       flag = true
-    }else{
+    } else {
       flag = false
       break
     }
   }
 
-  if(flag){
+  if (flag) {
     Log["Message"]("Grid displays only records with type code " + type)
-  }else{
+  } else {
     Log["Error"]("Grid doesn't display only records with type code " + type)
   }
-  
+
   //Move through the rows from grid Manufactured to check the type code "K"
   for (var i = 0; i < gridPanelSales["Rows"]["Count"]; i++) {
     gridPanelSales["Rows"]["Item"](i)["Cells"]["Item"](columnTypeCodeK)["Activate"]()
     var type = gridPanelSales["Rows"]["Item"](i)["Cells"]["Item"](columnTypeCodeK)["Text"]["OleValue"]
-    if (type == "K" )  {
+    if (type == "K") {
       flag = true
-    }else{
+    } else {
       flag = false
       break
     }
   }
 
-  if(flag){
+  if (flag) {
     Log["Message"]("Grid displays only records with type code " + type)
-  }else{
+  } else {
     Log["Error"]("Grid doesn't display only records with type code " + type)
   }
 
   Log["Message"]("Step 76")
 
-  var columnPartSales = getColumn(gridPanelSales, "Part") 
-  var columnDescPart = getColumn(gridPanelSales, "Description") 
+  var columnPartSales = getColumn(gridPanelSales, "Part")
+  var columnDescPart = getColumn(gridPanelSales, "Description")
 
   gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnPartSales)["Activate"]()
 
   var epiTextBox = trackerMainPanel[2]["FindChild"]("FullName", "*epiTextBox1", 1);
   var txtPart_PartNum = trackerMainPanel[2]["FindChild"]("FullName", "*txtPart_PartNum", 1);
 
-  if(gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnPartSales)["Text"]["OleValue"] == txtPart_PartNum["Text"]["OleValue"]
-      && gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"] == epiTextBox["Text"]["OleValue"]){
+  if (gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnPartSales)["Text"]["OleValue"] == txtPart_PartNum["Text"]["OleValue"]
+    && gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"] == epiTextBox["Text"]["OleValue"]) {
     Log["Message"]("Tracker View Part field displays the selected row data from the grid")
-  }else{
+  } else {
     Log["Error"]("Tracker View Part field doesn't display the selected row data from the grid")
   }
 
@@ -1161,17 +1163,17 @@ function testQuery2(){
   var oldEpiTextBoxValue = epiTextBox["Text"]["OleValue"]
   Log["Message"]("Step 78")
 
-  epiTextBox["Keys"]("test1" + '[Tab]') 
+  epiTextBox["Keys"]("test1" + '[Tab]')
 
-  if(gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"] != oldEpiTextBoxValue 
-    && gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"]  == epiTextBox["Text"]["OleValue"]){
+  if (gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"] != oldEpiTextBoxValue
+    && gridPanelSales["Rows"]["Item"](0)["Cells"]["Item"](columnDescPart)["Text"]["OleValue"] == epiTextBox["Text"]["OleValue"]) {
     Log["Checkpoint"]("Description was updated from tracker view field")
-  }else{
+  } else {
     Log["Error"]("Description was not updated from tracker view field")
   }
 }
 
-function testQuery3_Query4(){
+function testQuery3_Query4() {
   ClickMenu("Refresh All", "", true)
 
   var trackerMainPanel = RetrieveTrackerMainPanel()
@@ -1181,7 +1183,7 @@ function testQuery3_Query4(){
 
   if (gridPanel["Rows"]["Count"] > 0) {
     Log["Message"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
-  }else{
+  } else {
     Log["Error"]("Grid " + gridPanel["WndCaption"] + " retrieved " + gridPanel["Rows"]["Count"] + " records.")
   }
 
@@ -1190,7 +1192,7 @@ function testQuery3_Query4(){
   partComboTracker["setFocus"]()
   partComboTracker["Click"]()
 
-  while(true){
+  while (true) {
     partComboTracker["Keys"]("[Down]")
     if (partComboTracker["Value"] == "0LP3A") {
       partComboTracker["Keys"]("[Tab]")
@@ -1199,49 +1201,49 @@ function testQuery3_Query4(){
   }
 
   Log["Message"]("Step 82")
-  var columnInvoice = getColumn(gridPanel, "Invoice") 
+  var columnInvoice = getColumn(gridPanel, "Invoice")
   var columnPart = getColumn(gridPanel, "Part")
 
   var realValuePartNum = gridPanel["Rows"]["Item"](0)["Cells"]["Item"](columnPart)["Text"]["OleValue"]
 
   gridPanel["Rows"]["Item"](0)["Cells"]["Item"](columnInvoice)["Activate"]()
 
-  if(gridPanel["Rows"]["Item"](0)["Cells"]["Item"](columnPart)["Text"]["OleValue"] == realValuePartNum){
+  if (gridPanel["Rows"]["Item"](0)["Cells"]["Item"](columnPart)["Text"]["OleValue"] == realValuePartNum) {
     Log["Message"]("Invoice was not updated with selected value from epicombo")
-  }else{
+  } else {
     Log["Error"]("Invoice was updated with selected value from epicombo")
-  } 
+  }
 
   Log["Message"]("Step 83")
-  
+
   ClickMenu("Edit->Refresh")
 
   var flag = true
-  for (var i = 0; i < gridPanel["Rows"]["Count"] ; i++) {
+  for (var i = 0; i < gridPanel["Rows"]["Count"]; i++) {
     gridPanel["Rows"]["Item"](i)["Cells"]["Item"](columnPart)["Activate"]()
 
-    if( gridPanel["Rows"]["Item"](i)["Cells"]["Item"](columnPart)["Text"]["OleValue"] != partComboTracker["Value"]){
+    if (gridPanel["Rows"]["Item"](i)["Cells"]["Item"](columnPart)["Text"]["OleValue"] != partComboTracker["Value"]) {
       flag = false
       break
-    }else{
+    } else {
       flag = true
     }
   }
 
   if (flag) {
-    Log["Message"]("Grid retrieved records only for part number " +  partComboTracker["Value"])
-  }else{
-    Log["Error"]("Grid didn't retrieve records only for part number " +  partComboTracker["Value"])
-  } 
+    Log["Message"]("Grid retrieved records only for part number " + partComboTracker["Value"])
+  } else {
+    Log["Error"]("Grid didn't retrieve records only for part number " + partComboTracker["Value"])
+  }
 
   // BAQA Country combo visibility
   var combo_Country = FindObject("*Combo*", "Name", "*cboCustomer_Country*", trackerMainPanel[4])
 
-  if(!combo_Country["Exists"]){
+  if (!combo_Country["Exists"]) {
     Log["Message"]("Combo is not visible")
-  } else{
+  } else {
     Log["Error"]("Combo is visible. Visible behavior not modified.")
-  } 
+  }
 
   ClickMenu("File->Exit")
 }
