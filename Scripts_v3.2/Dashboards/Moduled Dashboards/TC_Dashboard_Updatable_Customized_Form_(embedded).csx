@@ -250,7 +250,11 @@ function AddCustomizationDashb(){
 
     Delay(2500)
     E10["Refresh"]()
-    ClickMenu("Tools->Customization")
+    Delay(2500)
+    
+    Aliases["Epicor"]["CustomerEntryForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Customization")
+  
+    Delay(2500)
 
     var CustomToolsDialog = Aliases["Epicor"]["CustomToolsDialog"]["tabCustomToolsDialog"]
     CustomToolsDialog["tpgCodeWizards"]["Tab"]["Selected"] = true
