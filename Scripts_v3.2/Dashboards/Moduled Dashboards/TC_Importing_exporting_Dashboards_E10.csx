@@ -216,6 +216,15 @@ function ImportBAQs(){
       }
     }
     ClickButton("OK")
+    Delay(2000)
+    while(true){
+      form = GetForm("", "Dashboard")
+      Delay(2500)
+
+      if(form["Exists"]){
+        break
+      }
+    }
   }else{
     Log["Error"]("BAQ Import dialog is not displayed")
   }
