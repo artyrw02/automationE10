@@ -297,20 +297,30 @@ function TestMenu(){
   findValueInStringGrids(gridsMainPanel[0], columnCustID, "E")
 
   Log["Message"]("Step 19")
-  var columnAddress = getColumn(gridsMainPanel[0], "Address") 
-  
+  var columnAddress = getColumn(gridsMainPanel[0], "Address")
+
   gridsMainPanel[0]["Rows"]["Item"](0)["Cells"]["Item"](columnAddress)["Click"]()
 
   var oldValueAddress = gridsMainPanel[0]["Rows"]["Item"](0)["Cells"]["Item"](columnAddress)["Text"]["OleValue"]
   var newValueAddress = gridsMainPanel[0]["Rows"]["Item"](0)["Cells"]["Item"](columnAddress)["EditorResolved"]["SelectedText"] = "TEST"
   gridsMainPanel[0]["Rows"]["Item"](1)["Cells"]["Item"](columnAddress)["Click"]()
 
-  if(oldValueAddress != newValueAddress){
+  if (oldValueAddress != newValueAddress) {
     Log["Checkpoint"]("Data was updated.")
-  }else{
+  } else {
     Log["Error"]("Data was not updated.")
   }
 
+  gridsMainPanel[0]["Rows"]["Item"](0)["Cells"]["Item"](columnAddress)["Click"]()
+  newValueAddress = gridsMainPanel[0]["Rows"]["Item"](0)["Cells"]["Item"](columnAddress)["EditorResolved"]["SelectedText"] = oldValueAddress
+  gridsMainPanel[0]["Rows"]["Item"](1)["Cells"]["Item"](columnAddress)["Click"]()
+
+  if (newValueAddress == oldValueAddress) {
+    Log["Checkpoint"]("Data was returned to it's original value.")
+  } else {
+    Log["Error"]("Data was not returned to it's original value.")
+  }
+  
   Log["Message"]("Step 20")     
   gridsMainPanel[1]["Click"]()
   ClickMenu("Edit->Refresh")
