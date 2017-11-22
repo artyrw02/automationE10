@@ -2,8 +2,8 @@
 //***************************************************************************
     //Description: definition of the variables used in the script scenario.
     //Testcase type: 'Dashboard'
-    //TC Name: TrackerViews_1
-    //Script File: TC_Dashboard_Tracker_View_1.csx
+    //TC Name: TrackerViews_2
+    //Script File: TC_Dashboard_Tracker_View_2.csx
 //***************************************************************************
 
 //Companies that will be used through the test case

@@ -1,9 +1,9 @@
 //USEUNIT General_Functions
 //***************************************************************************
     //Description: definition of the variables used in the script scenario.
-    //Testcase type: 'Dashboard'
-    //TC Name: Deployment
-    //Script File: TC_Dashboard_Deployment.csx
+    //Testcase type: 'Publishing'
+    //TC Name: Publishing
+    //Script File: TC_Dashboard_Publishing.csx
 //***************************************************************************
 
 //Companies that will be used through the test case
@@ -33,8 +33,8 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 //Dashboards used for Test
   var DashbData = {
     "dashboardID" : "DashBPublishing",
-    "dashboardCaption" : "Publishing",
-    "dashDescription" : "Publishing",
+    "dashboardCaption" : "DashBPublishing",
+    "dashDescription" : "DashBPublishing",
     "generalOptions" : "",
     "baqQuery" : "",
     "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
@@ -42,8 +42,8 @@ var treeMainPanel1 = setCompanyMainTree(company1,plant1)
 
   var DashbData2 = {
     "dashboardID" : "DashBPublishing2",
-    "dashboardCaption" : "Publishing2",
-    "dashDescription" : "Publishing2",
+    "dashboardCaption" : "DashBPublishing2",
+    "dashDescription" : "DashBPublishing2",
     "generalOptions" : "",
     "baqQuery" : "baq1",
     "deploymentOptions" : "Deploy Smart Client,Add Favorite Item,Generate Web Form"
