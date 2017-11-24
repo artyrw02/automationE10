@@ -6,7 +6,10 @@ function warmupDashboard() {
 
 	var company1 = "Epicor Education"
 	var plant1 = "Main"
+	ExpandComp(company1)
 
+	ChangePlant(plant1)
+	
 	var treeMainPanel1 = setCompanyMainTree(company1, plant1)
 
 	MainMenuTreeViewSelect(treeMainPanel1 + "Executive Analysis;Business Activity Management;Setup;Business Activity Query")
