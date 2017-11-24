@@ -129,11 +129,24 @@ function OpenCustomedForm(){
     E10["Refresh"]()
     Log["Message"]("Step 24")
 
+    Delay(2500)
+
     var availableLayers = GetTreePanel("AvailableLayers")
     availableLayers["ClickItem"]("Base|EP|Customizations|EmbDash")
-    ClickButton("OK")
-    
     Delay(2500)
+
+    ClickButton("OK")
+
+    while(true){
+        form = GetForm("", "PartForm")
+        Delay(2500)
+
+        if(form["Exists"]){
+            ValidatesFormOpened("", "PartForm")
+        break
+        }
+    }
+    
 }    
 
 function TestCustomedForm(){
