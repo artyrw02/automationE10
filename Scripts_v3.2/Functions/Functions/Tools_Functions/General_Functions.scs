@@ -121,7 +121,7 @@ function RestartSmartClient() {
 * @param: Company - String Name of the Company that needs to be activated
 * @return: none*/
 function ExpandComp(Company){
-  
+    Aliases["Epicor"]["MenuForm"]["Activate"]()
   var treeView = GetTreePanel("treeView")
   //Expand Company
   var ElemCountI = treeView["Nodes"]["Count"]-1
@@ -141,6 +141,7 @@ function ExpandComp(Company){
 * @param: Plant - String Name of the plant that needs to be activated
 * @return: none*/
 function ChangePlant(Plant){
+  Aliases["Epicor"]["MenuForm"]["Activate"]()
   var CountPlant, ActPlant
 
   var treeView = GetTreePanel("treeView")
