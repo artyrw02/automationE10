@@ -614,7 +614,7 @@ function ReportSOPickList(){
 	var dteActualDateTo = FindObject("*Date*", "Name", "*dteActualDate*", groupDateTo)
 
 	dteActualDate["Keys"]("10/09/2013" + "[Tab]")
-	dteActualDateTo["Keys"]("13/11/2013" + "[Tab]")
+	dteActualDateTo["Keys"]("11/13/2017" + "[Tab]")
 
 	//Pending Validation
 	Delay(2500)
