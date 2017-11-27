@@ -5,11 +5,11 @@ function GetForm(WndCaption, FormName){
   var E10 = Sys.Process("Epicor")
 
   if(WndCaption != "" && FormName != undefined){
-    var wnd = FindObject("*Form*", ["WndCaption", "Name"], ["*" + WndCaption + "*", "*" + FormName + "*"], E10 )
+    var wnd = FindObject("*Form*", ["WndCaption", "Name"], ["*" + WndCaption + "*", "WinFormsObject(\"" + FormName + "\")"], E10 )
   }else if(WndCaption != "" && FormName == undefined){
     var wnd = FindObject("*Form*", ["WndCaption"], ["*" + WndCaption + "*"], E10 )
   }else if (FormName != undefined && WndCaption == "") {
-    var wnd = FindObject("*Form*", ["Name"], ["*" + FormName + "*"], E10 )
+    var wnd = FindObject("*Form*", ["Name"], "WinFormsObject(\"" + FormName + "\")", E10 )
   }
 
   return wnd
@@ -56,10 +56,10 @@ function CloseTopForm(){
 // CheckErrorWindow
 
 //Verifies if top form exists 
-function VerifyForm(caption){
+function VerifyForm(caption, name){
   var wnd = FindTopMostForm()
 
-  if (aqString.Trim(wnd["WndCaption"]) == aqString.Trim(caption)){ 
+  if (aqString.Trim(wnd["WndCaption"]) == aqString.Trim(caption) || aqString.Trim(wnd["WinFormsControlName"]) == aqString.Trim(name)){ 
     return true
   }else{
     return false
@@ -169,5 +169,6 @@ function CheckEpicMsgdialog(){
     if (windowsMsg["Exists"]) {
       // ClickButton("OK")
       Log["Message"]("Message dialog displayed. '" + windowsMsg["WndCaption"]+ "'")
+      return true
     }
 }

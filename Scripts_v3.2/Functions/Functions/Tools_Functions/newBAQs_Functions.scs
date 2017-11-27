@@ -157,6 +157,7 @@ function TestResultsBAQ(parameterValue){
 function SaveBAQ(){
   Delay(2500)
   ClickMenu("File->Save")
+  Aliases["Epicor"]["BAQDiagramForm"]["ToolbarsDockAreaTop"]["ClickItem"]("[1]|&Save")
 }
 
 // Closes BAQ form

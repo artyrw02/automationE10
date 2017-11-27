@@ -40,7 +40,25 @@ function CreateSimpleDashboards(DashbData){
 function OpenDashboard(dashboardID) {
   EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
 
-  // ValidatesFormOpened(dashboardID)
+  //Verify dialog message
+  var dialog = CheckWindowMessageModals()
+
+  if(dialog){
+    Delay(2500)
+    ClickButton("OK")
+  }
+
+  var form
+
+  while(true){
+    form = GetForm("", "Dashboard")
+    Delay(2500)
+
+    if(form["Exists"]){
+      ValidatesFormOpened(dashboardID)
+      break
+    }
+  }
 }
 
 /*funtion that creates a dashboard
@@ -166,7 +184,11 @@ function DeployDashboard(deploymentOptions){
   if(deploymentStatus) {
     E10["Refresh"]()
 
-    CheckEpicMsgdialog()
+    var dialog = CheckEpicMsgdialog()
+    
+    if(dialog){
+      ClickButton("OK")
+    } 
     
     ClickButton("OK")
     Log["Message"]("Dashboard was deployed correctly. Clicked OK button to close Deploy Dashboard window.")
@@ -181,7 +203,7 @@ function ExitDashboard(){
 
   Delay(2500)
   ClickMenu("File->Exit")
-
+  // Aliases["Epicor"]["Dashboard"]["Close"]()
   ValidatesFormClosed("", "Dashboard")
 }
   

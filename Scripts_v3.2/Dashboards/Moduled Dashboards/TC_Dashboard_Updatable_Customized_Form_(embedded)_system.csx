@@ -37,7 +37,10 @@ function OpenFormDevMode(){
     E10["Refresh"]()
     Log["Message"]("Step 5")
     
-    ClickMenu("Tools->Customization")
+    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[0]|&Tools|Customization")
+  
+    Delay(2500)
+
 }
 
 // Steps 5 to 22
@@ -126,15 +129,29 @@ function OpenCustomedForm(){
     E10["Refresh"]()
     Log["Message"]("Step 24")
 
+    Delay(2500)
+
     var availableLayers = GetTreePanel("AvailableLayers")
     availableLayers["ClickItem"]("Base|EP|Customizations|EmbDash")
-    ClickButton("OK")
-    
     Delay(2500)
+
+    ClickButton("OK")
+
+    while(true){
+        form = GetForm("", "PartForm")
+        Delay(2500)
+
+        if(form["Exists"]){
+            ValidatesFormOpened("", "PartForm")
+        break
+        }
+    }
+    
 }    
 
 function TestCustomedForm(){
-    E10["Refresh"]()
+    Delay(2500)
+    
     var testPart = "00P1"
 
     Log["Message"]("Step 25,26")
@@ -148,9 +165,12 @@ function TestCustomedForm(){
     OpenPanelTab("PartStatus")
     Delay(4500)
     Log["Message"]("PartStatus tab Activated")
+    
+    Delay(2500)
+    // ClickMenu("Edit->Refresh")
+    Aliases["Epicor"]["PartForm"]["zSonomaForm_Toolbars_Dock_Area_Top"]["ClickItem"]("[1]|Refresh")
 
-    ClickMenu("Edit->Refresh")
-
+    Delay(2500)
     var PartTxtfield = GetTextBox("txtPart_PartNum")
 
     if(PartTxtfield["Text"]["OleValue"] == testPart){

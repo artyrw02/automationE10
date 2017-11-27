@@ -152,11 +152,6 @@ function VerifyAllCompaniesChk() {
     Log["Message"]("Step 20")
     OpenDashboard(dashb1)
 
-    //Verify dialog message
-    CheckWindowMessageModals()
-    Delay(2500)
-    ClickButton("OK")
-
     Delay(3500)
     OpenPanelTab("General")
 

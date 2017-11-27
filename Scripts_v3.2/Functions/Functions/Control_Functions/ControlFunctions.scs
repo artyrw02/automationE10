@@ -467,3 +467,28 @@ E10["Refresh"]()
           return false
       }    
   }
+
+  //---------------------------
+ function getStatusTemp(statusBarPath)
+{
+  var text = statusBarPath["Panels"]["Item"](0)["Text"]
+  var count = 0
+   
+  if(text["OleValue"] != "Ready"){
+    while(true){
+      Delay(2000)
+      count++
+    
+      if(count == 5){
+        text = statusBarPath["Panels"]["Item"](0)["Text"]
+        if(text["OleValue"] == "Ready"){
+          Log["Message"]("Form loaded. Attempts => " + count)
+          break          
+        }else{
+          count = 0
+          Log["Message"]("Reset count " + count)
+        } 
+      } 
+    } 
+  } 
+}
