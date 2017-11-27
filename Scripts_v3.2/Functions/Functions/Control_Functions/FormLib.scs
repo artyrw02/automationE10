@@ -1,0 +1,173 @@
+//USEUNIT ObjectLib
+
+// Gets the object type checkbox
+function GetForm(WndCaption, FormName){
+  var E10 = Sys.Process("Epicor")
+
+  if(WndCaption != "" && FormName != undefined){
+    var wnd = FindObject("*Form*", ["WndCaption", "Name"], ["*" + WndCaption + "*", "*" + FormName + "*"], E10 )
+  }else if(WndCaption != "" && FormName == undefined){
+    var wnd = FindObject("*Form*", ["WndCaption"], ["*" + WndCaption + "*"], E10 )
+  }else if (FormName != undefined && WndCaption == "") {
+    var wnd = FindObject("*Form*", ["Name"], ["*" + FormName + "*"], E10 )
+  }
+
+  return wnd
+}
+
+function ActivateForm(WndCaption, FormName){
+  var wnd = GetForm(WndCaption, FormName)
+
+  if(wnd["Exists"]){
+    wnd["Activate"]()
+    Log["Message"]("Form '" + (WndCaption || FormName) + "' activated.")
+  }else{
+    Log["Error"]("Form '" + (WndCaption || FormName) + "' not found.")
+  }
+}
+
+function CloseForm(obj, FormName){
+  var wnd = obj ? obj : GetForm(FormName)
+
+  wndCaption = wnd["WndCaption"]
+  
+  if(wnd["Exists"]){
+    wnd["Close"]()
+    Log["Message"]("Form '" + (wndCaption || FormName) + "' closed.")
+  }else{
+    Log["Error"]("Form '" + (wndCaption || FormName) + "' not found.")
+  }
+}
+
+function CloseTopForm(){
+  Delay(4000)
+  var wnd = FindTopMostForm()
+
+  wndCaption = wnd["WndCaption"]
+  
+  if(wnd["Exists"]){
+    wnd["Close"]()
+    Log["Message"]("Form '" + (wndCaption || FormName) + "' closed.")
+  }else{
+    Log["Error"]("Form '" + (wndCaption || FormName) + "' not found.")
+  }
+}
+
+// CheckErrorWindow
+
+//Verifies if top form exists 
+function VerifyForm(caption){
+  var wnd = FindTopMostForm()
+
+  if (aqString.Trim(wnd["WndCaption"]) == aqString.Trim(caption)){ 
+    return true
+  }else{
+    return false
+  }
+
+}
+
+//Logs data of form on top
+function ValidatesFormOpened(caption, name){
+  var form = VerifyForm(caption, name)
+
+  if(form){
+    Log["Message"]("Form '" + (caption || name) + "' opened.")
+  }else{
+    Log["Error"]("Form '" + (caption || name) + "' not on screen or opened.")
+  }
+
+}
+
+//Logs data of form on top
+function ValidatesFormClosed(caption, name){
+  var form = GetForm(caption, name)
+
+  if(!form["Exists"]){
+    Log["Message"]("Form '" + (caption || name) + "' closed.")
+  }else{
+    CloseForm(form)
+  }
+
+}
+
+//Used to catch a windows message 
+// Designed for System Dashboards mainly
+function CheckWindowMessage(WndCaption){
+  var count = 0
+
+  while(true){
+    Delay(2000)
+    var windowsMsg = FindObject("*", "Name",  "*" + WndCaption + "*")
+
+    if(windowsMsg["Exists"]){
+      Log["Message"]("Validating Dialog Message - " + windowsMsg["WndCaption"])
+      //ClickButton("OK")
+      break
+    }
+    count++
+
+    if(count == 5){
+      break
+      Runner["Stop"]()
+      Log["Error"]("Check")
+    }
+  }
+}
+
+function CheckWindowMessageModals(){
+  var count = 0 
+  var name = "Static"
+  while(true){
+    Delay(2000)
+    var windowsMsg = FindObject("*", ["Name","WndCaption"],  ["*" + name + "*", "*Dashboard*"])
+
+    if(windowsMsg["Exists"]){
+      Log["Message"]("Validating Dialog Message - " + windowsMsg["WndCaption"])
+      return true
+    }
+    count++
+
+    if(count == 5){
+      return false
+      Log["Message"]("No dialog Message displayed")
+      Runner["Stop"]()
+    }
+  }
+}
+
+function CheckExceptionWnd(){
+  var wnd = FindObject("*", ["Name","WndCaption"],  ["*Exception*", "*Error*"])
+
+  // var errMessageBoxes = getChildControls("*Box*", "Name", "*tbMessage*", wnd)
+  try{
+    var tbMessage = GetText("tbMessage")
+    if (wnd["Exists"]) {
+      Log["Message"]("Exception message displayed: " + tbMessage)
+      return tbMessage
+    }else{
+      return false
+    }
+  }catch(e){
+    Log["Error"](e["message"])
+  }finally{
+    //ClickButton("OK")
+    //Validate, if TRUE then allow ClickButton
+    return true
+    
+  }
+}
+
+/*Checks if there is any Epic dialog on screen
+@Wnd: Window caption of the form displayed
+@action: action that will be performed for the dialog displayed (Yes/No)
+*/
+function CheckEpicMsgdialog(){
+    var name = "Static"
+    var windowsMsg = FindObject("*", ["Name","WndCaption"],  ["*" + name + "*", "*Exception*"])
+
+    if (windowsMsg["Exists"]) {
+      // ClickButton("OK")
+      Log["Message"]("Message dialog displayed. '" + windowsMsg["WndCaption"]+ "'")
+    }
+}

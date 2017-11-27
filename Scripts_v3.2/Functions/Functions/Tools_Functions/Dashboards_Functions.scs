@@ -1,0 +1,396 @@
+//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+//Enable Dashboard Developer Mode  
+function DevMode(){
+  if (!Aliases["Epicor"]["Dashboard"]["dbPanel"]["windowDockingArea2"]["dockableWindow5"]["Exists"]) {
+    ClickMenu("Tools->Developer")
+  }
+}
+
+// function CreateSimpleDashboards(dashboardID, dashboardCaption, dashDescription, generalOptions, baqQuery, deploymentOptions){
+/*Simple deployment of dashboards
+* @param: DashbData - An array that contains the information of the dashboard to define
+* @param: DashbData[dashboardID] - String that contains the information of the dashboard 'ID'
+* @param: DashbData[dashboardCaption] - String that contains the information of the dashboard 'Caption'
+* @param: DashbData[dashDescription] - String that contains the information of the dashboard 'Description'
+* @param: DashbData[generalOptions] - String that contains the information of the dashboard 'generalOptions'
+* @param: DashbData[baqQuery] - String that contains the information of the dashboard 'baqQuery'
+* @param: DashbData[deploymentOptions] - String that contains the information of the dashboard 'deploymentOptions'
+* @return: none*/
+function CreateSimpleDashboards(DashbData){
+
+  NewDashboard(DashbData["dashboardID"],DashbData["dashboardCaption"],DashbData["dashDescription"], DashbData["generalOptions"])
+  
+  AddQueriesDashboard(DashbData["baqQuery"])
+  
+  SaveDashboard()
+  
+  Delay(1000)
+  
+  DeployDashboard(DashbData["deploymentOptions"])
+  
+  ExitDashboard()
+}
+
+/*Simple deployment of dashboards
+* @param: dashboardID - String that contains the information of the dashboard 'ID'
+* @return: none*/
+function OpenDashboard(dashboardID) {
+  EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
+
+  // ValidatesFormOpened(dashboardID)
+}
+
+/*funtion that creates a dashboard
+* @param: dashboardID - String that contains the information of the dashboard 'ID'
+* @param: dashboardCaption - String that contains the information of the dashboard 'Caption'
+* @param: dashDescription - String that contains the information of the dashboard 'Description'
+* @param: generalOptions - String that contains the information of the dashboard 'generalOptions'
+* @return: none*/
+function NewDashboard(dashboardID,dashboardCaption,dashDescription, generalOptions){
+  ClickMenu("File->New...->New Dashboard")
+
+  EnterText("txtDefinitonID", dashboardID + "[Tab]", "Adding Dashboard name")
+  
+  Delay(1500)
+  if(Aliases["Epicor"]["ExceptionDialog"]["Exists"]){    
+    var aString = Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["rtbMessage"]["Text"]["OleValue"]
+    var aSubString = "TestDashBD set for All Companies already exists"
+    var Res, flag = true;
+
+    Res = aqString["Find"](aString, aSubString)
+    if (Res != -1) {
+         Log["Message"]("There are occurrences of '" + aSubString + "' in '" + aString + "'.");
+         Aliases["Epicor"]["ExceptionDialog"]["exceptionDialogFillPanel"]["btnOk"]["Click"]()
+    }
+    else{
+        Log["Message"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+    }
+  }
+
+  EnterText("txtCaption", dashboardCaption + "[Tab]", "Adding Dashboard Caption")
+  EnterText("txtDescription", dashDescription + "[Tab]", "Adding Dashboard Description")  
+
+  if(generalOptions != undefined){
+    var arrOptions = generalOptions.split(",")
+
+    for( var i = 0; i <= arrOptions["length"] - 1 ; i++){
+      CheckboxState(arrOptions[i], true)
+    }
+  }
+}
+
+/*funtion that adds a query on dashboard defined
+* @param: baqQuery - String that contains the information of the query (ID)
+* @return: none*/
+function AddQueriesDashboard(baqQuery, baqCaption){
+  var arrBaqQueries = baqQuery.split(",")
+
+  for( var i = 0; i <= arrBaqQueries.length - 1 ; i++){
+    ClickMenu("File->New...->New Query")
+
+    EnterText("txtQueryID", arrBaqQueries[i] + "[Tab]", "Adding Query text")  
+
+    if(baqCaption != undefined)
+      EnterText("txtCaption", baqCaption + "[Tab]")  
+      
+    ClickButton("OK")
+  }
+  
+  if (Aliases["Epicor"]["dlgWarning"]["Exists"] || Aliases["Epicor"]["ExceptionDialog"]["Exists"]) {
+    Log["Error"]("There is a dialog message active.")
+  }else{
+    Log["Checkpoint"]("Query " + baqQuery + " added.")
+  }
+}
+
+//Saves Dashboard
+function SaveDashboard(){
+  OpenPanelTab("General")
+
+  Delay(1500)
+
+  ClickMenu("File->Save")
+}
+
+/*Reads the deployment options in order to deploy the dashboard
+* @param: deploymentOptions - String that contains the deployment options separated by ',' separator
+* @return: none*/
+function DeployDashboard(deploymentOptions){
+  Delay(2500)
+  E10["Refresh"]()
+  
+  ClickMenu("Tools->Deploy Dashboard")
+  Delay(2500)
+  //Selection the option for the Actions listed 
+  var arrdeploymentOptions = deploymentOptions.split(",")
+
+  for (var i = 0; i <= arrdeploymentOptions.length - 1; i++) {
+    if(arrdeploymentOptions[i] == "Deploy Smart Client"){
+      CheckboxState("chkDeployApplication", true)
+    }
+    if(arrdeploymentOptions[i] == "Add Menu tab"){
+      CheckboxState("chkAddMenuTab", true)
+    }
+    if(arrdeploymentOptions[i] == "Add Favorite Item"){
+      CheckboxState("chkAddFavItem", true)
+    }
+    if(arrdeploymentOptions[i] == "Generate Web Form"){
+      CheckboxState("chkGenWebForm", true)
+    }
+    if(arrdeploymentOptions[i] == "Generate Mobile App"){
+      CheckboxState("chkGenMobile", true)
+    }
+    if(arrdeploymentOptions[i] == "Available for Mobile Menu"){
+      CheckboxState("chkMobileMenuAvail", true)
+    }
+  }
+
+  Delay(2500)
+
+  ClickButton("Deploy")
+  Log["Message"]("Clicked deploy button")
+  Delay(5000)
+
+  var ActiveWindow = FindTopMostForm()
+
+  Delay(1500)
+  var textStatus = ActiveWindow["FindChild"](["ClrClassName", "FullName"], ["*TextBox*", "*txtStatus*"], 30)
+
+  Delay(1500)
+  var deploymentStatus = findValueInString(textStatus["Text"]["OleValue"], "successfully compiled")
+ 
+  Delay(1500)
+  if(deploymentStatus) {
+    E10["Refresh"]()
+
+    CheckEpicMsgdialog()
+    
+    ClickButton("OK")
+    Log["Message"]("Dashboard was deployed correctly. Clicked OK button to close Deploy Dashboard window.")
+  }else{
+    Log["Error"]("There was a problem while deploying the dashboard.")
+  }
+}
+
+//Closes the dashboard form
+function ExitDashboard(){
+  E10["Refresh"]()
+
+  Delay(2500)
+  ClickMenu("File->Exit")
+
+  ValidatesFormClosed("", "Dashboard")
+}
+  
+//Closes only the dashboard not the form
+function CloseDashboard(){
+  ClickMenu("File->Close All")
+  ClickButton("OK")
+}
+
+// function CreateMenu(menuLocation, menuID, menuName, orderSequence, menuType, dll, validations)
+/*Creates menu from menu maintenance for dashboards
+* @param: MenuData - An array that contains the information of the menu to create
+* @param: MenuData[menuID] - String that contains the information of the menu 'ID'
+* @param: MenuData[menuName] - String that contains the information of the menu 'Name'
+* @param: MenuData[orderSequence] - String that contains the information of the menu 'Order Sequence'
+* @param: MenuData[menuType] - String that contains the information of the menu 'Type'
+* @param: MenuData[dll] - String that contains the information of the menu 'dll'
+* @param: MenuData[validations] - String that contains the information of the menu 'validations'
+* @return: none*/
+function CreateMenu(MenuData){  
+  Delay(1000)
+  var MenuMFormTree = Aliases["Epicor"]["MenuMForm"]["windowDockingArea2"]["dockableWindow2"]["jobTreeViewPanel"]["methodTree"]  
+  var CountElem = MenuMFormTree["SelectedNodes"]["Item"](0)["Nodes"]["Count"]  
+ 
+  var arrMenuLocation = MenuData["menuLocation"].split(">")
+  
+    for (var i = 1; i <= arrMenuLocation.length; i++) {
+      for (var j = 0; j <= CountElem; j++) {
+        MenuMFormTree.SelectedNodes.Item(0).Nodes.Item(j).Expanded = true
+        if (arrMenuLocation[i] == MenuMFormTree.SelectedNodes.Item(0).Nodes.Item(j).Text){
+           MenuMFormTree.ActiveNode = MenuMFormTree.SelectedNodes.Item(0).Nodes.Item(j)
+           MenuMFormTree.SelectedNodes.Item(0).Nodes.Item(j).Selected = true
+           break
+         } 
+      }
+    }
+
+  //Add New Item
+  ClickMenu("File->New...->New Menu")
+
+  EnterText("txtMenuID", MenuData["menuID"] + "[Tab]", "Adding Menu ID text")  
+  EnterText("txtName", MenuData["menuName"] + "[Tab]", "Adding Menu Name text")  
+  EnterText("nedSeq", MenuData["orderSequence"] + "[Tab]", "Adding Order Sequence text")  
+  ComboboxSelect("cboType", MenuData["menuType"])
+   
+  var flag = true
+
+  //Menu type
+  if (MenuData["menuType"] == "Dashboard-Assembly") {
+    EnterText("cboDashboard", MenuData["dll"] + "[Tab]", "Adding dll text") 
+  }else if (MenuData["menuType"] == "Menu item") {
+    EnterText("txtProgram", MenuData["dll"] + "[Tab]", "Adding dll text") 
+  }
+
+  //Validations on the form
+  if(MenuData["validations"] != undefined && MenuData["validations"] != "" && MenuData["validations"] != null){
+    var validations = MenuData["validations"].split(",")
+
+    for(var i = 0; i < validations["length"]; i++){
+      if(validations[i] == "All Companies"){
+        CheckboxState("chkAllCompanies", true)
+        Log["Message"]("Checkbox from menu was selected - " + validations[i])
+      }
+
+      if(validations[i] == "Enable"){
+        var enabled = verifyStateCheckbox("chkEnable")
+
+        if(enabled){
+          Log["Message"]("Checkbox Enabled is checked")
+        }else{
+          Log["Error"]("Checkbox Enabled is not checked")
+        }
+      }
+
+      if(validations[i] == "Web Access"){
+        var webAccess = Aliases["Epicor"]["MenuMForm"]["windowDockingArea1"]["dockableWindow3"]["mainPanel1"]["windowDockingArea1"]["dockableWindow1"]["detailPanel1"]["grpProgramMain"]["eshWebAccess"]["EnabledCaption"]
+        if(webAccess == "Available"){
+          Log["Checkpoint"]("Web Access  " + validations[i] + " is Available.")
+          flag = true
+        }else{
+          Log["Error"]("Web Access  " + validations[i] + " is not Available.")
+          flag =  false
+          break
+        }
+      }
+    }
+  }
+
+  if(flag){
+    E10["Refresh"]()
+
+    ClickMenu("File->Save")
+    Delay(1000)
+    ClickMenu("File->Exit")
+    ValidatesFormClosed("", "MenuMForm")
+    Log["Message"]("Menu created correctly")
+    Delay(1000)
+  }else{
+    Log["Error"]("There was a problem while creating the menu")
+  }
+}
+
+/*Opens dashboard installed in Favorite menu
+* @param: DashboardID - An String that contains the id of the dashboard to open
+* @return: none*/  
+function OpenDashboardFavMenu(DashboardID) {
+  OpenPanelTab("Favorites")
+  Aliases["Epicor"]["MenuForm"]["windowDockingArea1"]["dockableWindow2"]["shortcutBar"]["ClickItem"]("Dashboard Assemblies", DashboardID);
+}
+
+/*Activates the tab specified in the parameter inside de grid of the properties panel of dahsboards
+* @param: dashboardPropsPanel - An object that contains the information of the panel of the dashboard Query properties  
+* @param: tab - An String that contains the tab name that needs to be activated
+* @return: none*/  
+function DashboardPropertiesTabs(tab){
+  var dashboardPropsPanel = FindObject("*TabControl", "Name", "*Query*")
+
+  for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
+    if (dashboardPropsPanel["Tabs"]["Item_2"](i)["Text"] == tab) {
+        dashboardPropsPanel["ActiveTab"] = dashboardPropsPanel["Tabs"]["Item_2"](i)
+        dashboardPropsPanel["Focus"]()
+        dashboardPropsPanel["Keys"]("[Enter]")
+    }
+  }
+}
+
+/*Activates the tab specified in the parameter inside de grid of the properties panel of dahsboards
+* @param: dashboardPropsPanel - An object that contains the information of the panel of the dashboard Grid properties  
+* @param: tab - An String that contains the tab name that needs to be activated
+* @return: none*/  
+function DashboardGridPropertiesTabs(tab){
+  var dashboardPropsPanel = FindObject("*TabControl", "Name", "*PropsTab*")
+
+  for (var i = 0; i <= dashboardPropsPanel["Tabs"]["VisibleTabsCount"] -1; i++) {
+    if (dashboardPropsPanel["Tabs"]["Item_2"](i)["Text"] == tab) {
+        dashboardPropsPanel["ActiveTab"] = dashboardPropsPanel["Tabs"]["Item_2"](i)
+        dashboardPropsPanel["Focus"]()
+        dashboardPropsPanel["Keys"]("[Enter]")
+    }
+  }
+}
+
+/*Deletes dashboard
+* @param: dashboardIDs - An String that contains one or more dashboard separated by ',' 
+* @return: none*/  
+function DeleteDashboard(dashboardIDs) {
+
+  OpenPanelTab("General")
+
+  //Split string dashboardIDs into an array  
+  var arrDashboards
+
+  arrDashboards = dashboardIDs.split(",")
+  
+  var dashboardIDtext = GetText("txtDefinitonID")
+
+  for (var i = 0; i < arrDashboards["length"] ; i++) {
+    if (dashboardIDtext != arrDashboards[i] && dashboardIDtext != "") {
+      ClickMenu("Clear")
+      if(Aliases["Epicor"]["dlgWarning"]["Exists"]){
+        //Click 'Yes' to confirm 
+        Aliases["Epicor"]["dlgWarning"]["btnOK"]["Click"]()  
+      }
+      Log["Message"](dashboardIDtext["Text"] + " was cleared.")
+    }
+
+    if (dashboardIDtext == "") {
+      EnterText("txtDefinitonID", arrDashboards[i] + "[Tab]")
+
+      OpenPanelTab("General")
+
+      if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+        if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
+          ClickButton("No")
+          Log["Message"]("Dashboard not found.")
+        }      
+      }else{
+        Log["Message"](arrDashboards[i] + " was loaded.")
+      }
+    }
+
+    if (dashboardIDtext == arrDashboards[i]) {
+      ClickMenu("File->Delete Dashboard Definition")
+
+      if(Aliases["Epicor"]["dlgWarning"]["Exists"]){
+        ClickButton("OK") 
+      }
+
+      Log["Message"](arrDashboards[i] + " was deleted.")
+
+      //Retrieve dashboard for validation
+      EnterText("txtDefinitonID", arrDashboards[i] + "[Tab]")
+
+      if(Aliases["Epicor"]["EpiCheckMessageBox"]["Exists"]){
+        if(Aliases["Epicor"]["EpiCheckMessageBox"]["groupBox1"]["lblMessageText"]["Text"] == "Record not found.  Add new?"){
+          Log["Checkpoint"](arrDashboards[i] + " was deleted correctly.")
+          ClickButton("No")
+        }      
+      }else{
+        Log["Message"](arrDashboards[i] + " was not deleted.")
+      }
+    }
+  }
+}
+
+//Searched TrackerViews from dashboards
+function RetrieveTrackerMainPanel(name){
+  var trackerPDashboardChildren = FindObjects("*EpiBasePanel*","Name", "*" + (name || "TrackerPanel") + "*")
+
+  return trackerPDashboardChildren
+}
+

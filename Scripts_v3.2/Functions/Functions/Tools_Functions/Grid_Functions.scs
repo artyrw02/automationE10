@@ -1,0 +1,375 @@
+//USEUNIT ObjectLib
+
+/* Retrieves the column index of the grid specified in the parameter
+* @param: grid - An object that contains the information of a grid
+* @param: column - String that has the name of the column that will return the index
+* @return: the column Index*/
+function getColumn(grid, column) {
+   var allColumns = grid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
+
+    if (allColumns["Count"] == null || allColumns["Count"] == 0) {
+      Log["Message"]("Grid has no columns")
+    }
+
+    var colCurrent, columnIndex
+    //Used to find column index to get the Name and find the row
+    for (var i = 0; i <= allColumns["Count"] -1 ; i++) {
+      colCurrent = allColumns["Item"](i)["ColumnChooserCaptionResolved"]["OleValue"]
+      if ( allColumns["Item"](i)["IsVisibleInLayout"] && colCurrent == column ) {
+        columnIndex= allColumns["Item"](i)["Index"]
+        break
+      }
+    }
+    return columnIndex
+}
+
+/* Selects a value from a dropdown that it's in a grid
+* @param: column - String that has the name of the column that will return the index
+* @param: dropValue - A String that has the value that will be retrieved from the dropdown
+* @param: ultraGrid - An object that contains the information of a grid
+* @return: none
+* Note: Works only for escenario 'Test case BAQ parameters' */
+function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
+  var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
+    Log["Message"]('columns' + allColumns)
+
+    if (allColumns["Count"] == null || allColumns["Count"] == 0) {
+      Log["Message"]("Grid has no columns")
+    }
+
+    var colCurrent, columnIndex
+    //var column = "ColumnName"
+
+    for (var i = 0; i <= allColumns["Count"] -1 ; i++) {
+      colCurrent = allColumns["Item"](i)["ColumnChooserCaptionResolved"]["OleValue"]
+      if ( allColumns["Item"](i)["IsVisibleInLayout"] && colCurrent == column ) {
+        columnIndex = allColumns["Item"](i)["Index"]
+        break
+      }
+    }
+
+    Log["Message"]('columns index ' + columnIndex)
+    Log["Message"]('columns colCurrent ' + colCurrent)
+
+    var rows = ultraGrid["DisplayLayout"]["Rows"]
+    Log["Message"]('columns rows ' + rows)
+
+    var rowIndex = ultraGrid["Rows"]["Count"] -1 
+
+    Log["Message"]('columns rowIndex ' + rowIndex)
+
+    var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
+
+    Log["Message"]('columns rowIndex ' + rowIndex)
+
+    // Activate cell
+    ultraGrid["Rows"]["Item"](cell["Row"]["Index"])["Activate"]()
+
+    var rect = cell["GetUIElement"]()["Rect"]
+
+    ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+
+    cell["ShowDropDown"]()
+
+    while(!cell["DroppedDown"]){
+    Delay(5000)
+    if (!cell["DroppedDown"]){
+      Log["Message"]("DROPDOWN CONTROL NOT SHOWN, SECOND ATTEMPT")      
+      ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+      cell["ShowDropDown"]()             
+      
+      while (!cell["DroppedDown"]){
+        Delay(500)
+        if(!cell["DroppedDown"])
+          Log['Error']("Dropdown list not found")
+      }
+    }
+  }
+
+  //Gather the items in the dropdown into an array
+  var ddValueList = cell['EditorResolved']['ValueList']  
+  var aRes = []
+
+  if( ddValueList["ClrClassName"] == "UltraCombo" ){
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](0)["Text"]["OleValue"]
+      }
+  }
+  if( ddValueList["ClrClassName"] == "ValueList" ){
+      var listItemsCount = ddValueList["ValueListItems"]["Count"]
+      // var aRes = [listItemsCount]
+      for (var i = 0; i <= listItemsCount - 1; i++) {
+        aRes[i] = ddValueList["ValueListItems"]["Item"](i)["DisplayText"]["OleValue"]
+      }
+  }
+  if( ddValueList["ClrClassName"] == "EpiCombo" ) {
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"]
+      }
+  }
+  else{ 
+    Log["Message"]("Unable to get items from value list. Method for this class is not implemented")
+  }
+
+  var comboValue, indexValue
+
+  // var dropValue = "UD100A_Company"
+
+  //find value index in dropdown list 
+  for (var i = 0; i <= aRes.length -1; i++ ){
+    comboValue = aqString.Trim(aRes[i])
+    ultraGrid["Keys"]("[Down]")
+    if ( comboValue == aqString.Trim(dropValue) ){
+      //Select the value from the combo
+      indexValue = i
+      ultraGrid["Keys"]("[PageUp]")
+      break
+    }
+  }              
+
+  for (var i = 0; i <= indexValue - 1; i++) {
+    ultraGrid["Keys"]("[Down]")
+  }
+
+  //close dropdown list
+  ultraGrid["Click"](rect["X"] + 1, rect["Y"] + rect["Height"]/2)
+
+  if ( comboValue != aqString.Trim(dropValue) ){     
+    Log["Error"]("Cell_DropDownSelect failed ")
+  }
+
+  Log["Message"]("Value '" + dropValue + "' selected from dropdown list")
+
+  // Validation  of Grid in Business Activity Query 
+  if( column == "Filter Value" ){  
+    cell["Activate"]()
+    cell["Column"]["PerformAutoResize"]()
+    
+    var aLinks = ultraGrid["GetLinks"](cell)
+    
+    if( aLinks["Count"] == 0 )
+      Log["Message"]("Cell has no links")
+    else
+      Log["Message"]("Cell has links")
+     
+    var link = aLinks["Item"](0)
+    var linkText = "specified"
+
+    for (var i = 0; i < aLinks["Count"]; i++) {
+      link = aLinks["Item"](i) //get current link
+      if( link["Text"] == linkText )
+        break
+    }
+   
+    //all links in the cell checked. No link with <linkText> found
+    if (link.Text != linkText ) 
+      Log["Error"]( "Unable to find link '" + linkText + "'")
+              
+    ultraGrid["Click"](link["Bounds"]["Left"] + link["Bounds"]["Width"]/2, link["Bounds"]["Top"] + link["Bounds"]["Height"]/2)
+  }
+}
+
+
+/* Selects a value from a dropdown that it's in a grid
+* @param: column - String that has the name of the column that will return the index
+* @param: dropValue - A String that has the value that will be retrieved from the dropdown
+* @param: ultraGrid - An object that contains the information of a grid
+* @return: none
+* Note: Works only for any escenario except 'Test case BAQ parameters' */
+
+//IMPORTANT TO CHECK FUNTIONALITY WITH GRIDS - Ud tables
+function SelectCellDropdownGrid(column, dropValue, ultraGrid){
+  var allColumns = ultraGrid["DisplayLayout"]["Bands"]["Item"](0)["Columns"]
+    Log["Message"]('columns' + allColumns)
+
+    if (allColumns["Count"] == null || allColumns["Count"] == 0) {
+      Log["Message"]("Grid has no columns")
+    }
+
+    var colCurrent, columnIndex
+    //var column = "ColumnName"
+
+    for (var i = 0; i <= allColumns["Count"] -1 ; i++) {
+      colCurrent = allColumns["Item"](i)["ColumnChooserCaptionResolved"]["OleValue"]
+      if ( allColumns["Item"](i)["IsVisibleInLayout"] && colCurrent == column ) {
+        columnIndex = allColumns["Item"](i)["Index"]
+        break
+      }
+    }
+
+    Log["Message"]('columns index ' + columnIndex)
+    Log["Message"]('columns colCurrent ' + colCurrent)
+
+    var rows = ultraGrid["DisplayLayout"]["Rows"]
+    Log["Message"]('columns rows ' + rows)
+
+    var rowIndex = ultraGrid["Rows"]["Count"] -1 
+
+    Log["Message"]('columns rowIndex ' + rowIndex)
+
+    var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
+
+    Log["Message"]('columns rowIndex ' + rowIndex)
+
+    // Activate cell
+    ultraGrid["Rows"]["Item"](cell["Row"]["Index"])["Activate"]()
+
+    var rect = cell["GetUIElement"]()["Rect"]
+
+    ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+
+    cell["ShowDropDown"]()
+
+    while(!cell["DroppedDown"]){
+    Delay(5000)
+    if (!cell["DroppedDown"]){
+      Log["Message"]("DROPDOWN CONTROL NOT SHOWN, SECOND ATTEMPT")      
+      ultraGrid["DblClick"](rect["X"] + rect["Width"] - 5, rect["Y"] + rect["Height"]/2)
+      cell["ShowDropDown"]()             
+      
+      while (!cell["DroppedDown"]){
+        Delay(500)
+        if(!cell["DroppedDown"])
+          Log['Error']("Dropdown list not found")
+      }
+    }
+  }
+
+    //Gather the items in the dropdown into an array
+    var ddValueList = cell['EditorResolved']['ValueList']  
+    var aRes = []
+
+  if( ddValueList["ClrClassName"] == "UltraCombo" ){
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](0)["Text"]["OleValue"]
+      }
+  }else if( ddValueList["ClrClassName"] == "ValueList" ){
+      var listItemsCount = ddValueList["ValueListItems"]["Count"]
+      // var aRes = [listItemsCount]
+      for (var i = 0; i <= listItemsCount - 1; i++) {
+        aRes[i] = ddValueList["ValueListItems"]["Item"](i)["DisplayText"]["OleValue"]
+      }
+  }else if( ddValueList["ClrClassName"] == "EpiCombo" ) {
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"]
+      }
+  }else{ 
+    Log["Message"]("Unable to get items from value list. Method for this class is not implemented")
+  }
+
+  var comboValue, indexValue
+
+  //find value index in dropdown list 
+  for (var i = 0; i <= aRes.length -1; i++ ){
+    comboValue = aqString.Trim(aRes[i])
+    ultraGrid["Keys"]("[Down]")
+    if ( comboValue == aqString.Trim(dropValue) ){
+      //Select the value from the combo
+      indexValue = i
+      //ultraGrid["Keys"]("[PageUp]")
+      break
+    }
+  }              
+
+  /*for (var i = 0; i <= indexValue - 1; i++) {
+    ultraGrid["Keys"]("[Down]")
+  }*/
+
+  //close dropdown list
+  ultraGrid["Click"](rect["X"] + 1, rect["Y"] + rect["Height"]/2)
+
+  if ( comboValue != aqString.Trim(dropValue) ){     
+    Log["Error"]("Cell_DropDownSelect failed ")
+  }
+
+  Log["Message"]("Value '" + dropValue + "' selected from dropdown list")
+
+  // Validation  of Grid in Business Activity Query 
+  if( column == "Filter Value" ){  
+    cell["Activate"]()
+    cell["Column"]["PerformAutoResize"]()
+    
+    var aLinks = ultraGrid["GetLinks"](cell)
+    
+    if( aLinks["Count"] == 0 )
+      Log["Message"]("Cell has no links")
+    else
+      Log["Message"]("Cell has links")
+     
+    var link = aLinks["Item"](0)
+    var linkText = "specified"
+
+    for (var i = 0; i < aLinks["Count"]; i++) {
+      link = aLinks["Item"](i) //get current link
+      if( link["Text"] == linkText )
+        break
+    }
+   
+    //all links in the cell checked. No link with <linkText> found
+    if (link.Text != linkText ) 
+      Log["Error"]( "Unable to find link '" + linkText + "'")
+              
+    ultraGrid["Click"](link["Bounds"]["Left"] + link["Bounds"]["Width"]/2, link["Bounds"]["Top"] + link["Bounds"]["Height"]/2)
+  }
+}
+
+//Retrieves all the grids in any Dashboard installed in the Main Panel
+//returns an array of objects with the grids
+function RetrieveGridsMainPanel(){
+  var dashboardMainPanel =  FindTopMostForm()
+    
+  var gridDashboardPanelChildren = dashboardMainPanel["FindAllChildren"]("FullName", "*grid*", 30)["toArray"]();
+  return gridDashboardPanelChildren
+}
+
+//GetGrid MainPanel
+function GetGridMainPanel(value){
+  var gridsMainPanel = RetrieveGridsMainPanel()
+
+    for (var i = 0; i < gridsMainPanel["length"]; i++) {
+      if (gridsMainPanel[i]["WndCaption"] == value +': Summary' || gridsMainPanel[i]["WndCaption"] == value) {
+        return gridsMainPanel[i]
+      }
+    }
+}
+
+
+function GetGrid(ctrlName){
+    var wnd = FindTopMostForm()
+    return FindObject("*Grid*", "Name", "*" + ctrlName + "*", wnd) 
+}
+
+/* Finds value in cells inside a grid
+* @param: grid - An object that contains the information of a grid
+* @param: column - String that has the index of the column
+* @param: valueToFind - A String that has the value that will be find in the cell specified by the parameters
+* @return: none */
+function findValueInStringGrids(grid, column, valueToFind){
+  for (var i = 0; i < grid["Rows"]["Count"]; i++) {
+    var aString = grid["Rows"]["Item"](i)["Cells"]["Item"](column)["Text"]["OleValue"]
+    var aSubString = valueToFind
+    var Res, flag = true;
+
+    Res = aqString["Find"](aString, aSubString)
+    if (Res != -1) {
+      flag = true
+    }
+    else{
+      Log["Error"]("There are no occurrences of '" + aSubString + "' in '" + aString + "'.");
+      flag = false
+      break
+    }
+  }
+
+  if (flag) {
+    Log["Checkpoint"]("Grid retrieved just records with " + aSubString)
+  } 
+}

@@ -1,0 +1,90 @@
+"Pre-requisites":
+
+Reports installed on Admin console
+Task Agent installed on Admin console.
+
+
+Configure Report Style
+
+1. Go to > System Management>Reporting>Report Style
+2. Seacrh for 'OrderAck'
+3. Expand and select on tree Sales Order Ack > Report Style > Standard - SSRS
+4. Click Actions>Copy Report Style
+5. Click 'Copy'
+6. Select Copied report - change output lcoation to 'xml'
+7. Click 'Save'
+
+
+Continue- 
+
+Create report Sales order
+1. Go to > Sales Management > Customer Relationship Management > General Operations > Order Entry
+2. Select any ID from sales order '5362'
+3. Click on 'Print'
+4. Select on Report Style the copy configured before 'SSRS - copy'
+5. Click on 'Filter' tab - New > Order set to the ID and tab out.
+6. Click on 'Generate only'
+
+----------------------------------------------------------------------------------------------
+
+Los ultimos tienen issues que voy a checar, si quieres y terminas antes de que cheque bien esos los puedes hacer y solo dejar pendiente la validacion del xml.
+Acuerdate de cambiarle el report style a todos  al momento de imprimir.
+
+
+ARForm: Mass Print AR Invoices.
+                Sales Management/Demand Management/Reports/Mass Print AR Invoices
+                go to filter tab, click customers, select Addison, Inc.
+                Click generate Only.
+
+Jobtrav: JobTraveler.
+                Production Management/Job Management/Reports/Job Traveler
+                Go to filter tab, Click on job button, select the first 3 jobs (005354-1-1, 2000, 2022) click ok.
+                Click Generate Only
+
+OrderAck y ProFormaInvc: Sales order entry.
+                Sales Management/Customer Relationship Management/General Operations/Order Entry
+                Order: 5428
+                Actions > Print Sales Order Acknowledgement
+                Go to filter tab, click new.
+                Order: 5428
+
+                For ProFormaInvc we can use the same script.
+                Actions > Print Pro-Forma Invoice.
+                Generate Only
+
+POForm: Purchase Order Entry
+                Material Management/Purchase Management/General Operations/ Purchase Order Entry
+                PO Number: 4307
+                Actions > Print
+                Generate Only
+
+QuotForm2: Opportunity/QuotEntry.
+                Sales Management/ Customer Relationship Management/ General Operations/ Opportunity / Quote Entry
+                Opportunity/Quote: 1114
+                Actions > Print Form
+                Generate Only
+
+---------------------------------------------------------------------------------------------------------
+
+APCheck: AP Payment Entry.
+                Finantial Management/Cash Management/General Operations/Payment Entry
+                Group: 
+
+PackSlips: Mass PrintPacking Slips.
+                Sales Management/Demand Management/Reports/Mass Print Packing Slips
+                Go to filter tab. 
+                Click Packing slips button.
+                Select 102 Dalton Manufacturing.
+
+                
+
+script
+
+
+#XmlCheckpoint1 has the main structure of the report to be compared
+#pathFileReport variable that contains the complete path where the report to compare is located
+
+var pathFileReport = "C:\\Users\\Administrator\\Documents\\Reports\\Sales Order Acknowledgment00885.xml"
+
+XML["XmlCheckpoint1"]["Check"](pathFileReport);
+

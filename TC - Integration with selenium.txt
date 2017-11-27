@@ -1,0 +1,8 @@
+TC - Integration with selenium
+
+https://support.smartbear.com/testcomplete/docs/working-with/integration/selenium/overview.html
+https://support.smartbear.com/testcomplete/docs/working-with/integration/selenium/prerequisites.html
+https://support.smartbear.com/testcomplete/docs/working-with/integration/unit-test-frameworks/pyunit.html
+https://support.smartbear.com/testcomplete/docs/working-with/integration/unit-test-frameworks/pyunit.html
+https://support.smartbear.com/testcomplete/docs/working-with/managing-projects/properties/selenium.html
+https://blog.smartbear.com/testcomplete/how-to-run-selenium-from-testcomplete-in-6-simple-steps/

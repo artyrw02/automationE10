@@ -1,0 +1,166 @@
+//Find only one object with specific parameters
+function FindObject(className, props, vals, parentWnd, depth ){
+  try{
+    parentWnd = parentWnd? parentWnd : FindTopMostForm() 
+    var objects =  FindObjects(className, props, vals, parentWnd, depth)
+
+    if (objects["length"] > 1)
+      Log["Message"](objects["length"] + " objects found")
+    
+    if(objects["length"] == 0){
+      throw "Object not found"
+    }
+
+    return objects[0]
+
+  }catch(e){
+    // creates a stub object. This object has only one property, Exists, which equals False.
+    return Utils.CreateStubObject()
+  }
+}
+
+//Find objects with specific parameters
+function FindObjects(className, props, vals, parentWnd, depth ){
+      try{
+        var objects = []
+        var aClsNames = [].concat(className)
+        var aProps = [].concat(props)
+        var aVals = [].concat(vals)
+
+        var parentWnd = parentWnd? parentWnd : FindTopMostForm() 
+
+        var depth = depth ? depth : 30
+
+        //@TODO:  
+          //obtain the property name of an object 
+          //-- at the moment hardcoded
+         // var classPropertyName = "ClrClassName"
+         var classPropertyName = aqObject.IsSupported(parentWnd, "ClrClassName") 
+                    ? "ClrClassName"
+                    : "WndClass"
+
+        //Search paramenters is array (more than one property and value)
+        if (aProps["length"] > 1 && aVals["length"] > 1) {
+          if(aProps["length"] != aVals["length"]){
+            throw "Mismatch with the number of arguments for search"
+          }
+
+          objects = parentWnd["FindAllChildren"](
+                        CreateVarArray(classPropertyName, aProps, "Visible"),
+                        CreateVarArray(className, aVals, "True"),
+                          depth)["toArray"]()
+        }
+        //Search paramenters is not array (one property and value)
+        else{
+          for (i in aProps)
+            for (j in aVals){            
+                objects = parentWnd["FindAllChildren"](
+                                    CreateVarArray(classPropertyName, aProps[i], "Visible"), 
+                                    CreateVarArray(className, aVals[j], "True"), 
+                                      depth)["toArray"]()
+                // objects = objects.concat(objs) 
+            }
+        }
+
+      }catch(e){
+        Log["Error"](e["description"])
+        return Utils.CreateStubObject()
+        
+      }finally{
+        return objects
+      }
+}
+
+function GetObjectPath(object)
+{
+    var E10 = Sys.Process("Epicor")
+
+    return object["FullName"]
+        ["replace"](E10["FullName"], "")                               //remove E10
+        ["replace"](/(\[\"WinFormsObject\"\]|.WinFormsObject)\(\"/, "")    //remove leading obj name
+        ["replace"](/(\[\"WinFormsObject\"\]|.WinFormsObject)\(\"/g, "/")  //replace obj name with slash
+        ["replace"](/\"\)/g,"")                                            //remove ")
+}
+
+
+//FORM FUNCTIONS
+
+/** Find and return the topmost opened window form. 
+* @remark Tooltip windows are ignored. If no window found returns \a null*/
+function FindTopMostForm(ignoreErr, ignoreLog)
+{   
+    // var form = getCachedTopForm() 
+    // if (form)
+        // return form
+        
+    // ignoreErr || CheckErrorWindow()
+    //get all visible child forms 
+    var forms = getAllVisibleForms()
+    
+    var topform = forms[0] 
+    if (!ignoreLog) 
+        Log["Message"]("Topmost form '" + GetObjectPath(topform) + "'", topform.WndCaption)    
+
+    // addCachedForm(topform)
+    return topform
+}
+
+//return array of visible forms (ignoring tooltips) sorted by index
+function getAllVisibleForms()
+{
+    var E10 = Sys.Process("Epicor")
+
+    E10["Refresh"]()
+    var forms = E10["FindAllChildren"](CreateVarArray("Visible", "Enabled", "VisibleOnScreen"), CreateVarArray("True", "True", "True"))["toArray"]()
+    if (forms["length"] == 0)
+    { 
+        Delay(1000)
+        E10["Refresh"]()
+        var forms = E10["FindAllChildren"](CreateVarArray("Visible", "Enabled", "VisibleOnScreen"), CreateVarArray("True", "True", "True"))["toArray"]()
+        if (forms["length"] == 0){
+        // Check if TestComplete form is on top and minimize it
+        //     MinimizeTestComplete()
+            var forms = E10["FindAllChildren"](CreateVarArray("Visible", "Enabled", "VisibleOnScreen"), CreateVarArray("True", "True", "True"))["toArray"]()
+    //no form found
+            if (forms["length"] == 0)
+                throw "getAllVisibleForms: No form found"
+        }
+    }
+    //remove tooltip forms 
+    var i = 0
+    while (i < forms["length"]){
+        if (forms[i]["Name"]["match"](/tooltip/i)){
+            Log["Message"]("Tooltip popup window found", forms[i].FullName)
+            forms["splice"](i, 1)
+          }
+        else 
+            i++    
+    }
+    //sort by form index accending
+    forms["sort"](sortFormsByIndex)
+
+    function sortFormsByIndex(form1, form2)
+    {
+        if (form1["Index"] == form2["Index"]) return 0
+        if (form1["Index"] < form2["Index"])  return -1
+        else return 1         
+    }
+    return forms
+}
+
+
+/**Create variant(VBScript) array with passed arguments 
+* @param arg1, arg2,. . ., argN \a optional New elements of an array
+* @remark This function is commonly used within TestComplete Find, FindChild, FindAll methods */
+function CreateVarArray(args)
+{    
+    var args = [].concat.apply([], arguments)
+    
+    var objDict = Sys.OleObject("Scripting.Dictionary")
+//    objDict.RemoveAll()
+    
+    for (var i in args)
+        objDict.Add(i, args[i])
+    
+    return objDict.Items()
+}

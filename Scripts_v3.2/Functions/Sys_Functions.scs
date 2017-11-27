@@ -1,0 +1,59 @@
+/*Changes format region from control panel
+* @param: format - String - Name of the format that will be set in the Region Panel
+* @return: none*/
+function ChangeRegionControlPanel(format){
+  var controlPanelWindow = Sys["Process"]("explorer")["Window"]("CabinetWClass", "All Control Panel Items", 1)
+
+  var controlPanel = controlPanelWindow["Window"]("ShellTabWindowClass", "All Control Panel Items", 1)["Window"]("DUIViewWndClassName", "", 1)["UIAObject"]("Explorer_Pane")["UIAObject"]("Folder_Layout_Pane")["UIAObject"]("CPCategoryPanel")
+  
+  controlPanel["UIAObject"]("Region")["Click"]()
+
+  var formatCombo = Sys["Process"]("rundll32")["Window"]("#32770", "Region", 1)["Window"]("#32770", "Formats", 1)["Window"]("ComboBox", "", 1)
+  
+  formatCombo["Click"]()
+  // formatCombo["ClickItem"]("Estonian (Estonia)")
+  formatCombo["ClickItem"](format)
+
+  Sys["Process"]("rundll32")["Window"]("#32770", "Region", 1)["Window"]("Button", "&Apply", 3)["Click"]()
+  Sys["Process"]("rundll32")["Window"]("#32770", "Region", 1)["Window"]("Button", "OK", 1)["Click"]()
+
+  controlPanelWindow["Close"]()
+
+}
+
+
+function OpenCMD(application){
+  
+  var p, w, txt, cnt, i, s;
+  
+  Sys.OleObject("WScript.Shell").Run("C:\\Windows\\system32\\cmd.exe");
+  
+  p = Sys.Process("cmd");
+
+  w = p.Window("ConsoleWindowClass", "*");
+
+  w.Keys(application + " [Enter]");
+
+  // Example
+    // w.Keys("ipconfig [Enter]");
+    // txt = w.wText;
+    // aqString.ListSeparator = "\r\n";
+    // cnt = aqString.GetListLength(txt);
+    // for (i = 0; i < cnt; i++)
+    // {
+    //   s = aqString.GetListItem(txt, i);
+    //   Log.Message(s);
+    // }
+}
+
+function CloseCMD(){
+  
+  var p, w;
+   
+  p = Sys.Process("cmd");
+
+  w = p.Window("ConsoleWindowClass", "*");
+
+  w.Keys("exit [Enter]");
+
+}

@@ -1,0 +1,469 @@
+//USEUNIT ObjectLib
+//USEUNIT FormLib
+
+var E10 = Sys.Process("Epicor")
+E10["Refresh"]()
+
+//-------------------------------
+//CHECKBOX FUNTIONS
+//-------------------------------
+
+  // Gets the object type checkbox
+  function GetCheckbox(cbName, parentCtrl){
+    var wnd = parentCtrl || FindTopMostForm()
+    return FindObject("*EpiCheckBox*", "Name",  "WinFormsObject(\"" + cbName + "\")", wnd)
+  }
+
+  //Changes the state of the checkbox depending of status parameter
+  function CheckboxState(cbName, state){
+    var checkbox = GetCheckbox(cbName)
+
+    if (!checkbox["Exists"])
+      throw "CheckBox not found '" + cbName + "'"
+
+    try{
+        if (!verifyCheckbox(checkbox, state)){            
+            checkbox.Click(checkbox.Width / 2,checkbox.Height / 2 )
+            if (typeof(state) == "Boolean") 
+                checkbox.Checked = state
+        }
+        if (checkbox.ThreeState && !verifyCheckbox(checkbox, state)){            
+            checkbox.Click(checkbox.Width / 2,checkbox.Height / 2 )
+            if (typeof(state) == "Boolean") 
+                checkbox.Checked = state
+
+        }
+    }catch(e){
+      Log["Error"](e["message"])
+    }
+  }
+
+  function verifyCheckbox(cbCtrl, state)
+  {
+      var cbState = cbCtrl.ThreeState ? cbCtrl.CheckState.OleValue : cbCtrl.get_Checked() 
+      return (cbState == state)            
+  }
+
+  function verifyStateCheckbox(cbName){
+    var checkbox = GetCheckbox(cbName)
+
+    if (checkbox["CheckState"]["OleValue"] == "Checked") {
+      return true
+    }else if (checkbox["CheckState"]["OleValue"] == "Unchecked") {
+      return false
+    }else{
+      return "Indeterminate"
+    }
+  }
+//-------------------------------
+//BUTTONS FUNTIONS
+//-------------------------------
+
+  // Gets the object type button
+  function GetButton(btnCaption, btnName){
+
+    //To modify
+    var objBtn = GetButtons(btnCaption, btnName)
+
+    if (!objBtn["length"]) {
+      Log["Error"]("Button " + (btnCaption || btnName) + " not found.")
+    }
+
+    if (objBtn["length"] > 1) {
+      for(var i = 0; i < objBtn["length"]; i++){
+        if (objBtn[i]["WndCaption"] == btnCaption) {
+          return objBtn[i]
+        }
+      }
+    }
+
+    return objBtn[0]
+  }
+
+  function GetButtons(btnCaption, btnName, parentCtrl){
+    var wnd = parentCtrl || FindTopMostForm()
+    //return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
+
+    if(btnCaption != "")
+      return FindObjects("*Button", "WndCaption", ["*" + btnCaption + "*"], wnd)
+    if(btnName != "")
+      return FindObjects("*Button", "Name", ["*" + btnName], wnd)
+    if (btnCaption != "" && btnName != "")
+      return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption, "*" + (btnName || "?") + "*"], wnd)
+    //return FindObjects("*Button", ["WndCaption", "Name"], ["*" + btnCaption + "*", "*" + (btnName || "?*")], wnd)
+  }
+
+  /** Clicks on button set in parameters
+  * @param btnCaption \a required Name of button control
+  * @param btnName \a optional text or number of button
+  * @param parentCtrl \a optional object of the current form 
+  */
+  function ClickButton(btnCaption, btnName, parentCtrl) {
+    var button = GetButton(btnCaption, btnName, parentCtrl)
+
+    try{
+      if (button["Exists"]) {
+        button["Click"]()
+        Log["Message"]("Button " + (btnCaption || btnName) + " clicked.")
+      }else{
+        Log["Error"]("Button " + (btnCaption || btnName) + " was not found.")
+      }
+    }catch(e){
+      LogError(e, e["message"])
+    }
+  }
+
+//-------------------------------
+//TEXT FIELDS FUNTIONS
+//-------------------------------
+  // Used to retrieve the textbox object in order to interact with it
+  //Different object classes used for E10 are listed in order to avoid matching issues
+  function GetTextBox(ctrlName, parentWnd){
+    if (typeof(parentWnd) == "string")
+        parentWnd = FindControl(parentWnd)
+    var wnd = parentWnd || FindTopMostForm()
+    //DEBUG: to increase perfomance
+    //    return FindObject(["*Epi*", "FileEditControl", "*Edit*", "*Combo*"], "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    var obj = FindObject("EpiTextBox", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    if (obj["Exists"]) 
+        return obj
+    var obj = FindObject("*Epi*", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    if (obj["Exists"]) 
+        return obj
+    var obj = FindObject( "FileEditControl",  "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    if (obj["Exists"]) 
+        return obj
+    var obj = FindObject("*Edit*", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    if (obj["Exists"]) 
+        return obj
+    var obj = FindObject("*Combo*", "Name", "WinFormsObject(\"" + ctrlName + "\")", wnd)
+    if (obj["Exists"]) 
+        return obj
+    //Used for login window
+    var obj = FindObject("*Box*", "Name", "*" + ctrlName + "*", wnd)   
+    if (obj["Exists"]) 
+        return obj
+
+  }
+
+  /** Enter text to the textbox by simulating keystrokes
+  * @param ctrlName \a required Name of textbox control
+  * @param text \a required text or number to enter
+  * @param logText \a optional Any text for logging (can be textbox name or description) 
+  * @param parentWnd \a optional object of the current form 
+  * EXAMPLE - > EnterText("txtDefinitonID", "dashboardName" + "[Tab]", "Adding Dashboard name")
+  */
+  function EnterText(ctrlName, text, logText, parentWnd){      
+    
+    try{
+      var tab = (text["toString"]()["match"](/\[Tab\]$/)) ? true : false 
+      var text = text["toString"]()["replace"](/\[Tab\]$/, "")
+      
+      var field = GetTextBox(ctrlName, parentWnd)
+
+      if (!field["Exists"])
+        throw "TextBox not found '" + ctrlName + "'"  
+
+      field["Click"]()
+
+      // Clears text in case it has a value
+      if (field["Text"] != "") {
+        field["Keys"]("^[End]")
+      }
+
+      field["Keys"]("^![Home][Del]")
+      field["Keys"](text)
+
+      if (tab)            
+        field["Keys"]("[Tab]")
+
+      Log["Message"]((logText || "Text entered -") + " '" + text + "' successfull", ctrlName)
+    }catch(e){
+      Log["Error"](e["message"])
+    }
+  }
+
+  /** Get text from the textbox
+  * @param ctrlName \a required Name of textbox control
+  * @return If textbox found then return text value, otherwise throw exception */
+  function GetText(ctrlName, parentWnd)
+  {
+      try{
+          var ctrl = GetTextBox(ctrlName, parentWnd)
+          if (!ctrl["Exists"])
+              throw "TextBox not found '" + ctrlName + "'"
+          
+          var text = ctrl["Text"]["OleValue"] //GetObjectProperty.Value(ctrl, "Text")
+          Log["Message"]("Text found '" + text.substr(0, 120) + "'")
+          return text
+      }
+      catch(e){    
+          Log["Message"](e["message"])
+          return null
+      }    
+  }
+
+//-------------------------------
+//PANEL (TABS) FUNTIONS
+//-------------------------------
+  
+  /** Activates panels(tabs) in the form
+  * @param panelPath \a required Path in order to activate the one required (Query Builder->Display Fields)
+  * @param formName \a optional. Object of the form 
+  * @return - No return
+  */  
+  function OpenPanelTab(panelPath, formName){
+
+    var panels = panelPath["split"]("->")
+
+    var pnlCtrl = formName ? GetForm(formName) : FindTopMostForm()
+    
+    if (!pnlCtrl["Exists"]) 
+      throw "Parent form not found. Verify the path is correct: '" + formName + "'" 
+
+
+    for (var i = 0; i < panels["length"]; i++ ) {            
+      var dockPanel = findDockingPanel(pnlCtrl, panels[i])
+      if (!dockPanel)
+        throw "Unable to find panel '" + panels[i] + "'"
+      
+      var paneCtrl = dockPanel["pane"]
+
+      pnlCtrl = dockPanel["wda"]
+      //  if (!pnlCtrl.Parent.Pane.IsSelectedTab)
+      //      pnlCtrl.Parent.WaitProperty("Enabled", "True", 10000) && pnlCtrl.Parent.Activate()
+      if (!paneCtrl["IsSelectedTab"]){
+          paneCtrl["Activate"]()    
+      }
+    }
+      //testing purpose
+      var pnlPath = GetObjectPath(pnlCtrl)
+      Log["Message"]("Panel '" + panelPath + "' is opened", "Path: " + pnlPath)
+      return pnlPath 
+  }
+
+  //search ctrl branches for panel with text 
+  function findDockingPanel(ctrl, text){    
+      try{
+          var aWda = findWndDockingAreas(ctrl, 10)
+          
+          for (var i = 0; i < aWda["length"]; i++){
+              for (var j = 0; j < aWda[i]["Pane"]["Panes"]["Count"]; j++){
+                  var pane = aWda[i]["Pane"]["Panes"]["Item"](j) 
+                  if (pane["TextTabResolved"] == text || pane["Text"] == text){
+                      return {wda: aWda[i], pane: aWda[i]["Pane"]["Panes"]["Item"](j)} 
+                  }
+              }    
+          }     
+      
+          for (var i = 0; i < aWda["length"]; i++){    
+              var pnlCtrl = findDockingPanel(aWda[i], text)
+              if (pnlCtrl) return pnlCtrl    
+          }    
+          
+          return null
+      }catch(e){
+        Log["Message"](e["Message"])
+      }
+  }
+  //parse each branch of ctrl tree to search for first WindowDockingArea control and return array
+  function findWndDockingAreas(ctrl, depth){
+      if (!depth) return []
+      var aCtrls = ctrl.FindAllChildren(CreateVarArray("HasChildren", "Visible"), CreateVarArray("True", "True")).toArray()
+      
+      var aWda = []
+      for (var i = 0; i < aCtrls["length"]; i++){
+          if (aCtrls[i]["ClrClassName"] == "WindowDockingArea")
+              aWda["push"](aCtrls[i])
+          else
+              aWda = aWda["concat"](findWndDockingAreas(aCtrls[i], depth - 1))
+      }
+      return aWda
+  }
+
+//-------------------------------
+//COMBOBOX FUNTIONS
+//-------------------------------
+  // Returns the object type comboBoxxc
+  function GetComboBox(ctrlName, parentCtrl){
+    var wnd = parentCtrl || FindTopMostForm()
+    return FindObject("*Combo*", "Name", "*" + ctrlName + "*", wnd) 
+  }
+
+  function GetDropdownForm(ctrlName, parentCtrl){
+    var wnd = parentCtrl || FindTopMostForm()
+    return FindObject("*Dropdown*", "Name", "*" + ctrlName + "*", wnd) 
+  }
+
+  /** Select item from dropdown form(combobox)
+  * @param cmbName \a required. ID of the object
+  * @param parentCtrl \a required Path(in kasper format) to combobox
+  * @param text \a required string on which to perform the search and select
+  * @return \b true if combobox item found and selected, otherwise - \b false 
+  */
+  function ComboboxSelect(cmbName, text, parentCtrl){    
+    try{                
+        var cmbCtrl = GetComboBox(cmbName, parentCtrl)
+
+        // WaitObjectEnabled(cmbCtrl)
+        
+        Log["Message"]("ComboBox found  '" + cmbCtrl["Name"] + "'", cmbCtrl["FullName"])
+
+        // Check if current value is requared
+        if (cmbCtrl["Text"]["OleValue"] == text){
+            Log["Message"]("Combobox item is currently selected - '" + cmbCtrl["Text"] + "'")
+            return true
+        }
+
+        popupComboDropDown(cmbCtrl)
+        
+        if (selectComboDropDownText(cmbCtrl, text))
+            Log["Message"]("Combobox item selected - '" + cmbCtrl["Text"] + "'")
+        else
+            throw "Combobox item failed to select - '" + text + "'"
+
+        return true
+    }    
+    catch(e){        
+        Log['Error'](e + ": " + e["message"])
+        return false
+    }    
+    finally{
+        //close dropdown List. Exit from function.
+        try{
+            if (E10["WaitWinFormsObject"]("*DropDown*", "", 0)["Exists"]){
+                Log["Warning"]("ddWnd not closed correctly 2")
+                E10["WaitWinFormsObject"]("*DropDown*", "", 0)["parent"]["Click"]()
+            }
+        }
+        catch(e){
+           Log['Error'](e + ": " + e["message"])
+        }
+    }    
+  }
+
+  function popupComboDropDown(cmbCtrl){  
+    Delay(1000)  
+    cmbCtrl["Click"]()
+    cmbCtrl["Refresh"]()
+
+    cmbCtrl["Keys"]("[Down]")
+    cmbCtrl["Keys"]("[Hold]~[Down][Release]")
+    
+    if (cmbCtrl["SelectedRow"] && cmbCtrl["SelectedRow"]["ListIndex"])
+      cmbCtrl["Keys"]("[Home]") //to the top of the list
+  }
+
+  function selectComboDropDownText(cmbCtrl, text){    
+    var idx = 0;
+
+    if (cmbCtrl["Rows"]["Count"] == 0)
+      return false
+
+    while (idx < cmbCtrl["Rows"]["Count"]){            
+        if (cmbCtrl["Text"] != null){
+            if (cmbCtrl["Text"]["OleValue"] == text){
+               break;
+            }
+        }
+        else {
+            if (text == ""){
+               break;
+            }            
+        }
+        cmbCtrl["Keys"]("[Down]") 
+        idx++;
+    }        
+
+    cmbCtrl["Keys"]("[Tab]")
+
+    return true
+  }
+
+//-------------------------------
+//RADIO FUNTIONS
+//-------------------------------
+  function GetRadioBtn(cntrlName){
+    var radioBtn = FindObject("*RadioButton*", "Name", "*"+ cntrlName +"*")
+
+    return radioBtn
+  }
+
+//-------------------------------
+//TREEPANEL FUNTIONS
+//-------------------------------
+  function GetTreePanel(value){
+    E10["Refresh"]()
+    var treeObj = FindObject("*TreeView", "Name", "*" + value + "*")
+    if (treeObj["Exists"]) 
+      return treeObj
+    var treeObj = FindObject("*UltraTree", "Name", "*" + value + "*")
+    if (treeObj["Exists"]) 
+      return treeObj
+  }
+
+//-------------------------------
+//LISTS FUNTIONS
+//-------------------------------
+  function GetList(cntrlName){
+    var obj = FindObject("*ListBox*", "Name", "*" + cntrlName + "*")   
+    if (obj["Exists"]) 
+        return obj
+    var obj = FindObject("*ListView*", "Name", "*" + cntrlName + "*")   
+    if (obj["Exists"]) 
+        return obj
+  }
+
+  // testing
+  function ListViewSelect(ctrlName, itemName, isCase){    
+      try{
+      //overridden - if tree name not defined
+          if (typeof(itemName) != "string"){
+              itemName = ctrlName
+              ctrlName = null
+          }
+          
+          var list = GetList(ctrlName)
+          if (!list["Exists"])
+              throw "ListView not found '" + ctrlName + "'"
+              
+          //find <itemName> Item in the ListView
+          var item = findListItem(itemName, list, isCase)
+          //if Item not found throw error.
+          if (!item) {            
+              Log["Error"]("unable to find list item '" + itemName + "'")
+              throw "ListViewSelect failed" 
+          }        
+          //Select found item to get focus(autoscroll) for EpicListBox control only
+          var ctrlClass = list["ClrClassName"]
+          if (ctrlClass == "EpiListBox")
+              list["set_SelectedIndex"](item["Index"])
+          //Item found. DblClict on Item.
+          //        RectCenterDo( "DblClick", item, control )
+          list.Refresh()
+          list.DblClick( item.UIElement.Rect.Left + 3, item.UIElement.Rect.Top + item.UIElement.Rect.Height/2)
+          Log.Message("ListViewSelect applied for '" + itemName + "'", "controlPath: " + ctrlName + "\r\nClrClassName:" + ctrlClass)
+          
+          return true        
+
+          //find item with Name starting with <text> in the <control> listView
+          //<control> - ListView object
+          function findListItem(text, control, isCase) {            
+              //for each Item in the <control> ListView
+              for (var i = 0; i < control.Items.Count; i++ ){                
+                  //get current Item object
+                  var item = control.Items.Item_2(i)
+                  //if Item name starts with <test> - target item found. Return it.
+                  //        if( item.Text.StartsWith(text) )            
+                  if (aqString.Compare(aqString.Trim(item.Text.OleValue), aqString.Trim(text), isCase) == 0)            
+                      return item
+              }            
+              //All items checked. No Item with <Text> found. 
+              return null
+          }
+      }    
+      catch(e){        
+          Log.Error(e, e.message)
+          return false
+      }    
+  }
