@@ -1,0 +1,13 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT BAQs_Functions
+//USEUNIT Actions_Functions
+
+function PreviewSubmission()
+{
+  OpenBAQ()
+  
+} 
