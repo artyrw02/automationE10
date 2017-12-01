@@ -59,9 +59,7 @@ function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
     Log["Message"]('columns rowIndex ' + rowIndex)
 
     var cell = ultraGrid["Rows"]["Item"](rowIndex)["Cells"]["Item"](columnIndex)
-
-    Log["Message"]('columns rowIndex ' + rowIndex)
-
+ 
     // Activate cell
     ultraGrid["Rows"]["Item"](cell["Row"]["Index"])["Activate"]()
 
@@ -109,6 +107,13 @@ function SelectCellDropdownGrid2(column, dropValue, ultraGrid){
       var aRes = [listItemsCount]
       for (var i = 0; i <= aRes.length - 1; i++) {
         aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"]
+      }
+  }
+  if( ddValueList["ClrClassName"] == "EpiUltraCombo" ) {
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      var aRes = [listItemsCount]
+      for (var i = 0; i <= aRes.length - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](0)["Text"]["OleValue"]
       }
   }
   else{ 
@@ -261,11 +266,19 @@ function SelectCellDropdownGrid(column, dropValue, ultraGrid){
       for (var i = 0; i <= aRes.length - 1; i++) {
         aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](1)["Text"]["OleValue"]
       }
+      
+  }else if( ddValueList["ClrClassName"] == "EpiUltraCombo" ) {
+      var listItemsCount = ddValueList["Rows"]["Count"]
+      for (var i = 0; i <= listItemsCount - 1; i++) {
+        aRes[i] = ddValueList["Rows"]["Item"](i)["Cells"]["Item"](0)["Text"]["OleValue"]
+        Log["Message"](aRes[i]);
+      }
   }else{ 
     Log["Message"]("Unable to get items from value list. Method for this class is not implemented")
   }
 
   var comboValue, indexValue
+  
 
   //find value index in dropdown list 
   for (var i = 0; i <= aRes.length -1; i++ ){
