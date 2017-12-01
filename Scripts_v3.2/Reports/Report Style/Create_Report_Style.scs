@@ -1,0 +1,25 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT BAQs_Functions
+//USEUNIT ReportStyle_Functions
+
+function CreateReportStyle()
+{
+  //STEP 1
+  MainMenuTreeViewSelect("Epicor Education;Main;System Management;Reporting;Report Style");
+  ValidatesFormOpened("Report Style Maintenance");
+  //STEP 2
+  EnterText("txtKeyField", "ChgLogReport" +  "[Tab]")
+  var styleParams = ["Standard - SSRS Copy", "SQL Server Reporting",
+   "ChgLogReport", "reports/ChgLogReport/ChglogReport", "Database"];
+  //STEP 3, 4, 5
+  NewReportStyle(styleParams);
+  //STEP 6
+  var styleTree = GetTreePanel("treeView");
+  styleTree["ClickItem"]("Reports|Change Log Report|Report Style (3)|Standard - SSRS Copy");
+  ClickMenu("File->Delete");
+  ClickButton("Yes");
+  ClickMenu("File->Exit");
+	ValidatesFormClosed("Report Style Maintenance");
+}

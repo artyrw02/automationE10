@@ -1,0 +1,18 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+function NewMenu(menuparams) {
+  ClickMenu("File->New->New Menu");
+  var menuidtxt = "txtMenuID"
+  var nametxt = "txtName"
+  var seqcbo = "nedSeq"
+  var typecbo = "cboType"
+  var reporttxt = "txtReportPath"
+  EnterText(menuidtxt, menuparams[0]);
+  EnterText(nametxt, menuparams[1]);
+  EnterText(seqcbo, menuparams[2]);
+  EnterText(typecbo, menuparams[3]);
+  EnterText(reporttxt, menuparams[4]);
+  ClickMenu("File->Save")
+} 

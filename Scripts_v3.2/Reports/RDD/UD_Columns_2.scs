@@ -1,0 +1,24 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT Grid_Functions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT BAQs_Functions
+//USEUNIT Open_Forms
+//USEUNIT Actions_Functions
+
+function UDColumns2()
+{
+  OpenRDDForm();
+  OpenRDD("QuotForm");
+  DuplicateReport("1QuoteForm", "1QuoteForm");
+  var reportType = "cboReportType";
+  EnterText(reportType, "SQL Server Reporting");
+  NewTable("ABCCODE");
+}
+
+function testing()
+{
+  ClickMenu("File->New->New Table Criteria");
+} 

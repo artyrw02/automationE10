@@ -1,0 +1,38 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT Grid_Functions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+//ADD validation to the xml and get the xml baseline
+function ReportSalesOrder(){
+	var order = "5370"
+	var reportStyle = "Standard - SSRS - ORDERACK3"
+	MainMenuTreeViewSelect("Epicor Education;Main;Sales Management;Customer Relationship Management;General Operations;Order Entry")
+  Delay(1000)
+	ValidatesFormOpened("Sales Order Entry")
+	//Select Order
+	EnterText("txtKeyField", order + "[Tab]")
+	//Click on 'print'
+	ClickMenu("Actions->Print Sales Order Acknowledgement")
+	//Select Report style
+	Delay(1000)
+	ComboboxSelect("cboStyle", reportStyle)
+	//Go to 'filter' tab
+	OpenPanelTab("Filter")
+	ClickMenu("File->New")
+	var gridSalesOrder = GetGrid("grdOrders")
+	var orderColumn = getColumn(gridSalesOrder, "Order")
+	gridSalesOrder["ActiveRow"]["Cells"]["Item"](orderColumn)["Click"]()
+	gridSalesOrder["Keys"](order + "[Del]" + "[Tab]")
+	//Pending Validation
+	Delay(2500)
+	ClickMenu("File->Generate Only")
+	Log["Message"]("'Generate Only' option clicked from menu")
+	Delay(4000)
+	//closes OrderAck form (print)
+	ClickMenu("File->Exit")
+	ValidatesFormClosed("Order Ack")
+	ClickMenu("File->Exit")
+	ValidatesFormClosed("Sales Order")
+}
+

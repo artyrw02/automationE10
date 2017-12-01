@@ -1,0 +1,54 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT Grid_Functions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Open_Forms
+//USEUNIT Actions_Functions
+//USEUNIT ReportStyle_Functions
+
+function SupBAQ()
+{
+  //Step 1, 2
+  OpenRDDForm();
+  //Step 3
+  OpenRDD("ChgLogReport");
+  //Step 4
+  DuplicateReport("ChgLogReport2", "ChgLogReport2");
+  //Step 5
+  NewTable("ABCCODE");
+  var relparams = ["relation1", "description1", "company", " ", "ABCCODE", "Output"]
+  NewRelationship(relparams);
+  ClickButton("","btnNew");
+  var parentField = Aliases["Epicor"]["WinFormsObject"]("RptDataDefEntryForm")["WinFormsObject"]("windowDockingArea3")["WinFormsObject"]("dockableWindow4")["WinFormsObject"]("mainPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow5")["WinFormsObject"]("rptRelationPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow1")["WinFormsObject"]("rptRelationDetailPanel1")["WinFormsObject"]("epiGroupBox2")["WinFormsObject"]("grdFieldMapping");
+  var childField = Aliases["Epicor"]["WinFormsObject"]("RptDataDefEntryForm")["WinFormsObject"]("windowDockingArea3")["WinFormsObject"]("dockableWindow4")["WinFormsObject"]("mainPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow5")["WinFormsObject"]("rptRelationPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow1")["WinFormsObject"]("rptRelationDetailPanel1")["WinFormsObject"]("epiGroupBox2")["WinFormsObject"]("grdFieldMapping");
+  parentField["ClickCell"](0, "Parent Field Name");
+  Sys["Keys"]("Company");
+  childField["ClickCell"](0, "Child Field Name");
+  Sys["Keys"]("Company");
+  Save();
+  Exit();
+  OpenReportStyleForm();
+  GetReport("ChglogReport");
+  var styleParams = ["SSRS-Test", "SQL Server Reporting",
+   "ChgLogReport2", " ", "XML"];
+  NewReportStyle(styleParams);
+  Exit();
+  OpenChangeLog();
+  var actualDate = Aliases["Epicor"]["WinFormsObject"]("TemplateReportForm")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow3")["WinFormsObject"]("mainPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow2")["WinFormsObject"]("detailPanel1")["WinFormsObject"]("grpOptions")["WinFormsObject"]("tdtStartDay")["WinFormsObject"]("dteActualDate")
+  actualDate["Keys"]("01/01/2015");
+  ComboboxSelect("cboStyle", "SSRS-Test");
+  ClickMenu("File->Generate Only");
+  Exit();
+  OpenReportStyleForm();
+  GetReport("ChglogReport");
+  var styleTree = GetTreePanel("treeView");
+  styleTree["ClickItem"]("Reports|Change Log Report|Report Style (3)|SSRS-Test");
+  ClickMenu("File->Delete");
+  ClickButton("Yes");
+  ClickMenu("File->Exit");
+	ValidatesFormClosed("Report Style Maintenance");
+  OpenRDDForm();
+  DeleteRDD("ChgLogReport2");
+  Exit();
+}

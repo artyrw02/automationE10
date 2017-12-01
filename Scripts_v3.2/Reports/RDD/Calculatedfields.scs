@@ -1,0 +1,21 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT Open_Forms
+//USEUNIT Supplier_Functions
+//USEUNIT Payment_Entry_Functions
+
+
+//Pending
+function Calculatedfields ()
+{
+  OpenSupplierForm();
+  NewSupplier("sup", "sup", "Espa[Alt164]ol/M", "1/10 Net 30");
+  ClickMenu("File->Exit");
+  OpenPaymentEntry();
+  NewGroup("woo", "Main Checking Account", "AP Check Payment");
+  NewPayment("sup")
+  NewMiscPayment("200")
+  ProcessPayment();
+  ClickMenu("File->Exit");
+}

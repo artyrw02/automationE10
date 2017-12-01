@@ -1,0 +1,51 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+function OpenBAQForm()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;Executive Analysis;Business Activity Management;Setup;Business Activity Query");
+  ValidatesFormOpened("Business Activity Query Designer");
+}
+
+function OpenRDDForm()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;System Management;Reporting;Report Data Definition");
+  ValidatesFormOpened("Report Data Definition");
+}
+
+function OpenSolutionForm()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;System Management;Solution Management;Solution Workbench");
+  ValidatesFormOpened("Solution Workbench");
+}
+
+function OpenSupplierForm()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;Financial Management;Accounts Payable;Setup;Supplier");
+  ValidatesFormOpened("Supplier Maintenance");
+}
+
+function OpenReportStyleForm()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;System Management;Reporting;Report Style");
+  ValidatesFormOpened("Report Style Maintenance");
+}
+
+function OpenMenuMaintenance()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;System Setup;Security Maintenance;Menu Maintenance");
+  ValidatesFormOpened("Menu Maintenance");
+}
+
+function OpenPaymentEntry()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;Financial Management;Accounts Payable;General Operations;Payment Entry");
+  ValidatesFormOpened("AP Payment Entry");
+}
+
+function OpenChangeLog()
+{
+  MainMenuTreeViewSelect("Epicor Education;Main;System Setup;Security Maintenance;Change Log Report");
+  ValidatesFormOpened("Change Log Report");
+}

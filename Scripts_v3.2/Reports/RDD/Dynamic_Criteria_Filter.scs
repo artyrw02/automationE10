@@ -1,0 +1,52 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT BAQs_Functions
+//USEUNIT Actions_Functions
+//USEUNIT Open_Forms
+//USEUNIT FormLib
+
+function DynamicCriteriaFilter() {
+  var baqData = {
+      "Id" : "countrybaq",
+      "Description" : "countrybaq",
+      "Table" : "Erp.Country",
+      "Alias" : "Country",
+      "Columns" : "Company,CountryNum,FiscalCode,ISOCodem,IStatCode,Description,BorderCrossing,ShipViaCode,TaxRegionCode,LangNameID,CurrencyCode,FormatStr,ISOrigCountry,APTaxRegionCode,MXCountryCode,GlobalCountry,GlobalLock,IsSepa,SysRevID,SysRowID,AGAFIPCode,MXExternalCode,ISOCode"
+  }
+  // STEP 2
+  OpenBAQForm()
+  // STEP 3, 4, 5, 6
+  CreateSimpleBAQ(baqData)
+  // STEP 7
+  OpenRDDForm()
+  var rddparams = ["countryrdd", "countryrdd", "SQL Server Reporting"];
+  NewRDD(rddparams);
+  // STEP 8
+  AddRDDBAQ("countrybaq", "countrybaq");
+  // STEP 9
+  NewCriteria("RC", "RCDESC");
+  var grid = Aliases["Epicor"]["WinFormsObject"]("RptDataDefEntryForm")["WinFormsObject"]("windowDockingArea3")["WinFormsObject"]("dockableWindow4")["WinFormsObject"]("mainPanel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow7")["WinFormsObject"]("RptCriteriaSetDockPanel")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow4")["WinFormsObject"]("rptCriteriaFiltersPanel1")["WinFormsObject"]("grdReportCriteriaFiltersList");
+  NewCriteriaFilter("Filter", "Country_CountryNum", grid);
+  ClickMenu("Actions->Preview Submission Form");
+  var filter = "txtFilterList1_CountryNum";
+  if (GetText(filter) == "All Selected")
+  {
+    Log["Message"]("Filter validation passed.");
+  } else {
+    Log["Error"]("Not the same");
+  }
+  var previewForm = Aliases["Epicor"]["WinFormsObject"]("DynamicCriteriaReportForm");
+  CloseForm(previewForm, "Report- ");
+  Save();
+  Exit();
+  OpenRDDForm();
+  OpenRDD("countryrdd")
+  DeleteRDD("countryrdd");
+  Exit();
+  OpenBAQForm();
+  DeleteBAQ("countrybaq");
+  Exit();
+}

@@ -1,0 +1,17 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+function NewSupplier(supplier, name, language, terms)
+{
+  ClickMenu("File->New->New Supplier");
+  var suppliertxt = "txtVendID";
+  var nametxt = "txtName";
+  var termstxt = "cmbTerms";
+  var languagetxt = "cmbLanguage";
+  EnterText(suppliertxt, supplier);
+  EnterText(nametxt, name);
+  EnterText(termstxt, terms);
+  EnterText(languagetxt, language + "[Tab]");
+  ClickMenu("File->Save");
+}

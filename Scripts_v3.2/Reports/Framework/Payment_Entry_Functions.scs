@@ -1,0 +1,49 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+function NewGroup(groupid, bankaccount, paymentmethod)
+{
+  var grouptxt = "txtGroupID";
+  var bankaccounttxt = "cboBankAcctID";
+  var paymentmethodtxt = "cmbBankPayMethod";
+  ClickMenu("File->New->New Group");
+  EnterText(grouptxt, groupid);
+  EnterText(bankaccounttxt, bankaccount);
+  EnterText(paymentmethodtxt, paymentmethod);
+  ClickMenu("File->Save");
+}
+
+function NewPayment(supplier)
+{
+  var suppliertxt = "txtVendorID";
+  ClickMenu("File->New->New Payment");
+  EnterText(suppliertxt, supplier);
+  ClickMenu("File->Save");
+}
+
+function NewMiscPayment(payment)
+{
+  var paymentamountxt = "currDocTranAmt";
+  ClickMenu("File->New->New Misc Payment");
+  var gross = Aliases["Epicor"]["WinFormsObject"]("PaymentEntryForm")["WinFormsObject"]("windowDockingArea2")["WinFormsObject"]("dockableWindow3")["WinFormsObject"]("sheetTopLevel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow2")["WinFormsObject"]("sheetHeader1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow4")["WinFormsObject"]("headerPanel1")["WinFormsObject"]("sheetDetailList1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow2")["WinFormsObject"]("miscPaymentListPanel1")["WinFormsObject"]("grdMiscPayList")
+  gross["ClickCell"](0, "Gross Amount");
+  Sys["Keys"](payment);
+  //EnterText(paymentamountxt, gross)
+  ClickMenu("File->Save");
+}
+
+function ProcessPayment()
+{
+  ClickMenu("Actions->Process Payments...");
+  ValidatesFormOpened("Process Payments")
+} 
+
+function Test()
+{
+  ClickMenu("File->New->New Misc Payment");
+  var gross = Aliases["Epicor"]["WinFormsObject"]("PaymentEntryForm")["WinFormsObject"]("windowDockingArea2")["WinFormsObject"]("dockableWindow3")["WinFormsObject"]("sheetTopLevel1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow2")["WinFormsObject"]("sheetHeader1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow4")["WinFormsObject"]("headerPanel1")["WinFormsObject"]("sheetDetailList1")["WinFormsObject"]("windowDockingArea1")["WinFormsObject"]("dockableWindow2")["WinFormsObject"]("miscPaymentListPanel1")["WinFormsObject"]("grdMiscPayList")
+  gross["ClickCell"](0, "Gross Amount");
+  Sys["Keys"](gross);
+  ClickMenu("File->Save");
+} 

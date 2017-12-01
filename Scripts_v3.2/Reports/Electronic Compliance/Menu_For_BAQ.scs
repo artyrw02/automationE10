@@ -1,0 +1,42 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT ReportStyle_Functions
+//USEUNIT Open_Forms
+
+function MenuForBaq()
+{
+  // STEP 1
+  OpenRDDForm();
+  var rddparams = ["testingrdd", "testrdd", "SQL Server Reporting"];
+  // STEP 2
+  NewRDD(rddparams);
+  // STEP 3
+  AddRDDBAQ("contract", "zContracts");
+  ClickMenu("File->Exit");
+  // STEP 4
+  OpenReportStyleForm();
+  // STEP 5, 6
+  NewReport("testingreport", "testingreport");
+  var styleParams = ["testreportstyle", "SQL Server Reporting",
+   "testingrdd", " ", "Database"];
+  NewReportStyle(styleParams);
+  ClickMenu("File->Exit");
+  // STEP 7
+  OpenMenuMaintenance();
+  // STEP 8, 9
+  var menuparams = ["menubaq", "menubaq", "100", "Report", "testreport"];
+  NewMenu(menuparams);
+  // DELETE
+  ClickMenu("File->Delete");
+  ClickButton("Yes");
+  ClickMenu("File->Exit");
+  OpenReportStyleForm();
+  DeleteReport("testingreport");
+  ClickMenu("File->Exit");
+  OpenRDDForm();
+  DeleteRDD("testingrdd");
+  ClickMenu("File->Exit");
+}

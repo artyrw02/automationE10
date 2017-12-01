@@ -1,0 +1,28 @@
+﻿//USEUNIT Menu_Functions
+//USEUNIT ControlFunctions
+
+function Save()
+{
+  ClickMenu("File->Save");
+}
+
+function Delete()
+{
+  ClickMenu("File->Delete");
+}
+
+function Exit()
+{
+  ClickMenu("File->Exit");
+}
+
+function Refresh()
+{
+  ClickMenu("Edit->Refresh");
+}
+
+function Clear()
+{
+  ClickMenu("Edit->Clear");
+  ClickButton("Yes")
+} 

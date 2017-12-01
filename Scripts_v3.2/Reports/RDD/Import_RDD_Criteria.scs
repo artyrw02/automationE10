@@ -1,0 +1,29 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT Grid_Functions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT Open_Forms
+//USEUNIT Actions_Functions
+
+function ImportRDDCriteria()
+{
+  OpenSolutionForm();
+  ClickMenu("Actions->Install Solution");
+  ClickButton("Solution File");
+  var windowscbo = Aliases["Epicor"]["Window"]("#32770", "Open", 1)["Window"]("ComboBoxEx32", "", 1)["Window"]("ComboBox", "", 1);
+  windowscbo["Keys"]("rdd_Customer Solution_3.2.100.0.cab" + "[Tab]");
+  ClickButton("Open");
+  ClickButton("Install");
+  Delay(5000);
+  ClickButton("Close");
+  Exit();
+  OpenRDDForm();
+  OpenRDD("criteriardd");
+  var styleTree = GetTreePanel("treeView");
+  styleTree["ClickItem"]("Report Data|criteriardd|Report Criteria Sets (1)|RC|Report Criteria Prompts (2)");
+  Clear();
+  DeleteRDD("criteriardd");
+  Exit();
+}

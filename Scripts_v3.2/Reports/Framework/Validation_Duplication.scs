@@ -1,0 +1,25 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT Grid_Functions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT BAQs_Functions
+//USEUNIT Open_Forms
+//USEUNIT Actions_Functions
+
+function ValidationDuplication()
+{
+  var baqData = {
+    "Id" : "CompanyAddrBAQ",
+    "Description" : "CompanyAddrBAQ",
+    "Table" : "Erp.Company",
+    "Alias" : "Company",
+    "Columns" : "Company,Name,Address1,City,State,StateTaxID,TaxRegionCode"
+    }
+    
+  OpenBAQForm();
+  // ADD THE PARAMETERS
+  CreateSimpleBAQ(baqData);
+   
+}

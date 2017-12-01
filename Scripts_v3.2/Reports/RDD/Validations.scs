@@ -1,0 +1,75 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT Grid_Functions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT RDD_Functions
+//USEUNIT Main_Menu_Functions
+//USEUNIT BAQs_Functions
+//USEUNIT Open_Forms
+//USEUNIT Actions_Functions
+
+function RDDValidations()
+{
+  var baqData = {
+    "Id" : "company",
+    "Description" : "company",
+    "Table" : "Erp.Company",
+    "Alias" : "Company",
+    "Columns" : "Company,Name,Address1,City,StateTaxID,TaxRegionCode"
+  }
+  // STEP 1, 2
+  OpenBAQForm();
+  // STEP 3, 4, 5, 6, 7, 8
+  CreateSimpleBAQ(baqData);
+  // STEP 12
+  OpenRDDForm();
+  OpenRDD("ChgLogReport");
+  DuplicateReport("ChgLogReportDUP", "ChgLogReportDUP");
+  //ClickMenu("File->New->New BAQ");
+  //ClickMenu("File->Exit");
+  //codeid["Click"]
+  var styleTree = GetTreePanel("treeView");
+  styleTree["ClickItem"]("Report Data|Data Sources (2)");
+  Delete()
+  ClickButton("YES");
+  var styleTree = GetTreePanel("treeView");
+  styleTree["ClickItem"]("Report Data|Data Sources (1)");
+  Delete()
+  ClickButton("YES");
+  AddRDDBAQ("company", "company");
+  Save()
+  Exit()
+  OpenBAQForm();
+  DeleteBAQ("company");
+  Exit()
+  OpenRDDForm();
+  OpenRDD("ChgLogReportDUP");
+  ClickButton("OK")
+  Exit()
+  OpenBAQForm();
+  CreateSimpleBAQ(baqData);
+  OpenRDDForm();
+  OpenRDD("ChgLogReportDUP");
+  Save();
+  Refresh();
+  ClickMenu("Actions->Export Report Data Def");
+  ClickButton("Save");
+  DeleteRDD("ChgLogReportDUP");
+  ClickMenu("Actions->Import Report Data Def");
+  var windowscbo = Aliases["Epicor"]["Window"]("#32770", "Open", 1)["Window"]("ComboBoxEx32", "", 1)["Window"]("ComboBox", "", 1)
+  windowscbo["Keys"]("RDDChgLogReportDUP.xml")
+  ClickButton("Open")
+  ClickButton("OK")
+  OpenRDD("ChgLogReportDUP");
+  DeleteRDD("ChgLogReportDUP");
+  Exit()
+  OpenBAQForm();
+  DeleteBAQ("company")
+  Exit()
+}
+
+function testing()
+{
+  obj = Sys["Process"]("Epicor")["WinFormsObject"]("RptDataDefEntryForm")["WinFormsObject"]("_SonomaForm_Toolbars_Dock_Area_Top")
+  IsMenuItemPresence(obj,("File->New->New BAQ"),"EXISTS")
+} 

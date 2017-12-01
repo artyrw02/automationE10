@@ -1,0 +1,17 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT BAQs_Functions
+
+function rdd()
+{
+  var baqData = {
+      "Id" : "baqParams1",
+      "Description" : "baqParams1",
+      "Table" : "Erp.Customer",
+      "Alias" : "Customer",
+      "Columns" : "Company, CountryNum, FiscalCode, ISOCodem,IStatCode, Description, BorderCrossing, ShipViaCode, TaxRegionCode,LangNameID, CurrencyCode, FormatStr, ISOrigCountry, APTaxRegionCode, MXCountryCode, GlobalCountry, GlobalLock, IsSepa, SysRevID, SysRowID, AGAFIPCode, MXExternalCode"
+  }
+  MainMenuTreeViewSelect("Epicor Education;Main;Executive Analysis;Business Activity Management;Setup;Business Activity Query");
+  ValidatesFormOpened("Business Activity Query Designer");
+  CreateSimpleBAQ(baqData);
+}

@@ -1,0 +1,102 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+//USEUNIT Grid_Functions
+//USEUNIT Actions_Functions
+
+var codeid = "txtKeyField";
+var description = "txtRptDescription";
+var reportType = "cboReportType";
+var searchtxt = "txtStartWith";
+
+function NewRDD(rddparams)
+{
+  EnterText(codeid, rddparams[0]+ "[Tab]");
+  ClickButton("Yes");
+  EnterText(description, rddparams[1]);
+  EnterText(reportType, rddparams[2]);
+  ClickMenu("File->Save");
+}
+
+function AddRDDBAQ(queryparam, idparam)
+{
+  ClickMenu("File->New->New BAQ");
+  var reportquery = "txtRptQueryID";
+  var queryid = "txtQueryID";
+  EnterText(reportquery, queryparam);
+  EnterText(queryid, idparam + "[Tab]");
+  ClickButton("OK")
+  ClickMenu("File->Save");
+} 
+
+function DeleteRDD(rdd)
+{
+  EnterText("txtKeyField", rdd + "[Tab]")
+  ClickMenu("File->Delete");
+  Delay(2000)
+  ClickButton("Yes");
+}
+
+function NewCriteria(criteriaid, description)
+{
+  ClickMenu("File->New->New Report Criteria Set");
+  var criteriaidtxt = "txtRptCriteriaID"
+  var descriptiontxt = "txtDescription"
+  EnterText(criteriaidtxt, criteriaid);
+  EnterText(descriptiontxt, description);
+  ClickMenu("File->Save");
+}
+
+function OpenRDD(codeidtxt)
+{
+  codeid = "txtKeyField";
+  EnterText(codeid, codeidtxt + "[Tab]");
+}
+
+function DuplicateReport(duplicateParams1, duplicateParams2)
+{
+  var txtRptDescription = "txtRptDescription";
+  ClickMenu("Actions->Duplicate Report");
+  EnterText(codeid, duplicateParams1);
+  EnterText(txtRptDescription, duplicateParams2);
+  ClickButton("OK");
+} 
+
+function NewCriteriaFilter(column, filter, grid)
+{
+  ClickMenu("File->New->New Report Criteria Filter");
+  SelectCellDropdownGrid(column, filter, grid);
+  Save();
+}
+
+function NewTable(tablename)
+{
+  ClickMenu("File->New->New Table");
+  ClickButton("Schema Table...");
+  EnterText(searchtxt, tablename);
+  ClickButton("Search");
+  ClickButton("OK");
+}
+
+function NewTableCriteria()
+{
+  ClickButton("File->New->New Table Criteria");
+} 
+
+function NewRelationship(relparams)
+{
+  ClickMenu("File->New->New Relationship");
+  OpenPanelTab("Relationships->Detail");
+  var txtRelation = "txtRelationID";
+  var txtDescription = "txtDescription";
+  var cboParent = "cboParentTable";
+  var cboKey = "cboKey";
+  var cboChildTable = "cboChildTable";
+  var cboJoinType = "cboJoinType";
+  EnterText(txtRelation, relparams[0] + "[Tab]");
+  EnterText(txtDescription, relparams[1] + "[Tab]");
+  EnterText(cboParent, relparams[2] + "[Tab]");
+  EnterText(cboKey, relparams[3] + "[Tab]");
+  EnterText(cboChildTable, relparams[4] + "[Tab]");
+  EnterText(cboJoinType, relparams[5] + "[Tab]");
+} 

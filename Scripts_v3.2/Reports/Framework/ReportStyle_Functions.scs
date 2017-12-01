@@ -1,0 +1,45 @@
+﻿//USEUNIT ControlFunctions
+//USEUNIT General_Functions
+//USEUNIT Menu_Functions
+
+function NewReportStyle(styleParams)
+{
+  ClickMenu("File->New->New Report Style")
+  OpenPanelTab("Styles->Style Detail")
+  EnterStyleDetail(styleParams)
+  ClickMenu("File->Save")
+}
+
+function GetReport(reportid)
+{
+  EnterText("txtKeyField", reportid + "[Tab]")
+} 
+
+function NewReport(reportid, description)
+{
+  ClickMenu("File->New->New Report")
+  EnterText("txtKeyField", reportid)
+  EnterText("txtDesc", description)
+  ClickMenu("File->Save")
+} 
+
+function EnterStyleDetail(styleParams)
+{
+  var descriptiontxt = "epiTextBox1";
+  var reportTypetxt = "cboReportType";
+  var reportDataDefinitiontxt = "cboReportDataDef";
+  var reportLocationtxt = "txtPrintProgram";
+  var outputLocationtxt = "cboOutputType";
+  EnterText(descriptiontxt, styleParams[0]);
+  EnterText(reportTypetxt, styleParams[1]);
+  EnterText(reportDataDefinitiontxt, styleParams[2]);
+  EnterText(reportLocationtxt, styleParams[3]);
+  EnterText(outputLocationtxt, styleParams[4]);
+}
+
+function DeleteReport(reportid)
+{
+  EnterText("txtKeyField", reportid + "[Tab]")
+  ClickMenu("File->Delete")
+  ClickButton("Yes")
+} 

@@ -1,0 +1,25 @@
+﻿//USEUNIT Menu_Functions
+//USEUNIT ReportStyle_Functions
+
+function UploadSystemReports()
+{
+  //STEP 1
+  MainMenuTreeViewSelect("Epicor Education;Main;System Management;Reporting;Report Style");
+  ValidatesFormOpened("Report Style Maintenance");
+  //STEP 2
+  GetReport("ARForm");
+  // STEP 3-4
+  ClickMenu("Actions->Download SSRS Report");
+  Delay(5000)
+  ClickButton("OK");
+  Delay(5000)
+  ClickButton("OK");
+  // STEP 5
+  ClickMenu("Actions->Upload SSRS Report");
+  ClickButton("OK");
+  var text = "The report path (/reports/ARInvoiceForm/ARForm) must be within the custom report directory (reports/CustomReports)."
+  var wText = "wText"
+  ValidatesFormOpened("UnknownException");
+  ClickButton("OK")
+  ClickMenu("File->Exit")
+} 
